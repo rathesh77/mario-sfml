@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Mario.hpp"
+#include "Constants.hpp"
 
 class Game
 {
@@ -10,16 +11,14 @@ public:
     void tick();
 
 private:
-    int current_map;
-    int window_width;
+    int currentMap;
+    std::string backgroundPath = "sprites/background.png";
 
-    std::string backgroundPath = "sprites/background.jpg";
-
-    sf::Sprite sprites[2];
+    sf::Sprite sprite;
     sf::Texture backgroundTexture;
     sf::RenderWindow *window;
 
-    Mario mario;
+    Mario *mario;
     void drawSprites();
 
 };
