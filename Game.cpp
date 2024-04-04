@@ -24,16 +24,22 @@ void Game::tick()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        this->mario->moveForward();
+        this->mario->setDirection(1);
+        this->mario->increaseAcceleration();
+
         if (!(this->mario->sprite.getPosition().x < WINDOW_WIDTH / 2.5))
-            sprite.move(sf::Vector2f(-0.02, 0));
+            sprite.move(sf::Vector2f(-1, 0));
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        this->mario->moveBackward();
-    } else {
-        
+        this->mario->setDirection(-1);
+        this->mario->increaseAcceleration();
     }
+    else
+    {
+        this->mario->decreaseAcceleration();
+    }
+    this->mario->move();
 
     this->drawSprites();
 }

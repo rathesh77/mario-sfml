@@ -7,10 +7,12 @@ public:
     sf::Sprite sprite;
 
     Mario();
-    sf::Vector2f moveForward();
-    sf::Vector2f moveBackward();
+    void move();
+    void increaseAcceleration();
+    void decreaseAcceleration();
+    void setDirection(int);
+
     sf::Vector2f getPosition();
-    void reduceAcceleration();
 
     int getWidth();
     int getHeight();
@@ -22,4 +24,8 @@ private:
     int height;
     float speed;
     float acceleration;
+
+    float accelerationOffset = 0.01;
+
+    int direction = 0;
 };
