@@ -34,11 +34,6 @@ private:
     sf::Texture marioFrameThree;
     sf::Texture marioFrameFour;
 
-    sf::Texture marioFrameOneR;
-    sf::Texture marioFrameTwoR;
-    sf::Texture marioFrameThreeR;
-    sf::Texture marioFrameFourR;
-
     int width = 16;
     int height = 17;
     float acc = 0;
