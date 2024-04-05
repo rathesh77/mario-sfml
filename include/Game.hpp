@@ -9,6 +9,7 @@ public:
     
     int getCurrentMap();
     void tick();
+    int frameCount = 0;
 
 private:
     int currentMap;

@@ -22,7 +22,30 @@ int Game::getCurrentMap()
 
 void Game::tick()
 {
+
     sf::Event event;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    {
+        this->mario->setDirection(1);
+        this->mario->loadSpriteForward(this->frameCount);
+
+        if (!(this->mario->sprite.getPosition().x < WINDOW_WIDTH / 2.5))
+            this->sprite.move(sf::Vector2f(-3, 0));
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    {
+        this->mario->setDirection(-1);
+        this->mario->loadSpriteForward(this->frameCount);
+    }
+
+    if (!(this->mario->sprite.getPosition().x < WINDOW_WIDTH / 2.5) && this->mario->getDirection() == 1)
+    {
+        this->mario->setDirection(0);
+        this->mario->setVel(0.0f);
+    }
+    this->frameCount++;
+
     while (this->window->pollEvent(event))
     {
 
@@ -42,26 +65,7 @@ void Game::tick()
             break;
         }
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-    {
-        std::cout << "right" << std::endl;
-        this->mario->setDirection(1);
-
-        if (!(this->mario->sprite.getPosition().x < WINDOW_WIDTH / 2.5))
-            this->sprite.move(sf::Vector2f(-3, 0));
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    {
-        this->mario->setDirection(-1);
-        std::cout << "left" << std::endl;
-    }
-
-    if (!(this->mario->sprite.getPosition().x < WINDOW_WIDTH / 2.5) && this->mario->getDirection() == 1)
-    {
-        this->mario->setDirection(0);
-        this->mario->setVel(0);
-    }
-
+    
     this->mario->move();
     this->drawSprites();
 }
