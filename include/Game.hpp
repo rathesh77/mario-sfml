@@ -8,7 +8,7 @@ public:
     Game(sf::RenderWindow*);
     
     int getCurrentMap();
-    void tick();
+    void tick(sf::Clock *);
     int frameCount = 0;
 
 private:

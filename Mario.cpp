@@ -77,17 +77,20 @@ void Mario::move()
 void Mario::loadSpriteForward(int frameCount)
 {
 
-    if (frameCount < 2)
+    if (this->vel != 0)
     {
-        this->sprite.setTexture(marioFrameOne);
-    }
-    if (frameCount % 2 == 0)
-    {
-        this->sprite.setTexture(marioFrameTwo);
-    }
-    if (frameCount % 3 == 0)
-    {
-        this->sprite.setTexture(marioFrameThree);
+        if (frameCount < 2)
+        {
+            this->sprite.setTexture(marioFrameOne);
+        }
+        if (frameCount % 2 == 0)
+        {
+            this->sprite.setTexture(marioFrameTwo);
+        }
+        if (frameCount % 3 == 0)
+        {
+            this->sprite.setTexture(marioFrameThree);
+        }
     }
 }
 

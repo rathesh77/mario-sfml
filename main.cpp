@@ -12,10 +12,11 @@ int main()
     window.setSize(sf::Vector2u(1200, 400));
     Game game = Game(&window);
     
+    sf::Clock clock;
     while (window.isOpen())
     {
         window.clear();
-        game.tick();
+        game.tick(&clock);
 
         window.display();
     }
