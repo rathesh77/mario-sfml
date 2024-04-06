@@ -8,22 +8,27 @@ public:
 
     Mario();
     void move();
+    void updateVelocity();
+
     void updateAcc();
     void reduceAcc();
 
     void setDirection(int);
-    void setVel(float);
+    void setVelocity(float);
 
     int getDirection();
+    float getVelocity();
 
     sf::Vector2f getPosition();
     void  loadSpriteForward(int);
     void  loadSpriteBackward(int);
+    void  jump();
 
     int getWidth();
     int getHeight();
 
     float lerp (float, float, float);
+    bool decelerating = false;
 
 private:
     std::string spritePath = "sprites/sprites_sheet.png";
@@ -36,15 +41,18 @@ private:
 
     int width = 16;
     int height = 17;
-    float acc = 0;
-    float vel = 0;
-
-    float maxVel = 3;
-    float maxAcc = 0.7;
-    float accOffset = 0.4;
-
     int direction = 0;
+    
+    float acc = 0;
+    float velocity = 0;
+
+    float maxVelocity = 3;
+    float accOffset = 0.1f;
+    float vertVelocity = 9.45f; 
+    float gravity = 0.7f;
+    
     bool lookingRight = true;
     bool flipped = false;
+    bool isJumping = false;
 
 };

@@ -25,22 +25,18 @@ void Game::tick(sf::Clock *clock)
 
     sf::Event event;
 
+    std::cout << "mario velocity: " + std::to_string(this->mario->getVelocity()) << std::endl;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         this->mario->setDirection(1);
-
-        if (!(this->mario->sprite.getPosition().x < WINDOW_WIDTH / 2.5))
-            this->sprite.move(sf::Vector2f(-3, 0));
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         this->mario->setDirection(-1);
     }
-
-    if (!(this->mario->sprite.getPosition().x < WINDOW_WIDTH / 2.5) && this->mario->getDirection() == 1)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        this->mario->setDirection(0);
-        this->mario->setVel(0.0f);
+        this->mario->jump();
     }
 
     while (this->window->pollEvent(event))
@@ -66,12 +62,26 @@ void Game::tick(sf::Clock *clock)
     if (clock->getElapsedTime().asSeconds() >= 0.1f)
     {
         this->frameCount++;
-        std::cout << clock->getElapsedTime().asSeconds() << std::endl;
         clock->restart();
         this->mario->loadSpriteForward(this->frameCount);
     }
 
-    this->mario->move();
+    this->mario->updateVelocity();
+    if ((this->mario->getPosition().x >= WINDOW_WIDTH / 2.5))
+    {
+        if (!this->mario->decelerating && this->mario->getDirection() < 1)
+        {
+            this->mario->move();
+        }
+        else
+        {
+            this->sprite.move(sf::Vector2f(-this->mario->getVelocity(), 0));
+        }
+    }
+    else
+    {
+        this->mario->move();
+    }
     this->drawSprites();
 }
 

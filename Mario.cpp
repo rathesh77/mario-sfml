@@ -17,7 +17,7 @@ Mario::Mario()
         throw std::invalid_argument("Could not load mario frame one texture");
 
     this->sprite = sf::Sprite(this->marioFrameOne);
-    this->sprite.setPosition(10, WINDOW_HEIGHT - 47);
+    this->sprite.setPosition(10, FLOOR_Y);
 }
 
 sf::Vector2f Mario::getPosition()
@@ -34,7 +34,7 @@ void Mario::setDirection(int direction)
 
     if (!this->lookingRight && !this->flipped)
     {
-        auto oldPosition = this->sprite.getPosition();
+        auto oldPosition = this->getPosition();
         this->sprite.scale(-1.0f, 1.0f);
         this->sprite.setPosition(oldPosition.x + this->width, oldPosition.y);
 
@@ -42,7 +42,7 @@ void Mario::setDirection(int direction)
     }
     else if (this->flipped && this->lookingRight)
     {
-        auto oldPosition = this->sprite.getPosition();
+        auto oldPosition = this->getPosition();
 
         this->sprite.scale(-1.0f, 1.0f);
         this->sprite.setPosition(oldPosition.x - this->width, oldPosition.y);
@@ -53,9 +53,9 @@ void Mario::setDirection(int direction)
     this->direction = direction;
 }
 
-void Mario::setVel(float vel)
+void Mario::setVelocity(float velocity)
 {
-    this->vel = vel;
+    this->velocity = velocity;
 }
 
 int Mario::getDirection()
@@ -66,18 +66,49 @@ int Mario::getDirection()
 void Mario::move()
 {
 
-    float goal = this->maxVel * this->direction;
+    this->sprite.move(sf::Vector2f(this->velocity, 0));
+}
+void Mario::updateVelocity()
+{
+
+    float goal = this->maxVelocity * this->direction;
     float dt = this->accOffset;
-    float current = this->vel;
-    this->vel = lerp(current, goal, dt);
-    // std::cout << "velocity: " + std::to_string(this->vel) << std::endl;
-    this->sprite.move(sf::Vector2f(this->vel, 0));
+    float current = this->velocity;
+    this->velocity = lerp(current, goal, dt);
+
+    if (std::abs(this->velocity) < std::abs(current))
+    {
+        this->decelerating = true;
+    }
+    else
+    {
+        this->decelerating = false;
+    }
+    if (this->isJumping)
+    {
+        std::cout << "vertical velocity: " + std::to_string(this->vertVelocity) << std::endl;
+        if (this->getPosition().y >= FLOOR_Y && this->vertVelocity < 0)
+        {
+            this->vertVelocity = 9.45f;
+            this->isJumping = false;
+        }
+        else
+        {
+            this->sprite.move(sf::Vector2f(0, -this->vertVelocity));
+            this->vertVelocity -= this->gravity;
+        }
+    }
+}
+
+void Mario::jump()
+{
+    this->isJumping = true;
 }
 
 void Mario::loadSpriteForward(int frameCount)
 {
 
-    if (this->vel != 0)
+    if (this->velocity != 0)
     {
         if (frameCount < 2)
         {
@@ -96,6 +127,7 @@ void Mario::loadSpriteForward(int frameCount)
 
 float Mario::lerp(float current, float goal, float dt)
 {
+
     if (current + dt < goal)
         return current + dt;
 
@@ -103,6 +135,11 @@ float Mario::lerp(float current, float goal, float dt)
         return current - dt;
 
     return goal;
+}
+
+float Mario::getVelocity()
+{
+    return this->velocity;
 }
 
 int Mario::getWidth()

@@ -4,7 +4,7 @@
 
 #define WINDOW_WIDTH 500
 #define WINDOW_HEIGHT 238
-
+#define FLOOR_Y WINDOW_HEIGHT - 47
 class Constants
 {
 public:
