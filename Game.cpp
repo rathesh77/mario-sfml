@@ -13,20 +13,21 @@ Game::Game(sf::RenderWindow *window)
     if (!this->t_brick.loadFromFile(this->brickPath))
         throw std::invalid_argument("Could not load background texture");
 
-    // this->s_background = sf::Sprite(this->t_background);
+    this->s_background = new sf::Sprite[NB_BACKGROUNDS];
 
     for (int i = 0; i < NB_BACKGROUNDS; i++)
     {
-        this->s_background[i] = sf::Sprite();
+        auto sprite = sf::Sprite();
+        this->s_background[i] = sprite;
         this->s_background[i].setTexture(this->t_background);
-        this->s_background[i].setTextureRect(sf::IntRect(0, 10, SINGLE_BACKGROUND_WIDTH, WINDOW_HEIGHT));
+        this->s_background[i].setTextureRect(sf::IntRect(0, 40, SINGLE_BACKGROUND_WIDTH, WINDOW_HEIGHT));
         this->s_background[i].setPosition(i * SINGLE_BACKGROUND_WIDTH, 0);
     }
 
     this->s_brick = sf::Sprite();
     this->s_brick.setTexture(t_brick);
-    this->s_brick.setTextureRect(sf::IntRect(272, 112, 15, 15));
-    this->s_brick.setPosition(15 * 13, 15 * 12);
+    this->s_brick.setTextureRect(sf::IntRect(272, 112, TILE_DIMENSION, TILE_DIMENSION));
+    this->s_brick.setPosition(TILE_DIMENSION * 7, TILE_DIMENSION*5);
 
     this->mario = new Mario();
 }
