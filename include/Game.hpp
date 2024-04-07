@@ -16,12 +16,12 @@ public:
 private:
     int currentMap;
     int NB_BACKGROUNDS = 30;
-    int SINGLE_BACKGROUND_WIDTH = 254;
+    int SINGLE_BACKGROUND_WIDTH = TILE_DIMENSION*TILE_DIMENSION;
 
     std::string backgroundPath = "sprites/background2.png";
     std::string brickPath = "sprites/bricks.png";
 
-    sf::Sprite s_background[30];
+    sf::Sprite *s_background;
     sf::Sprite s_brick;
 
     sf::Texture t_background;

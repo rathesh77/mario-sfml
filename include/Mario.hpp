@@ -48,7 +48,7 @@ private:
     sf::Texture marioFrameThree;
     sf::Texture marioFrameFour;
 
-    int width = 16;
+    int width = TILE_DIMENSION;
     int height = 17;
     int direction = 0;
     
