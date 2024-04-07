@@ -7,7 +7,7 @@ Mario::Mario()
     if (!this->marioFrameOne.loadFromFile(this->spritePath, sf::IntRect(0, 8, this->width, this->height)))
         throw std::invalid_argument("Could not load mario texture");
 
-    if (!this->marioFrameTwo.loadFromFile(this->spritePath, sf::IntRect(19, 8, 19 + this->width, this->height)))
+    if (!this->marioFrameTwo.loadFromFile(this->spritePath, sf::IntRect(20, 8, 20 + this->width, this->height)))
         throw std::invalid_argument("Could not load mario frame one texture");
 
     if (!this->marioFrameThree.loadFromFile(this->spritePath, sf::IntRect(38, 8, 38 + this->width, this->height)))

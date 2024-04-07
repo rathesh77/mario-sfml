@@ -49,7 +49,7 @@ private:
     sf::Texture marioFrameFour;
 
     int width = TILE_DIMENSION;
-    int height = 17;
+    int height = TILE_DIMENSION;
     int direction = 0;
     
     float acc = 0;
