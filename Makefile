@@ -9,7 +9,7 @@ clean: main.exe
 	./clean.sh ${EXECUTABLE}.exe
 
 compile:
-	g++ -L${LIB} -I${INCLUDE} -I./include ${SOURCES} ${MODULES} -o ${EXECUTABLE}
+	g++ -g -L${LIB} -I${INCLUDE} -I./include ${SOURCES} ${MODULES} -o ${EXECUTABLE}
 
 run: main.exe
 	./${EXECUTABLE}
