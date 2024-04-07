@@ -63,10 +63,13 @@ void Mario::moveX()
     if (this->getX() + this->velocity <= BOUNDING_X_LEFT && (this->direction < 1 || this->decelerating))
     {
         this->velocity = 0.0f;
+        this->sprite.setPosition(this->getX(), BOUNDING_Y_BOTTOM);
         std::cout << "out of map:" + std::to_string(this->getX()) << std::endl;
     }
     else
     {
+        this->realCoordinates.x += this->velocity;
+
         if ((this->getX() + this->getVelocity() >= BOUNDING_X_MIDDLE))
         {
             if (!this->decelerating && this->getDirection() < 1)
@@ -120,7 +123,6 @@ void Mario::updateVelocity()
     {
         this->decelerating = false;
     }
-    this->realCoordinates.x += this->velocity;
 }
 
 void Mario::jump()
