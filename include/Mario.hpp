@@ -4,11 +4,12 @@
 class Mario
 {
 public:
-    sf::Sprite sprite;
-
+    sf::Vector2f getPosition();
+    sf::Sprite getSprite();
     Mario();
+
     void moveX();
-        void moveY();
+    void moveY();
 
     void updateVelocity();
 
@@ -16,12 +17,10 @@ public:
     void reduceAcc();
 
     void setDirection(int);
-    void setVelocity(float);
 
     int getDirection();
     float getVelocity();
 
-    sf::Vector2f getPosition();
     float getX();
     float getY();
 
@@ -34,11 +33,13 @@ public:
 
     bool marioIsFreezed();
 
-
-    float lerp (float, float, float);
     bool decelerating = false;
 
+    float lerp (float, float, float);
+    sf::Vector2f realCoordinates;
+
 private:
+    sf::Sprite sprite;
     std::string spritePath = "sprites/sprites_sheet.png";
     
     sf::Texture texture;
