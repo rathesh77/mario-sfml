@@ -7,7 +7,9 @@ public:
     sf::Sprite sprite;
 
     Mario();
-    void move();
+    void moveX();
+        void moveY();
+
     void updateVelocity();
 
     void updateAcc();
@@ -20,12 +22,18 @@ public:
     float getVelocity();
 
     sf::Vector2f getPosition();
+    float getX();
+    float getY();
+
     void  loadSpriteForward(int);
     void  loadSpriteBackward(int);
     void  jump();
 
     int getWidth();
     int getHeight();
+
+    bool marioIsFreezed();
+
 
     float lerp (float, float, float);
     bool decelerating = false;
@@ -55,4 +63,5 @@ private:
     bool flipped = false;
     bool isJumping = false;
 
+    bool freezeMario = false;
 };

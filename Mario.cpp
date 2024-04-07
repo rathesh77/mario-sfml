@@ -17,7 +17,7 @@ Mario::Mario()
         throw std::invalid_argument("Could not load mario frame one texture");
 
     this->sprite = sf::Sprite(this->marioFrameOne);
-    this->sprite.setPosition(10, FLOOR_Y);
+    this->sprite.setPosition(10, BOUNDING_Y_BOTTOM);
 }
 
 sf::Vector2f Mario::getPosition()
@@ -63,10 +63,50 @@ int Mario::getDirection()
     return this->direction;
 }
 
-void Mario::move()
+void Mario::moveX()
 {
 
-    this->sprite.move(sf::Vector2f(this->velocity, 0));
+    if (this->getX() + this->velocity <= BOUNDING_X_LEFT && (this->direction < 1 || this->decelerating)) {
+        this->setVelocity(0);
+        std::cout<<"out of map:" + std::to_string(this->getX())<<std::endl;
+    } else{
+    if ((this->getX() +this->getVelocity() >= WINDOW_WIDTH / 2.5))
+    {
+        if (!this->decelerating && this->getDirection() < 1)
+        {
+            this->sprite.move(sf::Vector2f(this->velocity, 0));
+            this->freezeMario = false;
+
+        }
+        else
+        {
+            this->freezeMario = true;
+        }
+    }
+    else
+    {
+        this->freezeMario = false;
+        this->sprite.move(sf::Vector2f(this->velocity, 0));
+    }
+    }
+}
+
+void Mario::moveY()
+{
+    if (this->isJumping)
+    {
+        std::cout << "vertical velocity: " + std::to_string(this->vertVelocity) << std::endl;
+        if (this->getY() -this->vertVelocity  >= BOUNDING_Y_BOTTOM && this->vertVelocity < 0)
+        {
+            this->vertVelocity = 9.45f;
+            this->isJumping = false;
+        }
+        else
+        {
+            this->sprite.move(sf::Vector2f(0, -this->vertVelocity));
+            this->vertVelocity -= this->gravity;
+        }
+    }
 }
 void Mario::updateVelocity()
 {
@@ -83,20 +123,6 @@ void Mario::updateVelocity()
     else
     {
         this->decelerating = false;
-    }
-    if (this->isJumping)
-    {
-        std::cout << "vertical velocity: " + std::to_string(this->vertVelocity) << std::endl;
-        if (this->getPosition().y >= FLOOR_Y && this->vertVelocity < 0)
-        {
-            this->vertVelocity = 9.45f;
-            this->isJumping = false;
-        }
-        else
-        {
-            this->sprite.move(sf::Vector2f(0, -this->vertVelocity));
-            this->vertVelocity -= this->gravity;
-        }
     }
 }
 
@@ -142,6 +168,18 @@ float Mario::getVelocity()
     return this->velocity;
 }
 
+
+float Mario::getX()
+{
+    return this->getPosition().x;
+}
+
+float Mario::getY()
+{
+    return this->getPosition().y;
+}
+
+
 int Mario::getWidth()
 {
     return this->width;
@@ -150,4 +188,8 @@ int Mario::getWidth()
 int Mario::getHeight()
 {
     return this->height;
+}
+
+bool Mario::marioIsFreezed() {
+    return this->freezeMario;
 }

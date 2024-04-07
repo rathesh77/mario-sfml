@@ -7,10 +7,12 @@ Game::Game(sf::RenderWindow *window)
     this->currentMap = 0;
     this->window = window;
     std::cout << this->backgroundPath;
-    if (!this->backgroundTexture.loadFromFile(this->backgroundPath))
+    if (!this->t_background.loadFromFile(this->backgroundPath))
         throw std::invalid_argument("Could not load background texture");
 
-    this->sprite = sf::Sprite(this->backgroundTexture);
+    if (!this->t_background.loadFromFile(this->backgroundPath))
+        throw std::invalid_argument("Could not load background texture");
+    this->s_background = sf::Sprite(this->t_background);
 
     this->mario = new Mario();
 }
@@ -25,7 +27,7 @@ void Game::tick(sf::Clock *clock)
 
     sf::Event event;
 
-    std::cout << "mario velocity: " + std::to_string(this->mario->getVelocity()) << std::endl;
+    //std::cout << "mario velocity: " + std::to_string(this->mario->getVelocity()) << std::endl;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         this->mario->setDirection(1);
@@ -67,26 +69,24 @@ void Game::tick(sf::Clock *clock)
     }
 
     this->mario->updateVelocity();
-    if ((this->mario->getPosition().x >= WINDOW_WIDTH / 2.5))
+
+    if (this->mario->marioIsFreezed())
     {
-        if (!this->mario->decelerating && this->mario->getDirection() < 1)
-        {
-            this->mario->move();
-        }
-        else
-        {
-            this->sprite.move(sf::Vector2f(-this->mario->getVelocity(), 0));
-        }
+        this->s_background.move(sf::Vector2f(-this->mario->getVelocity(), 0));
     }
-    else
-    {
-        this->mario->move();
-    }
+
+    this->mario->moveX();
+    this->mario->moveY();
+
     this->drawSprites();
+}
+
+bool Game::isInsideLimits(sf::Vector2f pos) {
+    return pos.x <= 7 || pos.x >= WINDOW_WIDTH / 2.5;
 }
 
 void Game::drawSprites()
 {
-    this->window->draw(this->sprite);
+    this->window->draw(this->s_background);
     this->window->draw(this->mario->sprite);
 }
