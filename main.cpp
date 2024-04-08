@@ -3,15 +3,25 @@
 
 #include "Constants.hpp"
 #include "Game.hpp"
+#include "MapParser.hpp"
 
 int main()
 {
+    MapParser *mp = MapParser::create("map1.txt");
+    if (mp) {
+        mp->parse();
+    } else {
+        return EXIT_FAILURE;
+    }
+
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML window");
     window.setFramerateLimit(30);
     window.setKeyRepeatEnabled(true); 
     window.setSize(sf::Vector2u(1200, 400));
     Game game = Game(&window);
-    
+    Map *m = mp->map;
+    game.loadMap(m);
+
     sf::Clock clock;
     while (window.isOpen())
     {

@@ -6,6 +6,14 @@ Game::Game(sf::RenderWindow *window)
 
     this->currentMap = 0;
     this->window = window;
+
+    this->mario = new Mario();
+}
+
+void Game::loadMap(Map *map)
+{
+    this->map = map;
+    this->NB_GRIDS = map->getNumberOfGrids();
     std::cout << this->backgroundPath;
     if (!this->t_background.loadFromFile(this->backgroundPath))
         throw std::invalid_argument("Could not load background texture");
@@ -13,9 +21,9 @@ Game::Game(sf::RenderWindow *window)
     if (!this->t_brick.loadFromFile(this->brickPath))
         throw std::invalid_argument("Could not load background texture");
 
-    this->s_background = new sf::Sprite[NB_BACKGROUNDS];
+    this->s_background = new sf::Sprite[NB_GRIDS];
 
-    for (int i = 0; i < NB_BACKGROUNDS; i++)
+    for (int i = 0; i < NB_GRIDS; i++)
     {
         auto sprite = sf::Sprite();
         this->s_background[i] = sprite;
@@ -24,12 +32,29 @@ Game::Game(sf::RenderWindow *window)
         this->s_background[i].setPosition(i * SINGLE_BACKGROUND_WIDTH, 0);
     }
 
-    this->s_brick = sf::Sprite();
-    this->s_brick.setTexture(t_brick);
-    this->s_brick.setTextureRect(sf::IntRect(272, 112, TILE_DIMENSION, TILE_DIMENSION));
-    this->s_brick.setPosition(TILE_DIMENSION * 7, TILE_DIMENSION*5);
+    generateSpritesInMemory();
+}
 
-    this->mario = new Mario();
+void Game::generateSpritesInMemory() {
+    const int nbElements = map->getNthGrid(current_grid)->NB_SPRITES + map->getNthGrid(current_grid+1)->NB_SPRITES; 
+    //if (this->s_elements)
+    //delete this->s_elements; // memory freed
+    //this->s_elements = NULL; not necessary since we reallocate some space below
+    this->s_elements = new sf::Sprite[nbElements];
+    auto *save_ptr = this->s_elements;
+    for (int i = current_grid; i < current_grid + 2; i++) {
+        auto *ptr = map->getNthGrid(i)->element;
+        while (ptr) {
+            if (ptr->type == "brick") {
+                this->s_elements->setTexture(t_brick);
+                this->s_elements->setTextureRect(sf::IntRect(272, 112, TILE_DIMENSION, TILE_DIMENSION));
+                this->s_elements->setPosition(ptr->position.x + (16 * 16  * (i - current_grid)), ptr->position.y );
+            }
+            ptr = ptr->next;
+            this->s_elements++;
+        }
+    }
+    this->s_elements = save_ptr;
 }
 
 int Game::getCurrentMap()
@@ -100,18 +125,46 @@ void Game::tick(sf::Clock *clock)
 void Game::drawSprites()
 {
 
-    for (int i = 0; i < NB_BACKGROUNDS; i++)
+    for (int i = 0; i < NB_GRIDS; i++)
     {
         this->window->draw(this->s_background[i]);
     }
+
+    this->drawElements();
     this->window->draw(this->mario->getSprite());
-    this->window->draw(this->s_brick);
 }
 
 void Game::shiftSceneBackward()
 {
-    for (int i = 0; i < NB_BACKGROUNDS; i++)
+    for (int i = 0; i < NB_GRIDS; i++)
         this->s_background[i].move(sf::Vector2f(-this->mario->getVelocity(), 0));
+
+    this->shiftElementsBackward();
     
-    this->s_brick.move(sf::Vector2f(-this->mario->getVelocity(), 0));
+}
+
+void Game::shiftElementsBackward() {
+    auto *save_ptr = this->s_elements;
+    for (int i = current_grid; i < current_grid + 2; i++) {
+        int nb = 0;
+        while (nb < map->getNthGrid(i)->NB_SPRITES) {
+            this->s_elements->move(sf::Vector2f(-this->mario->getVelocity(), 0));
+            this->s_elements++;
+            nb++;
+        }
+    }
+    this->s_elements = save_ptr;
+}
+
+void Game::drawElements() {
+    auto *save_ptr = this->s_elements;
+    for (int i = current_grid; i < current_grid + 2; i++) {
+    int nb = 0;
+        while (nb < map->getNthGrid(i)->NB_SPRITES ) {
+                this->window->draw(*this->s_elements);
+            nb++;
+            this->s_elements++;
+        }
+    }
+    this->s_elements = save_ptr;
 }
