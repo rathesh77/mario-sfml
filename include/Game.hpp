@@ -21,7 +21,7 @@ public:
 
 private:
     int currentMap;
-    int NB_GRIDS = 30;
+    int NB_GRIDS;
     int SINGLE_BACKGROUND_WIDTH = TILE_DIMENSION*TILE_DIMENSION;
 
     std::string backgroundPath = "sprites/background2.png";

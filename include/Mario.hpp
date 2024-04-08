@@ -33,6 +33,9 @@ public:
 
     bool marioIsFreezed();
 
+    void detectCollisions(sf::Sprite*, int);
+    bool collides(sf::Vector2f, sf::Vector2f);
+
     bool decelerating = false;
 
     float lerp (float, float, float);

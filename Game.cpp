@@ -122,7 +122,7 @@ void Game::tick(sf::Clock *clock)
 
     this->mario->moveX();
     this->mario->moveY();
-    std::cout << std::to_string(this->mario->realCoordinates.x) << std::endl;
+    this->mario->detectCollisions(this->s_objects, this->NB_SPRITES);
     this->drawSprites();
 
     int old_current_grid = this->current_grid;
@@ -130,7 +130,7 @@ void Game::tick(sf::Clock *clock)
     if (this->current_grid != old_current_grid) {
         generateSpritesInMemory();
     }
-    std::cout<<"current grid:" + std::to_string(current_grid)<<std::endl;
+    //std::cout<<"current grid:" + std::to_string(current_grid)<<std::endl;
 }
 
 void Game::drawSprites()
@@ -171,17 +171,20 @@ void Game::shiftObjectsBackward() {
 }
 
 void Game::drawObjects() {
+    this->NB_SPRITES = 0;
     auto *save_ptr = this->s_objects;
     int first = current_grid -1;
     if (first < 0)
         first++;
     for (int i = first; i < current_grid + 2; i++) {
     int nb = 0;
+
         while (nb < map->getNthGrid(i)->NB_SPRITES ) {
                 this->window->draw(*this->s_objects);
             nb++;
             this->s_objects++;
         }
+        this->NB_SPRITES += nb;
     }
     this->s_objects = save_ptr;
 }

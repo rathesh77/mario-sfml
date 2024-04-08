@@ -19,7 +19,6 @@ Mario::Mario()
     this->sprite = sf::Sprite(this->marioFrameOne);
     this->sprite.setPosition(10, BOUNDING_Y_BOTTOM);
     this->realCoordinates.x += this->getX();
-
 }
 
 sf::Vector2f Mario::getPosition()
@@ -36,15 +35,15 @@ void Mario::setDirection(int direction)
 
     if (!this->lookingRight && !this->flipped)
     {
-        //this->sprite.scale(-1.0f, 1.0f);
-        //this->sprite.move(this->width, 0);
+        // this->sprite.scale(-1.0f, 1.0f);
+        // this->sprite.move(this->width, 0);
 
         this->flipped = true;
     }
     else if (this->flipped && this->lookingRight)
     {
-        //this->sprite.scale(-1.0f, 1.0f);
-        //this->sprite.move(- this->width,0);
+        // this->sprite.scale(-1.0f, 1.0f);
+        // this->sprite.move(- this->width,0);
 
         this->flipped = false;
     }
@@ -57,6 +56,25 @@ int Mario::getDirection()
     return this->direction;
 }
 
+void Mario::detectCollisions(sf::Sprite *s_objects, int count)
+{
+    int i = 0;
+    while (i < count)
+    {
+        if (this->collides(this->getPosition(), s_objects->getPosition()))
+        {
+            std::cout << "collision !" << std::endl;
+        }
+        s_objects++;
+        i++;
+    }
+}
+
+bool Mario::collides(sf::Vector2f a, sf::Vector2f b)
+{
+
+    return a.x >= b.x - 16 && a.x <= b.x + 16 && a.y >= b.y - 16 && a.y <= b.y + 16;
+}
 void Mario::moveX()
 {
 
@@ -94,7 +112,7 @@ void Mario::moveY()
 {
     if (this->isJumping)
     {
-        std::cout << "vertical velocity: " + std::to_string(this->vertVelocity) << std::endl;
+        // std::cout << "vertical velocity: " + std::to_string(this->vertVelocity) << std::endl;
         if (this->getY() - this->vertVelocity >= BOUNDING_Y_BOTTOM && this->vertVelocity < 0)
         {
             this->vertVelocity = 9.45f;
@@ -191,7 +209,6 @@ bool Mario::marioIsFreezed()
 {
     return this->freezeMario;
 }
-
 
 sf::Sprite Mario::getSprite()
 {
