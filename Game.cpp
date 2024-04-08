@@ -52,7 +52,7 @@ void Game::generateSpritesInMemory() {
             if (ptr->type == "brick") {
                 this->s_objects->setTexture(t_brick);
                 this->s_objects->setTextureRect(sf::IntRect(272, 112, TILE_DIMENSION, TILE_DIMENSION));
-                this->s_objects->setPosition(ptr->position.x+ this->s_background[current_grid].getPosition().x + (16 * 16  * (i - current_grid)), ptr->position.y );
+                this->s_objects->setPosition(ptr->position.x+ this->s_background[current_grid].getPosition().x + (TILE_DIMENSION * TILE_DIMENSION  * (i - current_grid)), ptr->position.y );
             }
             ptr = ptr->next;
             this->s_objects++;
@@ -126,7 +126,7 @@ void Game::tick(sf::Clock *clock)
     this->drawSprites();
 
     int old_current_grid = this->current_grid;
-    this->current_grid = (int)(this->mario->realCoordinates.x / (16 * 16)); 
+    this->current_grid = (int)(this->mario->realCoordinates.x / (TILE_DIMENSION * TILE_DIMENSION)); 
     if (this->current_grid != old_current_grid) {
         generateSpritesInMemory();
     }

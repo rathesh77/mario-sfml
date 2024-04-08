@@ -73,7 +73,7 @@ void Mario::detectCollisions(sf::Sprite *s_objects, int count)
 bool Mario::collides(sf::Vector2f a, sf::Vector2f b)
 {
 
-    return a.x >= b.x - 16 && a.x <= b.x + 16 && a.y >= b.y - 16 && a.y <= b.y + 16;
+    return a.x >= b.x - TILE_DIMENSION && a.x <= b.x + TILE_DIMENSION && a.y >= b.y - TILE_DIMENSION && a.y <= b.y + TILE_DIMENSION;
 }
 void Mario::moveX()
 {
