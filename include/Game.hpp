@@ -28,7 +28,7 @@ private:
     std::string brickPath = "sprites/bricks.png";
 
     sf::Sprite *s_background;
-    sf::Sprite *s_objects;
+    sf::Sprite *s_objects = new sf::Sprite[1];
 
     sf::Texture t_background;
     sf::Texture t_brick;
