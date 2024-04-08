@@ -23,18 +23,18 @@ int Map::getNumberOfGrids()
     return this->NB_GRIDS;
 }
 
-void Map::addElementToCurrentGrid(Grid *grid, Element *e)
+void Map::addObjectToCurrentGrid(Grid *grid, Object *e)
 {
 
-    if (!grid->element)
+    if (!grid->object)
     {
-        grid->element = e;
+        grid->object = e;
     }
     else
     {
         if (!grid->last)
         {
-            grid->element->next = e;
+            grid->object->next = e;
 
             grid->last = e;
         }

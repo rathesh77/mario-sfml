@@ -39,9 +39,9 @@ void MapParser::parse()
         }
         else if (line[start] != '-')
         {
-            Element *e = new Element;
-            e =  parseElement(line, start);
-           this->map->addElementToCurrentGrid(currentGrid, e);
+            Object *e = new Object;
+            e =  parseObject(line, start);
+           this->map->addObjectToCurrentGrid(currentGrid, e);
         }
     }
     file.close();
@@ -69,23 +69,23 @@ int MapParser::parseNthGrid(std::string line, int &start)
     return num;
 }
 
-Element* MapParser::parseElement(std::string line, int& start)
+Object* MapParser::parseObject(std::string line, int& start)
 {
 
-    Element *element = new Element;
+    Object *object = new Object;
 
     skipBlanks(line, start);
 
-    element->type = parseElementType(line, start);
+    object->type = parseObjectType(line, start);
 
-    float x = parseElementPosition(line, start);
-    float y = parseElementPosition(line, start);
+    float x = parseObjectPosition(line, start);
+    float y = parseObjectPosition(line, start);
 
-    element->position = sf::Vector2f(x, y);
-    return element;
+    object->position = sf::Vector2f(x, y);
+    return object;
 }
 
-std::string MapParser::parseElementType(std::string line, int &start)
+std::string MapParser::parseObjectType(std::string line, int &start)
 {
     skipBlanks(line, start);
 
@@ -106,7 +106,7 @@ std::string MapParser::parseElementType(std::string line, int &start)
     return type;
 }
 
-float MapParser::parseElementPosition(std::string line, int &start)
+float MapParser::parseObjectPosition(std::string line, int &start)
 {
     skipBlanks(line, start);
 

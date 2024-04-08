@@ -22,9 +22,9 @@ private:
     std::string filename;
     std::ifstream *ifstream;
     int parseNthGrid(std::string, int&);
-    Element* parseElement(std::string,int&);
-    std::string parseElementType(std::string, int&);
-    float parseElementPosition(std::string, int&);
+    Object* parseObject(std::string,int&);
+    std::string parseObjectType(std::string, int&);
+    float parseObjectPosition(std::string, int&);
     void skipBlanks(std::string, int&);
 
 };

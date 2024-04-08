@@ -6,18 +6,18 @@
 #include <iostream>
 #include <fstream>
 
-struct Element
+struct Object
 {
     std::string type;      // brick, koopa etc...
     sf::Vector2f position = sf::Vector2f(0,0); // coordinates
 
-    Element *next = NULL;
+    Object *next = NULL;
 };
 struct Grid
 {
     int id = -1;
-    Element *element = NULL;
-    Element *last = NULL;
+    Object *object = NULL;
+    Object *last = NULL;
     int NB_SPRITES = 0;
 };
 
@@ -28,7 +28,7 @@ public:
 
     Map(int);
     Grid *getNthGrid(int);
-    void addElementToCurrentGrid(Grid *, Element*);
+    void addObjectToCurrentGrid(Grid *, Object*);
     int getNumberOfGrids();
 
 private:

@@ -13,8 +13,8 @@ public:
     int getCurrentMap();
     void tick(sf::Clock *);
     void shiftSceneBackward();
-    void shiftElementsBackward();
-    void drawElements();
+    void shiftObjectsBackward();
+    void drawObjects();
 
     void loadMap(Map*);
     void generateSpritesInMemory();
@@ -28,7 +28,7 @@ private:
     std::string brickPath = "sprites/bricks.png";
 
     sf::Sprite *s_background;
-    sf::Sprite *s_elements;
+    sf::Sprite *s_objects;
 
     sf::Texture t_background;
     sf::Texture t_brick;
