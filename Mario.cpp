@@ -19,6 +19,7 @@ Mario::Mario()
     this->sprite = sf::Sprite(this->marioFrameOne);
     this->sprite.setPosition(10, BOUNDING_Y_BOTTOM);
     this->realCoordinates.x += this->getX();
+    ground = BOUNDING_Y_BOTTOM;
 }
 
 sf::Vector2f Mario::getPosition()
@@ -59,15 +60,44 @@ int Mario::getDirection()
 void Mario::detectCollisions(sf::Sprite *s_objects, int count)
 {
     int i = 0;
+    bool hit = false;
     while (i < count)
     {
-        if (this->collides(this->getPosition(), s_objects->getPosition()))
+        sf::Vector2f objectPos = s_objects->getPosition();
+        if (this->collides(this->getPosition(), objectPos))
         {
-            sf::Vector2f oppositeForce = this->getPosition()-s_objects->getPosition();
-            std::cout << "opposite force :"+ std::to_string(oppositeForce.x) + "/"+ std::to_string(oppositeForce.y) << std::endl;
+            hit = true;
+            sf::Vector2f oppositeForce = this->getPosition() - objectPos;
+            // std::cout << "opposite force :"+ std::to_string(oppositeForce.x) + "/"+ std::to_string(oppositeForce.y) << std::endl;
+
+            if (std::abs(oppositeForce.y) > std::abs(oppositeForce.x))
+            {
+                if (oppositeForce.y >= 0)
+                { // force downward
+                    this->velocityY = 0;
+                }
+                else
+                {
+                    std::cout << "upward" << std::endl;
+
+                    // force upward
+                    ground = s_objects->getPosition().y - TILE_DIMENSION;
+                }
+            }
         }
         s_objects++;
         i++;
+    }
+    if (hit == false && !this->isJumping)
+    {
+        std::cout << "not hid" << std::endl;
+        this->velocityY = 0;
+        this->isJumping = true;
+        ground = BOUNDING_Y_BOTTOM;
+    }
+    if (hit == false)
+    {
+        ground = BOUNDING_Y_BOTTOM;
     }
 }
 
@@ -79,21 +109,21 @@ bool Mario::collides(sf::Vector2f a, sf::Vector2f b)
 void Mario::moveX()
 {
 
-    if (this->getX() + this->velocity <= BOUNDING_X_LEFT && (this->direction < 1 || this->decelerating))
+    if (this->getX() + this->velocityX <= BOUNDING_X_LEFT && (this->direction < 1 || this->decelerating))
     {
-        this->velocity = 0.0f;
+        this->velocityX = 0.0f;
         this->sprite.setPosition(this->getX(), BOUNDING_Y_BOTTOM);
         std::cout << "out of map:" + std::to_string(this->getX()) << std::endl;
     }
     else
     {
-        this->realCoordinates.x += this->velocity;
+        this->realCoordinates.x += this->velocityX;
 
         if ((this->getX() + this->getVelocity() >= BOUNDING_X_MIDDLE))
         {
             if (!this->decelerating && this->getDirection() < 1)
             {
-                this->sprite.move(sf::Vector2f(this->velocity, 0));
+                this->sprite.move(sf::Vector2f(this->velocityX, 0));
                 this->freezeMario = false;
             }
             else
@@ -104,7 +134,7 @@ void Mario::moveX()
         else
         {
             this->freezeMario = false;
-            this->sprite.move(sf::Vector2f(this->velocity, 0));
+            this->sprite.move(sf::Vector2f(this->velocityX, 0));
         }
     }
 }
@@ -113,18 +143,18 @@ void Mario::moveY()
 {
     if (this->isJumping)
     {
-        this->sprite.move(sf::Vector2f(0, -this->vertVelocity));
+        this->sprite.move(sf::Vector2f(0, -this->velocityY));
     }
 }
 void Mario::updateHorizontalVelocity()
 {
 
-    float goal = this->maxVelocity * this->direction;
+    float goal = this->maxVelocityX * this->direction;
     float dt = this->accOffset;
-    float current = this->velocity;
-    this->velocity = lerp(current, goal, dt);
+    float current = this->velocityX;
+    this->velocityX = lerp(current, goal, dt);
 
-    if (std::abs(this->velocity) < std::abs(current))
+    if (std::abs(this->velocityX) < std::abs(current))
     {
         this->decelerating = true;
     }
@@ -136,32 +166,47 @@ void Mario::updateHorizontalVelocity()
 
 void Mario::updateVerticalVelocity()
 {
+    if (this->getY() == ground)
+    {
+        // std::cout<<"on ground"<<std::endl;
+    }
     if (this->isJumping)
     {
-        // std::cout << "vertical velocity: " + std::to_string(this->vertVelocity) << std::endl;
-        if (this->getY() - this->vertVelocity >= BOUNDING_Y_BOTTOM)
+
+        this->velocityY -= this->gravity;
+
+        if (this->getY() - this->velocityY >= ground)
         {
-            this->vertVelocity = initialVertVelocity;
-            this->isJumping = false;
-            this->gravity = initialGravity;
-        }
-        else
-        {
-            this->vertVelocity -= this->gravity;
+
+            this->velocityY = this->getY() - ground;
+            // this->velocityY = initialVelocityY;
+            // this->isJumping = false;
+            // this->gravity = initialGravity;
         }
     }
-
 }
 
 void Mario::jump()
 {
+    // if (this->getY() >= ground)
     this->isJumping = true;
+}
+
+void Mario::resetY()
+{
+    if (this->getY() == ground)
+    {
+        /// std::cout<<"reset"<<std::endl;
+        this->isJumping = false;
+        this->velocityY = initialVelocityY;
+        this->gravity = initialGravity;
+    }
 }
 
 void Mario::loadSpriteForward(int frameCount)
 {
 
-    if (this->velocity != 0)
+    if (this->velocityX != 0)
     {
         if (frameCount < 2)
         {
@@ -192,7 +237,7 @@ float Mario::lerp(float current, float goal, float dt)
 
 float Mario::getVelocity()
 {
-    return this->velocity;
+    return this->velocityX;
 }
 
 float Mario::getX()

@@ -13,6 +13,7 @@ public:
 
     void updateHorizontalVelocity();
     void updateVerticalVelocity();
+    void resetY();
 
     void updateAcc();
     void reduceAcc();
@@ -46,6 +47,7 @@ private:
     sf::Sprite sprite;
     std::string spritePath = "sprites/sprites_sheet.png";
     
+    float ground;
     sf::Texture texture;
     sf::Texture marioFrameOne;
     sf::Texture marioFrameTwo;
@@ -56,15 +58,19 @@ private:
     int height = TILE_DIMENSION;
     int direction = 0;
     
-    float acc = 0;
-    float velocity = 0;
+    float acc = 0.0f;
 
-    float maxVelocity = 3;
+    float velocityX = 0.0f;
+    float maxVelocityX = 3.0f;
+
     float accOffset = 0.1f;
-    float initialVertVelocity = 9.45f;
-    float vertVelocity = initialVertVelocity; 
-    float initialGravity = 0.5f;
+
+    float initialVelocityY = 9.45f;
+    float velocityY = initialVelocityY;
+
+    float initialGravity = 0.6f;
     float gravity = initialGravity;
+
     bool lookingRight = true;
     bool flipped = false;
     bool isJumping = false;

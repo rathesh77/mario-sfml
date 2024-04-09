@@ -35,24 +35,29 @@ void Game::loadMap(Map *map)
     generateSpritesInMemory();
 }
 
-void Game::generateSpritesInMemory() {
-    int nbObjects = map->getNthGrid(current_grid)->NB_SPRITES + map->getNthGrid(current_grid+1)->NB_SPRITES; 
+void Game::generateSpritesInMemory()
+{
+    int nbObjects = map->getNthGrid(current_grid)->NB_SPRITES + map->getNthGrid(current_grid + 1)->NB_SPRITES;
     int first = current_grid;
-    if (current_grid-1 >= 0) {
-        nbObjects += map->getNthGrid(current_grid-1)->NB_SPRITES;
+    if (current_grid - 1 >= 0)
+    {
+        nbObjects += map->getNthGrid(current_grid - 1)->NB_SPRITES;
         first--;
     }
-    delete []this->s_objects; // memory freed
-    //this->s_objects = NULL; not necessary since we reallocate some space below
+    delete[] this->s_objects; // memory freed
+    // this->s_objects = NULL; not necessary since we reallocate some space below
     this->s_objects = new sf::Sprite[nbObjects];
     auto *save_ptr = this->s_objects;
-    for (int i = first; i < current_grid + 2; i++) {
+    for (int i = first; i < current_grid + 2; i++)
+    {
         auto *ptr = map->getNthGrid(i)->object;
-        while (ptr) {
-            if (ptr->type == "brick") {
+        while (ptr)
+        {
+            if (ptr->type == "brick")
+            {
                 this->s_objects->setTexture(t_brick);
                 this->s_objects->setTextureRect(sf::IntRect(272, 112, TILE_DIMENSION, TILE_DIMENSION));
-                this->s_objects->setPosition(ptr->position.x+ this->s_background[current_grid].getPosition().x + (TILE_DIMENSION * TILE_DIMENSION  * (i - current_grid)), ptr->position.y );
+                this->s_objects->setPosition(ptr->position.x + this->s_background[current_grid].getPosition().x + (TILE_DIMENSION * TILE_DIMENSION * (i - current_grid)), ptr->position.y);
             }
             ptr = ptr->next;
             this->s_objects++;
@@ -82,6 +87,7 @@ void Game::tick(sf::Clock *clock)
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
+        this->mario->resetY();
         this->mario->jump();
     }
 
@@ -112,25 +118,30 @@ void Game::tick(sf::Clock *clock)
         this->mario->loadSpriteForward(this->frameCount);
     }
 
-    this->mario->updateHorizontalVelocity();
-    this->mario->updateVerticalVelocity();
-
     if (this->mario->marioIsFreezed())
     {
         this->shiftSceneBackward();
     }
 
+    this->mario->updateHorizontalVelocity();
+    this->mario->updateVerticalVelocity();
+
+    this->mario->detectCollisions(this->s_objects, this->NB_SPRITES);
     this->mario->moveX();
     this->mario->moveY();
-    this->mario->detectCollisions(this->s_objects, this->NB_SPRITES);
+
     this->drawSprites();
 
+    this->mario->resetY();
+
     int old_current_grid = this->current_grid;
-    this->current_grid = (int)(this->mario->realCoordinates.x / (TILE_DIMENSION * TILE_DIMENSION)); 
-    if (this->current_grid != old_current_grid) {
+    this->current_grid = (int)(this->mario->realCoordinates.x / (TILE_DIMENSION * TILE_DIMENSION));
+    if (this->current_grid != old_current_grid)
+    {
         generateSpritesInMemory();
     }
-    //std::cout<<"current grid:" + std::to_string(current_grid)<<std::endl;
+
+    // std::cout<<"current grid:" + std::to_string(current_grid)<<std::endl;
 }
 
 void Game::drawSprites()
@@ -151,17 +162,19 @@ void Game::shiftSceneBackward()
         this->s_background[i].move(sf::Vector2f(-this->mario->getVelocity(), 0));
 
     this->shiftObjectsBackward();
-    
 }
 
-void Game::shiftObjectsBackward() {
+void Game::shiftObjectsBackward()
+{
     auto *save_ptr = this->s_objects;
-    int first = current_grid -1;
+    int first = current_grid - 1;
     if (first < 0)
         first++;
-    for (int i = first; i < current_grid + 2; i++) {
+    for (int i = first; i < current_grid + 2; i++)
+    {
         int nb = 0;
-        while (nb < map->getNthGrid(i)->NB_SPRITES) {
+        while (nb < map->getNthGrid(i)->NB_SPRITES)
+        {
             this->s_objects->move(sf::Vector2f(-this->mario->getVelocity(), 0));
             this->s_objects++;
             nb++;
@@ -170,17 +183,20 @@ void Game::shiftObjectsBackward() {
     this->s_objects = save_ptr;
 }
 
-void Game::drawObjects() {
+void Game::drawObjects()
+{
     this->NB_SPRITES = 0;
     auto *save_ptr = this->s_objects;
-    int first = current_grid -1;
+    int first = current_grid - 1;
     if (first < 0)
         first++;
-    for (int i = first; i < current_grid + 2; i++) {
-    int nb = 0;
+    for (int i = first; i < current_grid + 2; i++)
+    {
+        int nb = 0;
 
-        while (nb < map->getNthGrid(i)->NB_SPRITES ) {
-                this->window->draw(*this->s_objects);
+        while (nb < map->getNthGrid(i)->NB_SPRITES)
+        {
+            this->window->draw(*this->s_objects);
             nb++;
             this->s_objects++;
         }
