@@ -26,7 +26,7 @@ sf::Vector2f Mario::getPosition()
     return this->sprite.getPosition();
 }
 
-void Mario::setDirection(int direction)
+void Mario::setDirectionX(int direction)
 {
     if (direction != 0)
     {
@@ -63,7 +63,8 @@ void Mario::detectCollisions(sf::Sprite *s_objects, int count)
     {
         if (this->collides(this->getPosition(), s_objects->getPosition()))
         {
-            std::cout << "collision !" << std::endl;
+            sf::Vector2f oppositeForce = this->getPosition()-s_objects->getPosition();
+            std::cout << "opposite force :"+ std::to_string(oppositeForce.x) + "/"+ std::to_string(oppositeForce.y) << std::endl;
         }
         s_objects++;
         i++;
@@ -112,20 +113,10 @@ void Mario::moveY()
 {
     if (this->isJumping)
     {
-        // std::cout << "vertical velocity: " + std::to_string(this->vertVelocity) << std::endl;
-        if (this->getY() - this->vertVelocity >= BOUNDING_Y_BOTTOM && this->vertVelocity < 0)
-        {
-            this->vertVelocity = 9.45f;
-            this->isJumping = false;
-        }
-        else
-        {
-            this->sprite.move(sf::Vector2f(0, -this->vertVelocity));
-            this->vertVelocity -= this->gravity;
-        }
+        this->sprite.move(sf::Vector2f(0, -this->vertVelocity));
     }
 }
-void Mario::updateVelocity()
+void Mario::updateHorizontalVelocity()
 {
 
     float goal = this->maxVelocity * this->direction;
@@ -141,6 +132,25 @@ void Mario::updateVelocity()
     {
         this->decelerating = false;
     }
+}
+
+void Mario::updateVerticalVelocity()
+{
+    if (this->isJumping)
+    {
+        // std::cout << "vertical velocity: " + std::to_string(this->vertVelocity) << std::endl;
+        if (this->getY() - this->vertVelocity >= BOUNDING_Y_BOTTOM)
+        {
+            this->vertVelocity = initialVertVelocity;
+            this->isJumping = false;
+            this->gravity = initialGravity;
+        }
+        else
+        {
+            this->vertVelocity -= this->gravity;
+        }
+    }
+
 }
 
 void Mario::jump()

@@ -74,11 +74,11 @@ void Game::tick(sf::Clock *clock)
     // std::cout << "mario velocity: " + std::to_string(this->mario->getVelocity()) << std::endl;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        this->mario->setDirection(1);
+        this->mario->setDirectionX(1);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        this->mario->setDirection(-1);
+        this->mario->setDirectionX(-1);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
@@ -98,7 +98,7 @@ void Game::tick(sf::Clock *clock)
             {
             case sf::Keyboard::Key::Right:
             case sf::Keyboard::Key::Left:
-                this->mario->setDirection(0);
+                this->mario->setDirectionX(0);
                 break;
             }
             break;
@@ -112,11 +112,11 @@ void Game::tick(sf::Clock *clock)
         this->mario->loadSpriteForward(this->frameCount);
     }
 
-    this->mario->updateVelocity();
+    this->mario->updateHorizontalVelocity();
+    this->mario->updateVerticalVelocity();
 
     if (this->mario->marioIsFreezed())
     {
-
         this->shiftSceneBackward();
     }
 

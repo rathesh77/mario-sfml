@@ -11,12 +11,13 @@ public:
     void moveX();
     void moveY();
 
-    void updateVelocity();
+    void updateHorizontalVelocity();
+    void updateVerticalVelocity();
 
     void updateAcc();
     void reduceAcc();
 
-    void setDirection(int);
+    void setDirectionX(int);
 
     int getDirection();
     float getVelocity();
@@ -60,9 +61,10 @@ private:
 
     float maxVelocity = 3;
     float accOffset = 0.1f;
-    float vertVelocity = 9.45f; 
-    float gravity = 0.7f;
-    
+    float initialVertVelocity = 9.45f;
+    float vertVelocity = initialVertVelocity; 
+    float initialGravity = 0.5f;
+    float gravity = initialGravity;
     bool lookingRight = true;
     bool flipped = false;
     bool isJumping = false;
