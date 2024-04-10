@@ -123,10 +123,16 @@ void Game::tick(sf::Clock *clock)
         this->shiftSceneBackward();
     }
 
-    this->mario->updateHorizontalVelocity();
-    this->mario->updateVerticalVelocity();
+    if (this->mario->willCollide) {
+        this->mario->willCollide = false;
+        
+    } else {
+        this->mario->updateHorizontalVelocity();
+        this->mario->updateVerticalVelocity();
+        this->mario->postCollisionsDetection();
 
     this->mario->detectCollisions(this->s_objects, this->NB_SPRITES);
+    }
     this->mario->moveX();
     this->mario->moveY();
 

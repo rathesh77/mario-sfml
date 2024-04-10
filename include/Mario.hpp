@@ -36,12 +36,17 @@ public:
     bool marioIsFreezed();
 
     void detectCollisions(sf::Sprite*, int);
+    void postCollisionsDetection();
+
     bool collides(sf::Vector2f, sf::Vector2f);
 
     bool decelerating = false;
 
     float lerp (float, float, float);
     sf::Vector2f realCoordinates;
+        bool willCollide = false;
+
+
 
 private:
     sf::Sprite sprite;

@@ -64,9 +64,10 @@ void Mario::detectCollisions(sf::Sprite *s_objects, int count)
     while (i < count)
     {
         sf::Vector2f objectPos = s_objects->getPosition();
-        if (this->collides(this->getPosition(), objectPos))
+        if (this->collides(this->getPosition() + sf::Vector2f(this->velocityX, -this->velocityY), objectPos))
         {
             hit = true;
+            willCollide = true;
             sf::Vector2f oppositeForce = this->getPosition() - objectPos;
             // std::cout << "opposite force :"+ std::to_string(oppositeForce.x) + "/"+ std::to_string(oppositeForce.y) << std::endl;
 
@@ -76,14 +77,14 @@ void Mario::detectCollisions(sf::Sprite *s_objects, int count)
                 { // force downward
                 std::cout<<"downward"<<std::endl;
                 //this->sprite.move(-this->velocityX, -this->velocityY);
-                    this->velocityY = 0;
+                    this->velocityY = -1.0f;
                 }
                 else
                 {
                     std::cout << "upward" << std::endl;
-
                     // force upward
                     ground = s_objects->getPosition().y - TILE_DIMENSION;
+                    this->velocityY = this->getY() - ground;
                 }
             } else {
                 this->velocityX = 0;
@@ -92,17 +93,21 @@ void Mario::detectCollisions(sf::Sprite *s_objects, int count)
         s_objects++;
         i++;
     }
-    if (hit == false && !this->isJumping)
+}
+
+void Mario::postCollisionsDetection()
+{
+    if (!this->isJumping)
     {
         std::cout << "not hit" << std::endl;
         this->velocityY = 0;
         this->isJumping = true;
         ground = BOUNDING_Y_BOTTOM;
     }
-    if (hit == false)
-    {
+
         ground = BOUNDING_Y_BOTTOM;
-    }
+    
+   // willCollide = false;
 }
 
 bool Mario::collides(sf::Vector2f a, sf::Vector2f b)
@@ -180,9 +185,10 @@ void Mario::updateVerticalVelocity()
         //std::cout<<"velocity1:"+ std::to_string(this->velocityY)<<std::endl;
 
         
-        if (this->getY() - this->gravity > ground) {
+        if (this->getY() - (this->velocityY -this->gravity) >= ground) {
             //sf::sleep(sf::seconds(10));
             this->velocityY = this->getY() - ground;
+            this->willCollide = true;
         } else
             this->velocityY -= this->gravity;
 
@@ -195,7 +201,7 @@ void Mario::updateVerticalVelocity()
             // this->gravity = initialGravity;
         }
     }
-    std::cout<<"velocity2:"+ std::to_string(this->velocityY)<<std::endl;
+    //std::cout<<"velocity2:"+ std::to_string(this->velocityY)<<std::endl;
 }
 
 void Mario::jump()
