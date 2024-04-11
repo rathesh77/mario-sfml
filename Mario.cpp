@@ -52,38 +52,44 @@ void Mario::setDirectionX(int direction) {
 
 int Mario::getDirection() { return this->direction; }
 
-void Mario::detectCollisions(sf::Sprite *s_objects, int count) {
+void Mario::detectCollisions(SpriteObject *s_objects, int count) {
     int i = 0;
     bool hit = false;
 
     this->overlap = false;
     while (i < count) {
-        sf::Vector2f objectPos = s_objects->getPosition();
+        sf::Vector2f objectPos = s_objects->sprite->getPosition();
         if (this->collides(this->getPosition() +
                                sf::Vector2f(this->velocityX, -this->velocityY),
                            objectPos)) {
             hit = true;
             this->overlap = true;
             sf::Vector2f oppositeForce = this->getPosition() - objectPos;
-            // std::cout << "opposite force :"+ std::to_string(oppositeForce.x)
-            // + "/"+ std::to_string(oppositeForce.y) << std::endl;
-
             if (std::abs(oppositeForce.y) > std::abs(oppositeForce.x)) {
                 if (oppositeForce.y >= 0) {  // force downward
                     std::cout << "downward" << std::endl;
-                    // this->sprite.move(-this->velocityX, -this->velocityY);
                     if (this->velocityY > 0)
                         this->velocityY = -0.0f;
                     else
                         this->overlap = false;
+                    if (s_objects->type == "goomba") {
+                        hitEnnemy = true;
+                    }
                 } else {
                     std::cout << "upward" << std::endl;
                     // force upward
-                    ground = s_objects->getPosition().y - TILE_DIMENSION;
+                    ground = s_objects->sprite->getPosition().y - TILE_DIMENSION;
                     this->velocityY = this->getY() - ground;
+
+                    if (s_objects->type == "goomba") {
+                        s_objects->sprite = new sf::Sprite;
+                    }
                 }
             } else {
                 this->velocityX = 0;
+                if (s_objects->type == "goomba") {
+                    hitEnnemy = true;
+                }
             }
         }
         s_objects++;
@@ -99,8 +105,6 @@ void Mario::postCollisionsDetection() {
     }
 
     ground = BOUNDING_Y_BOTTOM;
-
-    // willCollide = false;
 }
 
 bool Mario::collides(sf::Vector2f a, sf::Vector2f b) {
@@ -150,38 +154,21 @@ void Mario::updateHorizontalVelocity() {
 }
 
 void Mario::updateVerticalVelocity() {
-    if (this->getY() == ground) {
-        // std::cout<<"on ground"<<std::endl;
-    }
     if (this->isJumping) {
-        // std::cout<<"ground:"+ std::to_string(ground) <<std::endl;
-        // std::cout<<"velocity1:"+ std::to_string(this->velocityY)<<std::endl;
-
         if (this->getY() - (this->velocityY - this->gravity) >= ground) {
-            // sf::sleep(sf::seconds(10));
             this->velocityY = this->getY() - ground;
             this->overlap = true;
         } else
             this->velocityY -= this->gravity;
-
-        if (this->getY() - this->velocityY >= ground) {
-            // this->velocityY = this->getY() - ground;
-            //  this->velocityY = initialVelocityY;
-            //  this->isJumping = false;
-            //  this->gravity = initialGravity;
-        }
     }
-    // std::cout<<"velocity2:"+ std::to_string(this->velocityY)<<std::endl;
 }
 
 void Mario::jump() {
-    // if (this->getY() >= ground)
     this->isJumping = true;
 }
 
 void Mario::resetY() {
     if (this->getY() == ground) {
-        /// std::cout<<"reset"<<std::endl;
         this->isJumping = false;
         this->velocityY = initialVelocityY;
         this->gravity = initialGravity;
@@ -223,5 +210,7 @@ int Mario::getHeight() { return this->height; }
 bool Mario::marioIsFreezed() { return this->freezeMario; }
 
 bool Mario::isOverlaping() { return this->overlap; }
+
+bool Mario::hasHitEnnemy() { return this->hitEnnemy; }
 
 sf::Sprite Mario::getSprite() { return this->sprite; }

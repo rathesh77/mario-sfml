@@ -4,6 +4,7 @@
 #include "Map.hpp"
 #include "Mario.hpp"
 
+
 class Game {
    public:
     int frameCount = 0;
@@ -18,6 +19,7 @@ class Game {
 
     void loadMap(Map *);
     void generateSpritesInMemory();
+    void moveGoombas();
 
    private:
     int currentMap;
@@ -26,12 +28,14 @@ class Game {
 
     std::string backgroundPath = "sprites/background2.png";
     std::string brickPath = "sprites/bricks.png";
+    std::string ennemiesPath = "sprites/ennemies.png";
 
     sf::Sprite *s_background;
-    sf::Sprite *s_objects = new sf::Sprite[1];
+    SpriteObject *s_objects = new SpriteObject[1];
 
     sf::Texture t_background;
     sf::Texture t_brick;
+    sf::Texture t_ennemies;
 
     sf::RenderWindow *window;
 
@@ -43,4 +47,6 @@ class Game {
 
     int NB_SPRITES = 0;
     int current_grid = 0;
+
+    bool lost = false;
 };

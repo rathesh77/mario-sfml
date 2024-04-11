@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Constants.hpp"
+#include "Structs.hpp"
 
 class Mario {
    public:
@@ -36,10 +37,11 @@ class Mario {
     bool marioIsFreezed();
     bool isOverlaping();
 
-    void detectCollisions(sf::Sprite*, int);
+    void detectCollisions(SpriteObject*, int);
     void postCollisionsDetection();
 
     bool collides(sf::Vector2f, sf::Vector2f);
+    bool hasHitEnnemy();
 
     bool decelerating = false;
 
@@ -81,4 +83,6 @@ class Mario {
     bool isJumping = false;
 
     bool freezeMario = false;
+
+    bool hitEnnemy = false;
 };
