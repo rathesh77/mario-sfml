@@ -32,12 +32,32 @@ Mario::Mario() {
     ground = BOUNDING_Y_BOTTOM;
 }
 
-void Mario::detectCollisions(SpriteObject *s_objects, int count) {
+void Mario::loop(SpriteObject *s_objects, int NB_SPRITES) {
+
+        if (this->isOverlaping()) {
+            this->overlap = false;
+
+        } else {
+            this->updateHorizontalVelocity();
+            this->updateVerticalVelocity();
+            this->postCollisionsDetection();
+
+            this->detectCollisions(s_objects);
+        }
+        this->moveX();
+        this->moveY();
+
+        this->resetY();
+}
+
+void Mario::detectCollisions(SpriteObject *s_objects) {
     int i = 0;
     bool hit = false;
 
     this->overlap = false;
-    while (i < count) {
+    while (true) {
+        if (s_objects->type == "NULL" || s_objects->type == "" )
+            break;
         sf::Vector2f objectPos = s_objects->sprite->getPosition();
         if (s_objects->type != "brick") {
             objectPos = s_objects->body->getPosition();

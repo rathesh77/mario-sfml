@@ -7,6 +7,7 @@ class Mario: public Body {
    public:
 
     Mario();
+    void loop(SpriteObject *, int);
 
     void moveX();
 
@@ -14,7 +15,7 @@ class Mario: public Body {
 
     bool marioIsFreezed();
     bool hasHitEnnemy();
-    void detectCollisions(SpriteObject*, int);
+    void detectCollisions(SpriteObject*);
 
    private:
     std::string spritePath = "sprites/sprites_sheet.png";

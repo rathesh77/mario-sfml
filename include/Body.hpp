@@ -50,7 +50,7 @@ class Body {
 
     bool isOverlaping();
 
-    void detectCollisions(SpriteObject*, int);
+    void detectCollisions(SpriteObject*);
     void postCollisionsDetection();
 
     bool collides(sf::Vector2f, sf::Vector2f);

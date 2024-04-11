@@ -43,8 +43,9 @@ void Game::generateSpritesInMemory() {
     delete[] this->s_objects;  // memory freed
     // this->s_objects = NULL; not necessary since we reallocate some space
     // below
-    this->s_objects = new SpriteObject[nbObjects];
-    this->enemies = new Body[nbObjects];
+    this->s_objects = new SpriteObject[nbObjects + 1];
+    this->s_objects[nbObjects].type = "NULL";
+
     auto *save_ptr = this->s_objects;
     for (int i = 0; i < map->getNumberOfGrids(); i++) {
         auto *ptr = map->getNthGrid(i)->object;
@@ -122,25 +123,12 @@ void Game::tick(sf::Clock *clock) {
             this->shiftSceneBackward();
         }
 
-        if (this->mario->isOverlaping()) {
-            this->mario->overlap = false;
-            if (this->mario->hasHitEnnemy()) {
-                this->lost = true;
-            }
-
-        } else {
-            this->mario->updateHorizontalVelocity();
-            this->mario->updateVerticalVelocity();
-            this->mario->postCollisionsDetection();
-
-            this->mario->detectCollisions(this->s_objects, this->NB_SPRITES);
+        if (this->mario->isOverlaping() && this->mario->hasHitEnnemy()) {
+            this->lost = true;
         }
-        this->mario->moveX();
-        this->mario->moveY();
-
+        this->mario->loop(this->s_objects, NB_SPRITES);
         this->drawSprites();
 
-        this->mario->resetY();
     }
 
     this->current_grid = (int)(this->mario->realCoordinates.x /

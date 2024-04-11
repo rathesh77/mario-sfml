@@ -25,7 +25,7 @@ void Body::loop(SpriteObject *s_objects, int NB_SPRITES) {
         this->updateVerticalVelocity();
         this->postCollisionsDetection();
 
-        this->detectCollisions(s_objects, NB_SPRITES);
+        this->detectCollisions(s_objects);
     }
     this->moveX();
     this->moveY();
@@ -61,12 +61,14 @@ void Body::setDirectionX(int direction) {
 
 int Body::getDirection() { return this->direction; }
 
-void Body::detectCollisions(SpriteObject *s_objects, int count) {
+void Body::detectCollisions(SpriteObject *s_objects) {
     int i = 0;
     bool hit = false;
 
     this->overlap = false;
-    while (i < count) {
+    while (true) {
+        if (s_objects->type == "NULL" || s_objects->type == "" )
+            break;
         if (s_objects->type == "brick") {
             sf::Vector2f objectPos = s_objects->sprite->getPosition();
             if (this->collides(
@@ -102,7 +104,7 @@ void Body::detectCollisions(SpriteObject *s_objects, int count) {
 
 void Body::postCollisionsDetection() {
     if (!this->isJumping) {
-        std::cout << "not hit" << std::endl;
+        //std::cout << "not hit" << std::endl;
         this->velocityY = 0;
         this->isJumping = true;
     }

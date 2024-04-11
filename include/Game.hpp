@@ -39,7 +39,6 @@ class Game {
 
     Mario *mario;
 
-    Body *enemies = new Body[1];
     Map *map;
 
     void drawSprites();
