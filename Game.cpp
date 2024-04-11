@@ -37,7 +37,7 @@ void Game::loadMap(Map *map) {
 }
 
 void Game::generateSpritesInMemory() {
-    int nbObjects = map->getNumberOfGrids()* 20;
+    int nbObjects = map->getNumberOfGrids() * 20;
     int first = current_grid;
 
     delete[] this->s_objects;  // memory freed
@@ -59,10 +59,10 @@ void Game::generateSpritesInMemory() {
                     sf::IntRect(0, 16, TILE_DIMENSION, TILE_DIMENSION));
             }
             this->s_objects->sprite->setPosition(
-                    ptr->position.x +
-                        this->s_background[current_grid].getPosition().x +
-                        (TILE_DIMENSION * TILE_DIMENSION * (i - current_grid)),
-                    ptr->position.y);
+                ptr->position.x +
+                    this->s_background[current_grid].getPosition().x +
+                    (TILE_DIMENSION * TILE_DIMENSION * (i - current_grid)),
+                ptr->position.y);
             ptr = ptr->next;
             this->s_objects++;
         }
@@ -87,11 +87,11 @@ void Game::tick(sf::Clock *clock) {
                 // std::to_string(event.key.code)
                 // << std::endl;
                 if (!this->lost) switch (event.key.code) {
-                    case sf::Keyboard::Key::Right:
-                    case sf::Keyboard::Key::Left:
-                        this->mario->setDirectionX(0);
-                        break;
-                }
+                        case sf::Keyboard::Key::Right:
+                        case sf::Keyboard::Key::Left:
+                            this->mario->setDirectionX(0);
+                            break;
+                    }
                 break;
         }
     }
@@ -105,40 +105,40 @@ void Game::tick(sf::Clock *clock) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             this->mario->resetY();
             this->mario->jump();
-    }
+        }
 
-    if (clock->getElapsedTime().asSeconds() >= 0.1f) {
-        this->frameCount++;
-        clock->restart();
-        this->mario->loadSpriteForward(this->frameCount);
-    }
+        if (clock->getElapsedTime().asSeconds() >= 0.1f) {
+            this->frameCount++;
+            clock->restart();
+            this->mario->loadSpriteForward(this->frameCount);
+        }
 
         this->moveGoombas();
-    if (this->mario->marioIsFreezed()) {
-        this->shiftSceneBackward();
-    }
+        if (this->mario->marioIsFreezed()) {
+            this->shiftSceneBackward();
+        }
 
-    if (this->mario->isOverlaping()) {
-        this->mario->overlap = false;
+        if (this->mario->isOverlaping()) {
+            this->mario->overlap = false;
             if (this->mario->hasHitEnnemy()) {
-              this->lost = true;
+                this->lost = true;
             }
 
-    } else {
-        this->mario->updateHorizontalVelocity();
-        this->mario->updateVerticalVelocity();
-        this->mario->postCollisionsDetection();
+        } else {
+            this->mario->updateHorizontalVelocity();
+            this->mario->updateVerticalVelocity();
+            this->mario->postCollisionsDetection();
 
-        this->mario->detectCollisions(this->s_objects, this->NB_SPRITES);
+            this->mario->detectCollisions(this->s_objects, this->NB_SPRITES);
+        }
+        this->mario->moveX();
+        this->mario->moveY();
+
+        this->drawSprites();
+
+        this->mario->resetY();
     }
-    this->mario->moveX();
-    this->mario->moveY();
 
-    this->drawSprites();
-
-    this->mario->resetY();
-    }
-    
     this->current_grid = (int)(this->mario->realCoordinates.x /
                                (TILE_DIMENSION * TILE_DIMENSION));
 
@@ -200,7 +200,8 @@ void Game::moveGoombas() {
         int nb = 0;
 
         while (nb < map->getNthGrid(i)->NB_SPRITES) {
-            if (save_ptr->type == "goomba" && this->s_background[i].getPosition().x < WINDOW_WIDTH)
+            if (save_ptr->type == "goomba" &&
+                this->s_background[i].getPosition().x < WINDOW_WIDTH)
                 save_ptr->sprite->move(-1.0f, 0);
             nb++;
             save_ptr++;

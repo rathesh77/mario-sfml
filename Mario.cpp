@@ -78,7 +78,8 @@ void Mario::detectCollisions(SpriteObject *s_objects, int count) {
                 } else {
                     std::cout << "upward" << std::endl;
                     // force upward
-                    ground = s_objects->sprite->getPosition().y - TILE_DIMENSION;
+                    ground =
+                        s_objects->sprite->getPosition().y - TILE_DIMENSION;
                     this->velocityY = this->getY() - ground;
 
                     if (s_objects->type == "goomba") {
@@ -163,9 +164,7 @@ void Mario::updateVerticalVelocity() {
     }
 }
 
-void Mario::jump() {
-    this->isJumping = true;
-}
+void Mario::jump() { this->isJumping = true; }
 
 void Mario::resetY() {
     if (this->getY() == ground) {
