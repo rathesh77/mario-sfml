@@ -1,9 +1,9 @@
 #include <SFML/Graphics.hpp>
+
 #include "Constants.hpp"
 
-class Mario
-{
-public:
+class Mario {
+   public:
     sf::Vector2f getPosition();
     sf::Sprite getSprite();
     Mario();
@@ -26,16 +26,16 @@ public:
     float getX();
     float getY();
 
-    void  loadSpriteForward(int);
-    void  loadSpriteBackward(int);
-    void  jump();
+    void loadSpriteForward(int);
+    void loadSpriteBackward(int);
+    void jump();
 
     int getWidth();
     int getHeight();
 
     bool marioIsFreezed();
     bool isOverlaping();
-    
+
     void detectCollisions(sf::Sprite*, int);
     void postCollisionsDetection();
 
@@ -43,16 +43,15 @@ public:
 
     bool decelerating = false;
 
-    float lerp (float, float, float);
+    float lerp(float, float, float);
     sf::Vector2f realCoordinates;
 
-
-
     bool overlap = false;
-private:
+
+   private:
     sf::Sprite sprite;
     std::string spritePath = "sprites/sprites_sheet.png";
-    
+
     float ground;
     sf::Texture texture;
     sf::Texture marioFrameOne;
@@ -63,7 +62,7 @@ private:
     int width = TILE_DIMENSION;
     int height = TILE_DIMENSION;
     int direction = 0;
-    
+
     float acc = 0.0f;
 
     float velocityX = 0.0f;

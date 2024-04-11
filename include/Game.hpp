@@ -1,14 +1,14 @@
 #include <SFML/Graphics.hpp>
-#include "Mario.hpp"
+
 #include "Constants.hpp"
 #include "Map.hpp"
+#include "Mario.hpp"
 
-class Game
-{
-public:
+class Game {
+   public:
     int frameCount = 0;
-    
-    Game(sf::RenderWindow*);
+
+    Game(sf::RenderWindow *);
 
     int getCurrentMap();
     void tick(sf::Clock *);
@@ -16,13 +16,13 @@ public:
     void shiftObjectsBackward();
     void drawObjects();
 
-    void loadMap(Map*);
+    void loadMap(Map *);
     void generateSpritesInMemory();
 
-private:
+   private:
     int currentMap;
     int NB_GRIDS;
-    int SINGLE_BACKGROUND_WIDTH = TILE_DIMENSION*TILE_DIMENSION;
+    int SINGLE_BACKGROUND_WIDTH = TILE_DIMENSION * TILE_DIMENSION;
 
     std::string backgroundPath = "sprites/background2.png";
     std::string brickPath = "sprites/bricks.png";

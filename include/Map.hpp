@@ -2,39 +2,36 @@
 #ifndef MAP__H
 #define MAP__H
 #include <SFML/Graphics.hpp>
-#include "Constants.hpp"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
-struct Object
-{
-    std::string type;      // brick, koopa etc...
-    sf::Vector2f position = sf::Vector2f(0,0); // coordinates
+#include "Constants.hpp"
+
+struct Object {
+    std::string type;                            // brick, koopa etc...
+    sf::Vector2f position = sf::Vector2f(0, 0);  // coordinates
 
     Object *next = NULL;
 };
-struct Grid
-{
+struct Grid {
     int id = -1;
     Object *object = NULL;
     Object *last = NULL;
     int NB_SPRITES = 0;
 };
 
-class Map
-{
-public:
+class Map {
+   public:
     Map();
 
     Map(int);
     Grid *getNthGrid(int);
-    void addObjectToCurrentGrid(Grid *, Object*);
+    void addObjectToCurrentGrid(Grid *, Object *);
     int getNumberOfGrids();
 
-private:
+   private:
     Grid **grids;
     int NB_GRIDS;
-
 };
 
 #endif
