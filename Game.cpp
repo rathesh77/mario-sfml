@@ -4,76 +4,76 @@
 
 Game::Game(sf::RenderWindow *window) {
     this->currentMap = 0;
-    this->window = window;
+    this->m_window = window;
 
-    this->mario = new Mario();
+    this->m_mario = new Mario();
 }
 
 void Game::loadMap(Map *map) {
-    this->map = map;
+    this->m_map = map;
     this->NB_GRIDS = map->getNumberOfGrids();
-    std::cout << this->backgroundPath;
-    if (!this->t_background.loadFromFile(this->backgroundPath))
+    std::cout << this->m_backgroundPath;
+    if (!this->m_t_background.loadFromFile(this->m_backgroundPath))
         throw std::invalid_argument("Could not load background texture");
 
-    if (!this->t_brick.loadFromFile(this->brickPath))
+    if (!this->m_t_brick.loadFromFile(this->m_brickPath))
         throw std::invalid_argument("Could not load brick texture");
 
-    if (!this->t_ennemies.loadFromFile(this->ennemiesPath))
+    if (!this->m_t_ennemies.loadFromFile(this->m_ennemiesPath))
         throw std::invalid_argument("Could not load goomba texture");
 
-    this->s_background = new sf::Sprite[NB_GRIDS];
+    this->m_s_background = new sf::Sprite[NB_GRIDS];
 
     for (int i = 0; i < NB_GRIDS; i++) {
         auto sprite = sf::Sprite();
-        this->s_background[i] = sprite;
-        this->s_background[i].setTexture(this->t_background);
-        this->s_background[i].setTextureRect(
+        this->m_s_background[i] = sprite;
+        this->m_s_background[i].setTexture(this->m_t_background);
+        this->m_s_background[i].setTextureRect(
             sf::IntRect(0, 40, SINGLE_BACKGROUND_WIDTH, WINDOW_HEIGHT));
-        this->s_background[i].setPosition(i * SINGLE_BACKGROUND_WIDTH, 0);
+        this->m_s_background[i].setPosition(i * SINGLE_BACKGROUND_WIDTH, 0);
     }
 
     generateSpritesInMemory();
 }
 
 void Game::generateSpritesInMemory() {
-    int nbObjects = map->getNumberOfGrids() * 20;
-    int first = current_grid;
+    int nbObjects = m_map->getNumberOfGrids() * 20;
+    int first = m_current_grid;
 
-    delete[] this->s_objects;  // memory freed
+    delete[] this->m_s_objects;  // memory freed
     // this->s_objects = NULL; not necessary since we reallocate some space
     // below
-    this->s_objects = new SpriteObject[nbObjects + 1];
-    this->s_objects[nbObjects].type = "NULL";
+    this->m_s_objects = new SpriteObject[nbObjects + 1];
+    this->m_s_objects[nbObjects].type = "NULL";
 
-    auto *save_ptr = this->s_objects;
-    for (int i = 0; i < map->getNumberOfGrids(); i++) {
-        auto *ptr = map->getNthGrid(i)->object;
+    auto *save_ptr = this->m_s_objects;
+    for (int i = 0; i < m_map->getNumberOfGrids(); i++) {
+        auto *ptr = m_map->getNthGrid(i)->object;
         while (ptr) {
-            this->s_objects->type = ptr->type;
+            this->m_s_objects->type = ptr->type;
             if (ptr->type == "brick") {
-                this->s_objects->sprite->setTexture(t_brick);
-                this->s_objects->sprite->setTextureRect(
+                this->m_s_objects->sprite->setTexture(m_t_brick);
+                this->m_s_objects->sprite->setTextureRect(
                     sf::IntRect(272, 112, TILE_DIMENSION, TILE_DIMENSION));
-                this->s_objects->sprite->setPosition(
+                this->m_s_objects->sprite->setPosition(
                     ptr->position.x +
-                        this->s_background[current_grid].getPosition().x +
-                        (TILE_DIMENSION * TILE_DIMENSION * (i - current_grid)),
+                        this->m_s_background[m_current_grid].getPosition().x +
+                        (TILE_DIMENSION * TILE_DIMENSION * (i - m_current_grid)),
                     ptr->position.y);
             } else if (ptr->type == "goomba") {
                 const float x =
                     ptr->position.x +
-                    this->s_background[current_grid].getPosition().x +
-                    (TILE_DIMENSION * TILE_DIMENSION * (i - current_grid));
+                    this->m_s_background[m_current_grid].getPosition().x +
+                    (TILE_DIMENSION * TILE_DIMENSION * (i - m_current_grid));
 
                 const float y = ptr->position.y;
-                this->s_objects->body = new Body(this->ennemiesPath, x, y);
+                this->m_s_objects->body = new Body(this->m_ennemiesPath, x, y);
             }
             ptr = ptr->next;
-            this->s_objects++;
+            this->m_s_objects++;
         }
     }
-    this->s_objects = save_ptr;
+    this->m_s_objects = save_ptr;
 }
 
 int Game::getCurrentMap() { return this->currentMap; }
@@ -84,54 +84,54 @@ void Game::tick(sf::Clock *clock) {
     // std::cout << "mario velocity: " +
     // std::to_string(this->mario->getVelocity()) << std::endl;
 
-    while (this->window->pollEvent(event)) {
+    while (this->m_window->pollEvent(event)) {
         switch (event.type) {
             case sf::Event::Closed:
-                this->window->close();
+                this->m_window->close();
             case sf::Event::KeyReleased:
                 // std::cout << "Key released:" +
                 // std::to_string(event.key.code)
                 // << std::endl;
-                if (!this->lost) switch (event.key.code) {
+                if (!this->m_lost) switch (event.key.code) {
                         case sf::Keyboard::Key::Right:
                         case sf::Keyboard::Key::Left:
-                            this->mario->setDirectionX(0);
+                            this->m_mario->setDirectionX(0);
                             break;
                     }
                 break;
         }
     }
 
-    if (!this->lost) {
+    if (!this->m_lost) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            this->mario->setDirectionX(1);
+            this->m_mario->setDirectionX(1);
         } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            this->mario->setDirectionX(-1);
+            this->m_mario->setDirectionX(-1);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            this->mario->resetY();
-            this->mario->jump();
+            this->m_mario->resetY();
+            this->m_mario->jump();
         }
 
         if (clock->getElapsedTime().asSeconds() >= 0.1f) {
             this->frameCount++;
             clock->restart();
-            this->mario->loadSpriteForward(this->frameCount);
+            this->m_mario->loadSpriteForward(this->frameCount);
         }
 
-        if (this->mario->marioIsFreezed()) {
+        if (this->m_mario->marioIsFreezed()) {
             this->shiftSceneBackward();
         }
 
-        if (this->mario->isOverlaping() && this->mario->hasHitEnnemy()) {
-            this->lost = true;
+        if (this->m_mario->isOverlaping() && this->m_mario->hasHitEnnemy()) {
+            this->m_lost = true;
         }
-        this->mario->loop(this->s_objects, NB_SPRITES);
+        this->m_mario->loop(this->m_s_objects, m_nb_sprites);
         this->drawSprites();
 
     }
 
-    this->current_grid = (int)(this->mario->realCoordinates.x /
+    this->m_current_grid = (int)(this->m_mario->realCoordinates.x /
                                (TILE_DIMENSION * TILE_DIMENSION));
 
     // std::cout<<"current grid:" + std::to_string(current_grid)<<std::endl;
@@ -139,62 +139,62 @@ void Game::tick(sf::Clock *clock) {
 
 void Game::drawSprites() {
     for (int i = 0; i < NB_GRIDS; i++) {
-        this->window->draw(this->s_background[i]);
+        this->m_window->draw(this->m_s_background[i]);
     }
 
     this->drawObjects();
-    this->window->draw(*this->mario->getSprite());
+    this->m_window->draw(*this->m_mario->getSprite());
 }
 
 void Game::shiftSceneBackward() {
     for (int i = 0; i < NB_GRIDS; i++)
-        this->s_background[i].move(
-            sf::Vector2f(-this->mario->getVelocity(), 0));
+        this->m_s_background[i].move(
+            sf::Vector2f(-this->m_mario->getVelocity(), 0));
 
     this->shiftObjectsBackward();
 }
 
 void Game::shiftObjectsBackward() {
-    auto *save_ptr = this->s_objects;
+    auto *save_ptr = this->m_s_objects;
 
-    for (int i = 0; i < map->getNumberOfGrids(); i++) {
+    for (int i = 0; i < m_map->getNumberOfGrids(); i++) {
         int nb = 0;
-        while (nb < map->getNthGrid(i)->NB_SPRITES) {
-            if (this->s_objects->type == "brick") {
-                this->s_objects->sprite->move(
-                    sf::Vector2f(-this->mario->getVelocity(), 0));
+        while (nb < m_map->getNthGrid(i)->NB_SPRITES) {
+            if (this->m_s_objects->type == "brick") {
+                this->m_s_objects->sprite->move(
+                    sf::Vector2f(-this->m_mario->getVelocity(), 0));
             } else {
-                this->s_objects->body->getSprite()->move(
-                    sf::Vector2f(-this->mario->getVelocity(), 0));
+                this->m_s_objects->body->getSprite()->move(
+                    sf::Vector2f(-this->m_mario->getVelocity(), 0));
             }
-            this->s_objects++;
+            this->m_s_objects++;
             nb++;
         }
     }
-    this->s_objects = save_ptr;
+    this->m_s_objects = save_ptr;
 }
 
 void Game::drawObjects() {
-    this->NB_SPRITES = 0;
-    auto *save_ptr = this->s_objects;
+    this->m_nb_sprites = 0;
+    auto *save_ptr = this->m_s_objects;
 
-    for (int i = 0; i < map->getNumberOfGrids(); i++) {
+    for (int i = 0; i < m_map->getNumberOfGrids(); i++) {
         int nb = 0;
 
-        while (nb < map->getNthGrid(i)->NB_SPRITES) {
-            if (this->s_objects->type == "brick") {
-                this->window->draw(*this->s_objects->sprite);
-            } else if (this->s_objects->type == "goomba") {
-                if (this->s_background[i].getPosition().x < WINDOW_WIDTH) {
-                    this->s_objects->body->loop(save_ptr, 100);
+        while (nb < m_map->getNthGrid(i)->NB_SPRITES) {
+            if (this->m_s_objects->type == "brick") {
+                this->m_window->draw(*this->m_s_objects->sprite);
+            } else if (this->m_s_objects->type == "goomba") {
+                if (this->m_s_background[i].getPosition().x < WINDOW_WIDTH) {
+                    this->m_s_objects->body->loop(save_ptr, 100);
 
-                    this->window->draw(*this->s_objects->body->getSprite());
+                    this->m_window->draw(*this->m_s_objects->body->getSprite());
                 }
             }
             nb++;
-            this->s_objects++;
+            this->m_s_objects++;
         }
-        this->NB_SPRITES += nb;
+        this->m_nb_sprites += nb;
     }
-    this->s_objects = save_ptr;
+    this->m_s_objects = save_ptr;
 }

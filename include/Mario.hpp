@@ -18,15 +18,15 @@ class Mario: public Body {
     void detectCollisions(SpriteObject*);
 
    private:
-    std::string spritePath = "sprites/sprites_sheet.png";
+    std::string m_spritePath = "sprites/sprites_sheet.png";
 
-    sf::Texture texture;
-    sf::Texture marioFrameOne;
-    sf::Texture marioFrameTwo;
-    sf::Texture marioFrameThree;
-    sf::Texture marioFrameFour;
+    sf::Texture m_texture;
+    sf::Texture m_marioFrameOne;
+    sf::Texture m_marioFrameTwo;
+    sf::Texture m_marioFrameThree;
+    sf::Texture m_marioFrameFour;
 
-    bool freezeMario = false;
+    bool m_freezeMario = false;
 
-    bool hitEnnemy = false;
+    bool m_hitEnnemy = false;
 };

@@ -60,36 +60,36 @@ class Body {
     float lerp(float, float, float);
     sf::Vector2f realCoordinates;
 
-    bool overlap = false;
 
    protected:
-    sf::Sprite sprite;
-    std::string spritePath;
+    sf::Sprite m_sprite;
+    std::string m_spritePath;
 
-    sf::Texture texture;
+    sf::Texture m_texture;
 
-    int width = TILE_DIMENSION;
-    int height = TILE_DIMENSION;
-    int direction = -1;
+    int m_width = TILE_DIMENSION;
+    int m_height = TILE_DIMENSION;
+    int m_direction = -1;
 
-    float acc = 0.0f;
+    float m_acc = 0.0f;
 
-    float velocityX = -1.0f;
-    float maxVelocityX = 3.0f;
+    float m_velocityX = -1.0f;
+    float m_maxVelocityX = 3.0f;
 
-    float accOffset = 0.0f;
+    float m_accOffset = 0.0f;
 
-    float initialVelocityY = 9.45f;
-    float velocityY = initialVelocityY;
+    float m_initialVelocityY = 9.45f;
+    float m_velocityY = m_initialVelocityY;
 
-    float initialGravity = 0.6f;
-    float gravity = initialGravity;
+    float m_initialGravity = 0.6f;
+    float m_gravity = m_initialGravity;
 
-    bool lookingRight = true;
-    bool flipped = false;
-    bool isJumping = false;
+    bool m_lookingRight = true;
+    bool m_flipped = false;
+    bool m_isJumping = false;
 
-    float ground;
+    float m_ground;
+    bool m_overlap = false;
 };
 
 
