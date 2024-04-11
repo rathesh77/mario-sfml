@@ -1,19 +1,26 @@
 #include "Mario.hpp"
+
 #include <iostream>
 
 Mario::Mario()
 {
-
-    if (!this->marioFrameOne.loadFromFile(this->spritePath, sf::IntRect(0, 8, this->width, this->height)))
+    if (!this->marioFrameOne.loadFromFile(
+            this->spritePath, sf::IntRect(0, 8, this->width, this->height)))
         throw std::invalid_argument("Could not load mario texture");
 
-    if (!this->marioFrameTwo.loadFromFile(this->spritePath, sf::IntRect(20, 8, 20 + this->width, this->height)))
+    if (!this->marioFrameTwo.loadFromFile(
+            this->spritePath,
+            sf::IntRect(20, 8, 20 + this->width, this->height)))
         throw std::invalid_argument("Could not load mario frame one texture");
 
-    if (!this->marioFrameThree.loadFromFile(this->spritePath, sf::IntRect(38, 8, 38 + this->width, this->height)))
+    if (!this->marioFrameThree.loadFromFile(
+            this->spritePath,
+            sf::IntRect(38, 8, 38 + this->width, this->height)))
         throw std::invalid_argument("Could not load mario frame one texture");
 
-    if (!this->marioFrameFour.loadFromFile(this->spritePath, sf::IntRect(56, 8, 56 + this->width, this->height)))
+    if (!this->marioFrameFour.loadFromFile(
+            this->spritePath,
+            sf::IntRect(56, 8, 56 + this->width, this->height)))
         throw std::invalid_argument("Could not load mario frame one texture");
 
     this->sprite = sf::Sprite(this->marioFrameOne);
@@ -22,10 +29,7 @@ Mario::Mario()
     ground = BOUNDING_Y_BOTTOM;
 }
 
-sf::Vector2f Mario::getPosition()
-{
-    return this->sprite.getPosition();
-}
+sf::Vector2f Mario::getPosition() { return this->sprite.getPosition(); }
 
 void Mario::setDirectionX(int direction)
 {
@@ -52,32 +56,37 @@ void Mario::setDirectionX(int direction)
     this->direction = direction;
 }
 
-int Mario::getDirection()
-{
-    return this->direction;
-}
+int Mario::getDirection() { return this->direction; }
 
 void Mario::detectCollisions(sf::Sprite *s_objects, int count)
 {
     int i = 0;
     bool hit = false;
+
+    this->overlap = false;
     while (i < count)
     {
         sf::Vector2f objectPos = s_objects->getPosition();
-        if (this->collides(this->getPosition() + sf::Vector2f(this->velocityX, -this->velocityY), objectPos))
+        if (this->collides(this->getPosition() +
+                               sf::Vector2f(this->velocityX, -this->velocityY),
+                           objectPos))
         {
             hit = true;
-            willCollide = true;
+            this->overlap = true;
             sf::Vector2f oppositeForce = this->getPosition() - objectPos;
-            // std::cout << "opposite force :"+ std::to_string(oppositeForce.x) + "/"+ std::to_string(oppositeForce.y) << std::endl;
+            // std::cout << "opposite force :"+ std::to_string(oppositeForce.x)
+            // + "/"+ std::to_string(oppositeForce.y) << std::endl;
 
             if (std::abs(oppositeForce.y) > std::abs(oppositeForce.x))
             {
                 if (oppositeForce.y >= 0)
                 { // force downward
-                std::cout<<"downward"<<std::endl;
-                //this->sprite.move(-this->velocityX, -this->velocityY);
-                    this->velocityY = -1.0f;
+                    std::cout << "downward" << std::endl;
+                    // this->sprite.move(-this->velocityX, -this->velocityY);
+                    if (this->velocityY > 0)
+                        this->velocityY = -0.0f;
+                    else
+                        this->overlap = false;
                 }
                 else
                 {
@@ -86,7 +95,9 @@ void Mario::detectCollisions(sf::Sprite *s_objects, int count)
                     ground = s_objects->getPosition().y - TILE_DIMENSION;
                     this->velocityY = this->getY() - ground;
                 }
-            } else {
+            }
+            else
+            {
                 this->velocityX = 0;
             }
         }
@@ -102,23 +113,22 @@ void Mario::postCollisionsDetection()
         std::cout << "not hit" << std::endl;
         this->velocityY = 0;
         this->isJumping = true;
-        ground = BOUNDING_Y_BOTTOM;
     }
 
-        ground = BOUNDING_Y_BOTTOM;
-    
-   // willCollide = false;
+    ground = BOUNDING_Y_BOTTOM;
+
+    // willCollide = false;
 }
 
 bool Mario::collides(sf::Vector2f a, sf::Vector2f b)
 {
-
-    return a.x >= b.x - TILE_DIMENSION && a.x <= b.x + TILE_DIMENSION && a.y >= b.y - TILE_DIMENSION && a.y <= b.y + TILE_DIMENSION;
+    return a.x >= b.x - TILE_DIMENSION + 2 && a.x <= b.x + TILE_DIMENSION - 2 &&
+           a.y >= b.y - TILE_DIMENSION && a.y <= b.y + TILE_DIMENSION;
 }
 void Mario::moveX() // no collisions handling here. Only moving sprite
 {
-
-    if (this->getX() + this->velocityX <= BOUNDING_X_LEFT && (this->direction < 1 || this->decelerating))
+    if (this->getX() + this->velocityX <= BOUNDING_X_LEFT &&
+        (this->direction < 1 || this->decelerating))
     {
         this->velocityX = 0.0f;
         this->sprite.setPosition(this->getX(), this->getY());
@@ -157,7 +167,6 @@ void Mario::moveY()
 }
 void Mario::updateHorizontalVelocity()
 {
-
     float goal = this->maxVelocityX * this->direction;
     float dt = this->accOffset;
     float current = this->velocityX;
@@ -181,27 +190,27 @@ void Mario::updateVerticalVelocity()
     }
     if (this->isJumping)
     {
-        //std::cout<<"ground:"+ std::to_string(ground) <<std::endl;
-        //std::cout<<"velocity1:"+ std::to_string(this->velocityY)<<std::endl;
+        // std::cout<<"ground:"+ std::to_string(ground) <<std::endl;
+        // std::cout<<"velocity1:"+ std::to_string(this->velocityY)<<std::endl;
 
-        
-        if (this->getY() - (this->velocityY -this->gravity) >= ground) {
-            //sf::sleep(sf::seconds(10));
+        if (this->getY() - (this->velocityY - this->gravity) >= ground)
+        {
+            // sf::sleep(sf::seconds(10));
             this->velocityY = this->getY() - ground;
-            this->willCollide = true;
-        } else
+            this->overlap = true;
+        }
+        else
             this->velocityY -= this->gravity;
 
         if (this->getY() - this->velocityY >= ground)
         {
-
-            //this->velocityY = this->getY() - ground;
-            // this->velocityY = initialVelocityY;
-            // this->isJumping = false;
-            // this->gravity = initialGravity;
+            // this->velocityY = this->getY() - ground;
+            //  this->velocityY = initialVelocityY;
+            //  this->isJumping = false;
+            //  this->gravity = initialGravity;
         }
     }
-    //std::cout<<"velocity2:"+ std::to_string(this->velocityY)<<std::endl;
+    // std::cout<<"velocity2:"+ std::to_string(this->velocityY)<<std::endl;
 }
 
 void Mario::jump()
@@ -223,7 +232,6 @@ void Mario::resetY()
 
 void Mario::loadSpriteForward(int frameCount)
 {
-
     if (this->velocityX != 0)
     {
         if (frameCount < 2)
@@ -243,7 +251,6 @@ void Mario::loadSpriteForward(int frameCount)
 
 float Mario::lerp(float current, float goal, float dt)
 {
-
     if (current + dt < goal)
         return current + dt;
 
@@ -253,37 +260,18 @@ float Mario::lerp(float current, float goal, float dt)
     return goal;
 }
 
-float Mario::getVelocity()
-{
-    return this->velocityX;
-}
+float Mario::getVelocity() { return this->velocityX; }
 
-float Mario::getX()
-{
-    return this->getPosition().x;
-}
+float Mario::getX() { return this->getPosition().x; }
 
-float Mario::getY()
-{
-    return this->getPosition().y;
-}
+float Mario::getY() { return this->getPosition().y; }
 
-int Mario::getWidth()
-{
-    return this->width;
-}
+int Mario::getWidth() { return this->width; }
 
-int Mario::getHeight()
-{
-    return this->height;
-}
+int Mario::getHeight() { return this->height; }
 
-bool Mario::marioIsFreezed()
-{
-    return this->freezeMario;
-}
+bool Mario::marioIsFreezed() { return this->freezeMario; }
 
-sf::Sprite Mario::getSprite()
-{
-    return this->sprite;
-}
+bool Mario::isOverlaping() { return this->overlap; }
+
+sf::Sprite Mario::getSprite() { return this->sprite; }

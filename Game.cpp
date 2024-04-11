@@ -123,8 +123,8 @@ void Game::tick(sf::Clock *clock)
         this->shiftSceneBackward();
     }
 
-    if (this->mario->willCollide) {
-        this->mario->willCollide = false;
+    if (this->mario->isOverlaping()) {
+        this->mario->overlap = false;
         
     } else {
         this->mario->updateHorizontalVelocity();

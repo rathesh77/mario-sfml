@@ -34,7 +34,8 @@ public:
     int getHeight();
 
     bool marioIsFreezed();
-
+    bool isOverlaping();
+    
     void detectCollisions(sf::Sprite*, int);
     void postCollisionsDetection();
 
@@ -44,10 +45,10 @@ public:
 
     float lerp (float, float, float);
     sf::Vector2f realCoordinates;
-        bool willCollide = false;
 
 
 
+    bool overlap = false;
 private:
     sf::Sprite sprite;
     std::string spritePath = "sprites/sprites_sheet.png";
