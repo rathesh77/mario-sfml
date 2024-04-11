@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 
-#include "Constants.hpp"
 #include "Map.hpp"
 #include "Mario.hpp"
 
@@ -19,7 +18,6 @@ class Game {
 
     void loadMap(Map *);
     void generateSpritesInMemory();
-    void moveGoombas();
 
    private:
     int currentMap;
@@ -41,6 +39,7 @@ class Game {
 
     Mario *mario;
 
+    Body *enemies = new Body[1];
     Map *map;
 
     void drawSprites();

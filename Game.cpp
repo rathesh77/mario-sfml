@@ -44,6 +44,7 @@ void Game::generateSpritesInMemory() {
     // this->s_objects = NULL; not necessary since we reallocate some space
     // below
     this->s_objects = new SpriteObject[nbObjects];
+    this->enemies = new Body[nbObjects];
     auto *save_ptr = this->s_objects;
     for (int i = 0; i < map->getNumberOfGrids(); i++) {
         auto *ptr = map->getNthGrid(i)->object;
@@ -53,16 +54,20 @@ void Game::generateSpritesInMemory() {
                 this->s_objects->sprite->setTexture(t_brick);
                 this->s_objects->sprite->setTextureRect(
                     sf::IntRect(272, 112, TILE_DIMENSION, TILE_DIMENSION));
+                this->s_objects->sprite->setPosition(
+                    ptr->position.x +
+                        this->s_background[current_grid].getPosition().x +
+                        (TILE_DIMENSION * TILE_DIMENSION * (i - current_grid)),
+                    ptr->position.y);
             } else if (ptr->type == "goomba") {
-                this->s_objects->sprite->setTexture(t_ennemies);
-                this->s_objects->sprite->setTextureRect(
-                    sf::IntRect(0, 16, TILE_DIMENSION, TILE_DIMENSION));
-            }
-            this->s_objects->sprite->setPosition(
-                ptr->position.x +
+                const float x =
+                    ptr->position.x +
                     this->s_background[current_grid].getPosition().x +
-                    (TILE_DIMENSION * TILE_DIMENSION * (i - current_grid)),
-                ptr->position.y);
+                    (TILE_DIMENSION * TILE_DIMENSION * (i - current_grid));
+
+                const float y = ptr->position.y;
+                this->s_objects->body = new Body(this->ennemiesPath, x, y);
+            }
             ptr = ptr->next;
             this->s_objects++;
         }
@@ -113,7 +118,6 @@ void Game::tick(sf::Clock *clock) {
             this->mario->loadSpriteForward(this->frameCount);
         }
 
-        this->moveGoombas();
         if (this->mario->marioIsFreezed()) {
             this->shiftSceneBackward();
         }
@@ -151,7 +155,7 @@ void Game::drawSprites() {
     }
 
     this->drawObjects();
-    this->window->draw(this->mario->getSprite());
+    this->window->draw(*this->mario->getSprite());
 }
 
 void Game::shiftSceneBackward() {
@@ -168,8 +172,13 @@ void Game::shiftObjectsBackward() {
     for (int i = 0; i < map->getNumberOfGrids(); i++) {
         int nb = 0;
         while (nb < map->getNthGrid(i)->NB_SPRITES) {
-            this->s_objects->sprite->move(
-                sf::Vector2f(-this->mario->getVelocity(), 0));
+            if (this->s_objects->type == "brick") {
+                this->s_objects->sprite->move(
+                    sf::Vector2f(-this->mario->getVelocity(), 0));
+            } else {
+                this->s_objects->body->getSprite()->move(
+                    sf::Vector2f(-this->mario->getVelocity(), 0));
+            }
             this->s_objects++;
             nb++;
         }
@@ -185,26 +194,19 @@ void Game::drawObjects() {
         int nb = 0;
 
         while (nb < map->getNthGrid(i)->NB_SPRITES) {
-            this->window->draw(*this->s_objects->sprite);
+            if (this->s_objects->type == "brick") {
+                this->window->draw(*this->s_objects->sprite);
+            } else if (this->s_objects->type == "goomba") {
+                if (this->s_background[i].getPosition().x < WINDOW_WIDTH) {
+                    this->s_objects->body->loop(save_ptr, 100);
+
+                    this->window->draw(*this->s_objects->body->getSprite());
+                }
+            }
             nb++;
             this->s_objects++;
         }
         this->NB_SPRITES += nb;
     }
     this->s_objects = save_ptr;
-}
-
-void Game::moveGoombas() {
-    auto *save_ptr = this->s_objects;
-    for (int i = 0; i < map->getNumberOfGrids(); i++) {
-        int nb = 0;
-
-        while (nb < map->getNthGrid(i)->NB_SPRITES) {
-            if (save_ptr->type == "goomba" &&
-                this->s_background[i].getPosition().x < WINDOW_WIDTH)
-                save_ptr->sprite->move(-1.0f, 0);
-            nb++;
-            save_ptr++;
-        }
-    }
 }
