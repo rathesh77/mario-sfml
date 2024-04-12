@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
-#include "Constants.hpp"
 #include "Map.hpp"
 #include "Mario.hpp"
 
@@ -19,34 +19,45 @@ class Game {
 
     void loadMap(Map *);
     void generateSpritesInMemory();
-    void moveGoombas();
 
    private:
-    int currentMap;
-    int NB_GRIDS;
-    int SINGLE_BACKGROUND_WIDTH = TILE_DIMENSION * TILE_DIMENSION;
+    int m_currentMap;
+    int m_nb_grids;
+    int m_single_background_width = TILE_DIMENSION * TILE_DIMENSION;
 
-    std::string backgroundPath = "sprites/background2.png";
-    std::string brickPath = "sprites/bricks.png";
-    std::string ennemiesPath = "sprites/ennemies.png";
+    std::string m_backgroundPath = "sprites/background2.png";
+    std::string m_skyPath = "sprites/background2_non_transparent.png";
+    std::string m_brickPath = "sprites/bricks.png";
+    std::string m_groundPath = "sprites/tileset.png";
 
-    sf::Sprite *s_background;
-    SpriteObject *s_objects = new SpriteObject[1];
+    std::string m_ennemiesPath = "sprites/ennemies.png";
 
-    sf::Texture t_background;
-    sf::Texture t_brick;
-    sf::Texture t_ennemies;
+    sf::Sprite *m_s_background;
+    sf::Sprite *m_s_sky;
 
-    sf::RenderWindow *window;
+    SpriteObject *m_s_objects = new SpriteObject[1];
 
-    Mario *mario;
+    sf::Texture m_t_sky;
+    sf::Texture m_t_background;
+    sf::Texture m_t_brick;
+    sf::Texture m_t_ground;
 
-    Map *map;
+    sf::Texture m_t_ennemies;
+
+    sf::RenderWindow *m_window;
+
+    Mario *m_mario;
+
+    Map *m_map;
 
     void drawSprites();
 
-    int NB_SPRITES = 0;
-    int current_grid = 0;
+    int m_nb_sprites = 0;
+    int m_current_grid = 0;
 
-    bool lost = false;
+    bool m_lost = false;
+
+    sf::SoundBuffer buffer;
+    sf::Sound sound;
+
 };
