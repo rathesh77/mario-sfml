@@ -122,8 +122,10 @@ void Game::generateSpritesInMemory() {
     SpriteObject *_m_s_objects = new SpriteObject[this->m_nb_sprites + 1];
     memcpy(_m_s_objects, save_ptr,
            sizeof(SpriteObject) * (this->m_nb_sprites + 1));
-
+    this->m_s_objects = NULL;
+    save_ptr = NULL;
     this->m_s_objects = _m_s_objects;
+    _m_s_objects = NULL;
 }
 
 int Game::getCurrentMap() { return this->m_currentMap; }
