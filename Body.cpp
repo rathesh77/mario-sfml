@@ -80,13 +80,11 @@ void Body::detectCollisions(SpriteObject *s_objects) {
                 sf::Vector2f oppositeForce = this->getPosition() - objectPos;
                 if (std::abs(oppositeForce.y) > std::abs(oppositeForce.x)) {
                     if (oppositeForce.y >= 0) {  // force downward
-                        std::cout << "downward" << std::endl;
                         if (this->m_velocityY > 0)
                             this->m_velocityY = -0.0f;
                         else
                             this->m_overlap = false;
                     } else {
-                        std::cout << "upward" << std::endl;
                         // force upward
                         m_ground =
                             s_objects->sprite->getPosition().y - TILE_DIMENSION;

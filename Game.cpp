@@ -173,7 +173,6 @@ void Game::tick(sf::Clock *clock) {
             sound.stop();
         }
         this->m_mario->loop(this->m_s_objects);
-        this->drawSprites();
 
     } else {
         if (sound.getStatus() == sf::Sound::Stopped) {
@@ -182,6 +181,7 @@ void Game::tick(sf::Clock *clock) {
             sound.play();
         }
     }
+        this->drawSprites();
 
     this->m_current_grid = (int)(this->m_mario->realCoordinates.x /
                                  (TILE_DIMENSION * TILE_DIMENSION));

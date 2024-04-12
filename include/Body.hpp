@@ -73,7 +73,7 @@ class Body {
     float m_acc = 0.0f;
 
     float m_velocityX = -1.0f;
-    float m_maxVelocityX = 3.0f;
+    float m_maxVelocityX = 1.0f;
 
     float m_accOffset = 0.0f;
 

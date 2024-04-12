@@ -28,7 +28,8 @@ Mario::Mario() {
     this->realCoordinates.x += this->getX();
     this->m_direction = 0;
     this->m_velocityX = 0.0f;
-    this->m_accOffset = 0.1f;
+    this->m_accOffset = 0.25f;
+    this->m_maxVelocityX = 2.0f;
 
     m_ground = WINDOW_HEIGHT + 16;
 }
@@ -67,8 +68,10 @@ void Mario::detectCollisions(SpriteObject *s_objects) {
                 objectPos)) {
             hit = true;
             this->m_overlap = true;
-            sf::Vector2f oppositeForce = this->getPosition() - objectPos;
-            if (std::abs(oppositeForce.y) > std::abs(oppositeForce.x)) {
+            sf::Vector2i oppositeForce = (sf::Vector2i)this->getPosition() - (sf::Vector2i) objectPos;
+            if (std::abs(oppositeForce.y) == std::abs(oppositeForce.x)) {
+            }
+            else if (std::abs(oppositeForce.y) > std::abs(oppositeForce.x)) {
                 if (oppositeForce.y >= 0) {  // force downward
                     if (this->m_velocityY > 0)
                         this->m_velocityY = -0.0f;

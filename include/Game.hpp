@@ -30,7 +30,7 @@ class Game {
     std::string m_brickPath = "sprites/bricks.png";
     std::string m_groundPath = "sprites/tileset.png";
 
-    std::string m_ennemiesPath = "sprites/ennemies.png";
+    std::string m_ennemiesPath = "sprites/ennemies_transparent.png";
 
     sf::Sprite *m_s_background;
     sf::Sprite *m_s_sky;
