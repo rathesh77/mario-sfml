@@ -14,7 +14,7 @@ int main() {
     }
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
-                            "SFML window");
+                            "Super Mario Bros");
     window.setFramerateLimit(30);
     window.setKeyRepeatEnabled(true);
     window.setSize(sf::Vector2u(1200, 400));

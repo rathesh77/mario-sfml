@@ -7,12 +7,12 @@ Map::Map(int numberOfGrids) {
     for (int i = 0; i < numberOfGrids; i++) {
         this->grids[i] = new Grid;
     }
-    this->NB_GRIDS = numberOfGrids;
+    this->m_nb_grids = numberOfGrids;
 }
 
 Grid *Map::getNthGrid(int nth) { return this->grids[nth]; }
 
-int Map::getNumberOfGrids() { return this->NB_GRIDS; }
+int Map::getNumberOfGrids() { return this->m_nb_grids; }
 
 void Map::addObjectToCurrentGrid(Grid *grid, Object *e) {
     if (!grid->object) {

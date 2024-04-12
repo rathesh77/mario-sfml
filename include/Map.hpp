@@ -31,7 +31,7 @@ class Map {
 
    private:
     Grid **grids;
-    int NB_GRIDS;
+    int m_nb_grids;
 };
 
 #endif

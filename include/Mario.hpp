@@ -7,7 +7,7 @@ class Mario: public Body {
    public:
 
     Mario();
-    void loop(SpriteObject *, int);
+    void loop(SpriteObject *);
 
     void moveX();
 

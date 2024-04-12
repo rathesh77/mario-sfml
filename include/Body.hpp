@@ -22,7 +22,7 @@ class Body {
     Body(std::string, float, float);
     Body();
 
-    void loop(SpriteObject *, int);
+    void loop(SpriteObject *);
 
     void moveX();
     void moveY();
@@ -55,7 +55,6 @@ class Body {
 
     bool collides(sf::Vector2f, sf::Vector2f);
 
-    bool decelerating = false;
 
     float lerp(float, float, float);
     sf::Vector2f realCoordinates;
@@ -90,6 +89,7 @@ class Body {
 
     float m_ground;
     bool m_overlap = false;
+    bool m_decelerating = false;
 };
 
 

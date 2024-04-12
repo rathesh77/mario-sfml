@@ -4,7 +4,8 @@
 
 Mario::Mario() {
     if (!this->m_marioFrameOne.loadFromFile(
-            this->m_spritePath, sf::IntRect(0, 8, this->m_width, this->m_height)))
+            this->m_spritePath,
+            sf::IntRect(0, 8, this->m_width, this->m_height)))
         throw std::invalid_argument("Could not load mario texture");
 
     if (!this->m_marioFrameTwo.loadFromFile(
@@ -29,25 +30,24 @@ Mario::Mario() {
     this->m_velocityX = 0.0f;
     this->m_accOffset = 0.1f;
 
-    m_ground = BOUNDING_Y_BOTTOM;
+    m_ground = WINDOW_HEIGHT + 16;
 }
 
-void Mario::loop(SpriteObject *s_objects, int NB_SPRITES) {
+void Mario::loop(SpriteObject *s_objects) {
+    if (this->isOverlaping()) {
+        this->m_overlap = false;
 
-        if (this->isOverlaping()) {
-            this->m_overlap = false;
+    } else {
+        this->updateHorizontalVelocity();
+        this->updateVerticalVelocity();
+        this->postCollisionsDetection();
 
-        } else {
-            this->updateHorizontalVelocity();
-            this->updateVerticalVelocity();
-            this->postCollisionsDetection();
+        this->detectCollisions(s_objects);
+    }
+    this->moveX();
+    this->moveY();
 
-            this->detectCollisions(s_objects);
-        }
-        this->moveX();
-        this->moveY();
-
-        this->resetY();
+    this->resetY();
 }
 
 void Mario::detectCollisions(SpriteObject *s_objects) {
@@ -56,21 +56,20 @@ void Mario::detectCollisions(SpriteObject *s_objects) {
 
     this->m_overlap = false;
     while (true) {
-        if (s_objects->type == "NULL" || s_objects->type == "" )
-            break;
+        if (s_objects->type == "NULL" || s_objects->type == "") break;
         sf::Vector2f objectPos = s_objects->sprite->getPosition();
-        if (s_objects->type != "brick") {
+        if (s_objects->type != "brick" && s_objects->type != "ground") {
             objectPos = s_objects->body->getPosition();
         }
-        if (this->collides(this->getPosition() +
-                               sf::Vector2f(this->m_velocityX, -this->m_velocityY),
-                           objectPos)) {
+        if (this->collides(
+                this->getPosition() +
+                    sf::Vector2f(this->m_velocityX, -this->m_velocityY),
+                objectPos)) {
             hit = true;
             this->m_overlap = true;
             sf::Vector2f oppositeForce = this->getPosition() - objectPos;
             if (std::abs(oppositeForce.y) > std::abs(oppositeForce.x)) {
                 if (oppositeForce.y >= 0) {  // force downward
-                    std::cout << "downward" << std::endl;
                     if (this->m_velocityY > 0)
                         this->m_velocityY = -0.0f;
                     else
@@ -79,8 +78,7 @@ void Mario::detectCollisions(SpriteObject *s_objects) {
                         m_hitEnnemy = true;
                     }
                 } else {
-                    std::cout << "upward" << std::endl;
-                    // force upward
+                    //  force upward
                     m_ground = objectPos.y - TILE_DIMENSION;
                     this->m_velocityY = this->getY() - m_ground;
 
@@ -103,7 +101,7 @@ void Mario::detectCollisions(SpriteObject *s_objects) {
 void Mario::moveX()  // no collisions handling here. Only moving sprite
 {
     if (this->getX() + this->m_velocityX <= BOUNDING_X_LEFT &&
-        (this->m_direction < 1 || this->decelerating)) {
+        (this->m_direction < 1 || this->m_decelerating)) {
         this->m_velocityX = 0.0f;
         this->m_sprite.setPosition(this->getX(), this->getY());
         std::cout << "out of map:" + std::to_string(this->getX()) << std::endl;
@@ -111,7 +109,7 @@ void Mario::moveX()  // no collisions handling here. Only moving sprite
         this->realCoordinates.x += this->m_velocityX;
 
         if ((this->getX() + this->getVelocity() >= BOUNDING_X_MIDDLE)) {
-            if (!this->decelerating && this->getDirection() < 1) {
+            if (!this->m_decelerating && this->getDirection() < 1) {
                 this->m_sprite.move(sf::Vector2f(this->m_velocityX, 0));
                 this->m_freezeMario = false;
             } else {

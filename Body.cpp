@@ -8,16 +8,17 @@ Body::Body(std::string spritePath, float x, float y) {
     this->m_spritePath = spritePath;
 
     if (!this->m_texture.loadFromFile(
-            this->m_spritePath, sf::IntRect(0, 16, this->m_width, this->m_height)))
+            this->m_spritePath,
+            sf::IntRect(0, 16, this->m_width, this->m_height)))
         throw std::invalid_argument("Could not load mario texture");
 
     this->m_sprite = sf::Sprite(this->m_texture);
     this->m_sprite.setPosition(x, y);
     this->realCoordinates.x += this->getX();
-    m_ground = BOUNDING_Y_BOTTOM;
+    m_ground = WINDOW_HEIGHT + 16;
 }
 
-void Body::loop(SpriteObject *s_objects, int NB_SPRITES) {
+void Body::loop(SpriteObject *s_objects) {
     if (this->isOverlaping()) {
         // this->overlap = false;
     } else {
@@ -67,9 +68,8 @@ void Body::detectCollisions(SpriteObject *s_objects) {
 
     this->m_overlap = false;
     while (true) {
-        if (s_objects->type == "NULL" || s_objects->type == "" )
-            break;
-        if (s_objects->type == "brick") {
+        if (s_objects->type == "NULL" || s_objects->type == "") break;
+        if (s_objects->type == "brick" || s_objects->type == "ground") {
             sf::Vector2f objectPos = s_objects->sprite->getPosition();
             if (this->collides(
                     this->getPosition() +
@@ -104,12 +104,12 @@ void Body::detectCollisions(SpriteObject *s_objects) {
 
 void Body::postCollisionsDetection() {
     if (!this->m_isJumping) {
-        //std::cout << "not hit" << std::endl;
+        // std::cout << "not hit" << std::endl;
         this->m_velocityY = 0;
         this->m_isJumping = true;
     }
 
-    m_ground = BOUNDING_Y_BOTTOM;
+    m_ground = WINDOW_HEIGHT + 16;
 }
 
 bool Body::collides(sf::Vector2f a, sf::Vector2f b) {
@@ -135,9 +135,9 @@ void Body::updateHorizontalVelocity() {
     this->m_velocityX = lerp(current, goal, dt);
 
     if (std::abs(this->m_velocityX) < std::abs(current)) {
-        this->decelerating = true;
+        this->m_decelerating = true;
     } else {
-        this->decelerating = false;
+        this->m_decelerating = false;
     }
 }
 
