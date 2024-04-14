@@ -1,19 +1,29 @@
 #include "Body.hpp"
-
 #include <iostream>
 
-Body::Body() {}
+Body::Body() {
+    this->m_direction = 0;
+    this->m_velocityX = 0.0f;
+    this->m_accOffset = 0.0f;
+    this->m_maxVelocityX = 0.0f;
+    this->m_accOffset = 0;
+    this->m_sprite = sf::Sprite();
+    this->m_sprite.setPosition(0, WINDOW_HEIGHT + (TILE_DIMENSION * 2));
+}
 
-Body::Body(std::string spritePath, float x, float y) {
-    this->m_spritePath = spritePath;
+Body::Body(sf::Texture *texture, float posX, float posY, float rectX,
+           float rectY, float width, float height, std::string type) {
+    this->m_type = type;
 
-    if (!this->m_texture.loadFromFile(
-            this->m_spritePath,
-            sf::IntRect(0, 16, this->m_width, this->m_height)))
-        throw std::invalid_argument("Could not load mario texture");
+    this->m_texture = texture;
 
-    this->m_sprite = sf::Sprite(this->m_texture);
-    this->m_sprite.setPosition(x, y);
+    this->m_width = width;
+    this->m_height = width;
+
+    this->m_sprite = sf::Sprite(*this->m_texture);
+    this->m_sprite.setTextureRect(
+        sf::IntRect(rectX, rectY, width, height));
+    this->m_sprite.setPosition(posX, posY);
     this->realCoordinates.x += this->getX();
     m_ground = WINDOW_HEIGHT + 16;
 }
@@ -33,9 +43,10 @@ void Body::loop(SpriteObject *s_objects) {
 
     this->resetY();
     if (this->isOverlaping()) {
-        this->m_velocityX = -1.0;
+        // this->m_velocityX = -1.0;
         this->m_overlap = false;
     }
+    // std::cout<<this->m_velocityX<<std::endl;
 }
 
 sf::Vector2f Body::getPosition() { return this->m_sprite.getPosition(); }
@@ -69,36 +80,47 @@ void Body::detectCollisions(SpriteObject *s_objects) {
     this->m_overlap = false;
     while (true) {
         if (s_objects->type == "NULL" || s_objects->type == "") break;
-        if (s_objects->type == "brick" || s_objects->type == "ground") {
-            sf::Vector2f objectPos = s_objects->sprite->getPosition();
-            if (this->collides(
-                    this->getPosition() +
-                        sf::Vector2f(this->m_velocityX, -this->m_velocityY),
-                    objectPos)) {
-                hit = true;
-                this->m_overlap = true;
-                sf::Vector2f oppositeForce = this->getPosition() - objectPos;
-                if (std::abs(oppositeForce.y) > std::abs(oppositeForce.x)) {
-                    if (oppositeForce.y >= 0) {  // force downward
-                        if (this->m_velocityY > 0)
-                            this->m_velocityY = -0.0f;
-                        else
-                            this->m_overlap = false;
-                    } else {
-                        // force upward
-                        m_ground =
-                            s_objects->sprite->getPosition().y - TILE_DIMENSION;
-                        this->m_velocityY = this->getY() - m_ground;
-                    }
+        if (compare(this, s_objects->body)) {
+            s_objects++;
+            continue;
+        }  // two of the same type of body cannot collide each other
+        sf::Vector2f objectPos = s_objects->body->getPosition();
+
+        if (this->collides(
+                this->getPosition() +
+                    sf::Vector2f(this->m_velocityX, -this->m_velocityY),
+                objectPos)) {
+            hit = true;
+            this->m_overlap = true;
+            sf::Vector2f oppositeForce = this->getPosition() - objectPos;
+            float forceY = std::abs(oppositeForce.y);
+            float forceX = std::abs(oppositeForce.x);
+
+            if (forceY > forceX) {
+                if (oppositeForce.y >= 0) {  // force downward
+                    if (this->m_velocityY > 0)
+                        this->m_velocityY = -0.0f;
+                    else
+                        this->m_overlap = false;
                 } else {
+                    // force upward
+                    m_ground = objectPos.y - TILE_DIMENSION;
+                    this->m_velocityY = this->getY() - m_ground;
+                }
+            } else if (forceY < forceX) {
+                if (forceX <= TILE_DIMENSION) {
+                    this->m_direction = -this->m_direction;
                     this->m_velocityX = 0;
                 }
+            } else {
             }
         }
         s_objects++;
         i++;
     }
 }
+
+bool Body::compare(Body *a, Body *b) { return a == b; }
 
 void Body::postCollisionsDetection() {
     if (!this->m_isJumping) {

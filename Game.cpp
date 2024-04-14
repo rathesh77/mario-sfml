@@ -1,5 +1,5 @@
 #include "Game.hpp"
-
+#include "Ground.hpp"
 #include <iostream>
 
 Game::Game(sf::RenderWindow *window) {
@@ -10,13 +10,13 @@ Game::Game(sf::RenderWindow *window) {
     buffer.loadFromFile("audio/overworld.mp3");
 
     sound.setBuffer(buffer);
-    sound.play();
+    //sound.play();
 }
 
 void Game::loadMap(Map *map) {
     this->m_map = map;
     this->m_nb_grids = map->getNumberOfGrids();
-    std::cout << this->m_backgroundPath;
+    //std::cout << this->m_backgroundPath;
 
     if (!this->m_t_sky.loadFromFile(this->m_skyPath))
         throw std::invalid_argument("Could not load goomba texture");
@@ -28,8 +28,7 @@ void Game::loadMap(Map *map) {
         throw std::invalid_argument("Could not load brick texture");
 
     if (!this->m_t_ground.loadFromFile(
-            this->m_groundPath,
-            sf::IntRect(32, 460, TILE_DIMENSION, TILE_DIMENSION)))
+            this->m_groundPath))
         throw std::invalid_argument("Could not load ground texture");
 
     if (!this->m_t_ennemies.loadFromFile(this->m_ennemiesPath))
@@ -52,7 +51,6 @@ void Game::loadMap(Map *map) {
                 auto skySprite = sf::Sprite();
                 const int coord = (TILE_DIMENSION * TILE_DIMENSION * (i)) +
                                   ((j * TILE_DIMENSION) + k);
-                std::cout << std::to_string(coord) << std::endl;
                 this->m_s_sky[coord] = skySprite;
                 this->m_s_sky[coord].setTexture(this->m_t_sky);
                 this->m_s_sky[coord].setTextureRect(
@@ -85,34 +83,27 @@ void Game::generateSpritesInMemory() {
         while (ptr) {
             this->m_s_objects->type = ptr->type;
             this->m_nb_sprites++;
-            if (ptr->type == "brick") {
-                this->m_s_objects->sprite->setTexture(m_t_brick);
-                this->m_s_objects->sprite->setTextureRect(
-                    sf::IntRect(272, 112, TILE_DIMENSION, TILE_DIMENSION));
-                this->m_s_objects->sprite->setPosition(
-                    ptr->position.x +
-                        this->m_s_background[m_current_grid].getPosition().x +
-                        (TILE_DIMENSION * TILE_DIMENSION *
-                         (i - m_current_grid)),
-                    ptr->position.y);
-            } else if (ptr->type == "goomba") {
-                const float x =
-                    ptr->position.x +
-                    this->m_s_background[m_current_grid].getPosition().x +
-                    (TILE_DIMENSION * TILE_DIMENSION * (i - m_current_grid));
+            const float x =
+                ptr->position.x +
+                this->m_s_background[m_current_grid].getPosition().x +
+                (TILE_DIMENSION * TILE_DIMENSION * (i - m_current_grid));
 
-                const float y = ptr->position.y;
-                this->m_s_objects->body = new Body(this->m_ennemiesPath, x, y);
+            const float y = ptr->position.y;
+            if (ptr->type == "brick") {
+                this->m_s_objects->body = new Ground(&this->m_t_brick, x, y,272,112,16,16, ptr->type);
+   
+
+            } else if (ptr->type == "goomba") {
+
+                this->m_s_objects->body = new Body(&this->m_t_ennemies, x, y,0,16,16,16, ptr->type);
             } else if (ptr->type == "ground") {
-                this->m_s_objects->sprite->setTexture(m_t_ground);
-                this->m_s_objects->sprite->setTextureRect(
-                    sf::IntRect(0, 0, TILE_DIMENSION, TILE_DIMENSION));
-                this->m_s_objects->sprite->setPosition(
-                    ptr->position.x +
-                        this->m_s_background[m_current_grid].getPosition().x +
-                        (TILE_DIMENSION * TILE_DIMENSION *
-                         (i - m_current_grid)),
-                    ptr->position.y);
+                this->m_s_objects->body = new Ground(&this->m_t_ground, x, y,32, 460,16,16, ptr->type);
+            } else if (ptr->type == "stone") {
+                this->m_s_objects->body = new Ground(&this->m_t_ground, x, y,0,33,16,16, ptr->type);
+
+            } else if (ptr->type == "pipe") {
+                this->m_s_objects->body = new Ground(&this->m_t_ground, x, y,113,613,31,63, ptr->type);
+
             }
             ptr = ptr->next;
             this->m_s_objects++;
@@ -180,7 +171,7 @@ void Game::tick(sf::Clock *clock) {
         if (sound.getStatus() == sf::Sound::Stopped) {
             buffer.loadFromFile("audio/mario_dies.mp3");
             sound.setBuffer(buffer);
-            sound.play();
+            //sound.play();
         }
     }
         this->drawSprites();
@@ -217,14 +208,10 @@ void Game::shiftObjectsBackward() {
     for (int i = 0; i < m_map->getNumberOfGrids(); i++) {
         int nb = 0;
         while (nb < m_map->getNthGrid(i)->NB_SPRITES) {
-            if (this->m_s_objects->type == "brick" ||
-                this->m_s_objects->type == "ground") {
-                this->m_s_objects->sprite->move(
-                    sf::Vector2f(-this->m_mario->getVelocity(), 0));
-            } else {
-                this->m_s_objects->body->getSprite()->move(
-                    sf::Vector2f(-this->m_mario->getVelocity(), 0));
-            }
+
+            this->m_s_objects->body->getSprite()->move(
+                sf::Vector2f(-this->m_mario->getVelocity(), 0));
+        
             this->m_s_objects++;
             nb++;
         }
@@ -239,15 +226,22 @@ void Game::drawObjects() {
         int nb = 0;
 
         while (nb < m_map->getNthGrid(i)->NB_SPRITES) {
-            if (this->m_s_objects->type == "brick" ||
-                this->m_s_objects->type == "ground") {
-                this->m_window->draw(*this->m_s_objects->sprite);
-            } else if (this->m_s_objects->type == "goomba") {
+
+            // the commented code belows clear sprites that are offscreen. Might need to use it later
+            /*if (this->m_s_objects->body->getPosition().x < -TILE_DIMENSION) {
+                this->m_s_objects->body = new Body;
+                nb++;
+                this->m_s_objects++;
+                continue;
+            }*/
+             if (this->m_s_objects->type == "goomba") {
                 if (this->m_s_background[i].getPosition().x < WINDOW_WIDTH) {
                     this->m_s_objects->body->loop(save_ptr);
 
                     this->m_window->draw(*this->m_s_objects->body->getSprite());
                 }
+            } else {
+                this->m_window->draw(*this->m_s_objects->body->getSprite());
             }
             nb++;
             this->m_s_objects++;

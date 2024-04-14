@@ -3,6 +3,8 @@
 #include <iostream>
 
 Mario::Mario() {
+    this->m_width = TILE_DIMENSION;
+    this->m_height = TILE_DIMENSION;
     if (!this->m_marioFrameOne.loadFromFile(
             this->m_spritePath,
             sf::IntRect(0, 8, this->m_width, this->m_height)))
@@ -28,9 +30,9 @@ Mario::Mario() {
     this->realCoordinates.x += this->getX();
     this->m_direction = 0;
     this->m_velocityX = 0.0f;
-    this->m_accOffset = 0.25f;
+    this->m_accOffset = 0.1f;
     this->m_maxVelocityX = 2.0f;
-
+    this->m_gravity =3.0f;
     m_ground = WINDOW_HEIGHT + 16;
 }
 
@@ -49,6 +51,7 @@ void Mario::loop(SpriteObject *s_objects) {
     this->moveY();
 
     this->resetY();
+    // std::cout<<this->m_velocityX<<std::endl;
 }
 
 void Mario::detectCollisions(SpriteObject *s_objects) {
@@ -58,20 +61,19 @@ void Mario::detectCollisions(SpriteObject *s_objects) {
     this->m_overlap = false;
     while (true) {
         if (s_objects->type == "NULL" || s_objects->type == "") break;
-        sf::Vector2f objectPos = s_objects->sprite->getPosition();
-        if (s_objects->type != "brick" && s_objects->type != "ground") {
-            objectPos = s_objects->body->getPosition();
-        }
+        sf::Vector2f objectPos = s_objects->body->getPosition();
+
         if (this->collides(
                 this->getPosition() +
                     sf::Vector2f(this->m_velocityX, -this->m_velocityY),
                 objectPos)) {
             hit = true;
             this->m_overlap = true;
-            sf::Vector2i oppositeForce = (sf::Vector2i)this->getPosition() - (sf::Vector2i) objectPos;
-            if (std::abs(oppositeForce.y) == std::abs(oppositeForce.x)) {
-            }
-            else if (std::abs(oppositeForce.y) > std::abs(oppositeForce.x)) {
+            sf::Vector2f oppositeForce = this->getPosition() - objectPos;
+            float forceY = std::abs(oppositeForce.y);
+            float forceX = std::abs(oppositeForce.x);
+
+            if (forceY > forceX) {
                 if (oppositeForce.y >= 0) {  // force downward
                     if (this->m_velocityY > 0)
                         this->m_velocityY = -0.0f;
@@ -86,13 +88,17 @@ void Mario::detectCollisions(SpriteObject *s_objects) {
                     this->m_velocityY = this->getY() - m_ground;
 
                     if (s_objects->type == "goomba") {
-                        s_objects->body = new Body;
+                        delete s_objects->body;
+                        s_objects->body = new Body();
                     }
                 }
             } else {
-                this->m_velocityX = 0;
-                if (s_objects->type == "goomba") {
-                    m_hitEnnemy = true;
+                if (forceX <= TILE_DIMENSION) {
+                    this->m_velocityX = 0;
+                    std::cout << "horizontal" << std::endl;
+                    if (s_objects->type == "goomba") {
+                        m_hitEnnemy = true;
+                    }
                 }
             }
         }
