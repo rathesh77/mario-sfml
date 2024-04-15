@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+//#include <SFML/Audio.hpp>
 
 #include "Map.hpp"
 #include "Mario.hpp"
@@ -25,7 +25,7 @@ class Game {
     int m_nb_grids;
     int m_single_background_width = TILE_DIMENSION * TILE_DIMENSION;
 
-    std::string m_backgroundPath = "sprites/background2.png";
+    std::string m_backgroundPath = "sprites/background2_non_transparent.png";
     std::string m_skyPath = "sprites/background2_non_transparent.png";
     std::string m_brickPath = "sprites/bricks.png";
     std::string m_groundPath = "sprites/tileset.png";
@@ -57,7 +57,7 @@ class Game {
 
     bool m_lost = false;
 
-    sf::SoundBuffer buffer;
-    sf::Sound sound;
+    //sf::SoundBuffer buffer;
+    //sf::Sound sound;
 
 };

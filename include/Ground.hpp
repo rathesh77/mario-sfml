@@ -6,7 +6,7 @@
 class Ground: public Body {
    public:
 
-    Ground(sf::Texture*, float, float, float, float, float, float, std::string);
+    Ground(sf::Texture*, float, float, float, float, int, int, std::string);
 
     void detectCollisions(SpriteObject*);
    void postCollisionsDetection();

@@ -1,7 +1,8 @@
 #include "Body.hpp"
 #include <iostream>
 
-Body::Body() {
+Body::Body()
+{
     this->m_direction = 0;
     this->m_velocityX = 0.0f;
     this->m_accOffset = 0.0f;
@@ -12,13 +13,14 @@ Body::Body() {
 }
 
 Body::Body(sf::Texture *texture, float posX, float posY, float rectX,
-           float rectY, float width, float height, std::string type) {
+           float rectY, int width, int height, std::string type)
+{
     this->m_type = type;
 
     this->m_texture = texture;
 
     this->m_width = width;
-    this->m_height = width;
+    this->m_height = height;
 
     this->m_sprite = sf::Sprite(*this->m_texture);
     this->m_sprite.setTextureRect(
@@ -28,10 +30,14 @@ Body::Body(sf::Texture *texture, float posX, float posY, float rectX,
     m_ground = WINDOW_HEIGHT + 16;
 }
 
-void Body::loop(SpriteObject *s_objects) {
-    if (this->isOverlaping()) {
+void Body::loop(SpriteObject *s_objects)
+{
+    if (this->isOverlaping())
+    {
         // this->overlap = false;
-    } else {
+    }
+    else
+    {
         this->updateHorizontalVelocity();
         this->updateVerticalVelocity();
         this->postCollisionsDetection();
@@ -42,26 +48,31 @@ void Body::loop(SpriteObject *s_objects) {
     this->moveY();
 
     this->resetY();
-    if (this->isOverlaping()) {
+    if (this->isOverlaping())
+    {
         // this->m_velocityX = -1.0;
         this->m_overlap = false;
     }
-    // std::cout<<this->m_velocityX<<std::endl;
 }
 
 sf::Vector2f Body::getPosition() { return this->m_sprite.getPosition(); }
 
-void Body::setDirectionX(int direction) {
-    if (direction != 0) {
+void Body::setDirectionX(int direction)
+{
+    if (direction != 0)
+    {
         this->m_lookingRight = direction == 1 ? true : false;
     }
 
-    if (!this->m_lookingRight && !this->m_flipped) {
+    if (!this->m_lookingRight && !this->m_flipped)
+    {
         // this->sprite.scale(-1.0f, 1.0f);
         // this->sprite.move(this->width, 0);
 
         this->m_flipped = true;
-    } else if (this->m_flipped && this->m_lookingRight) {
+    }
+    else if (this->m_flipped && this->m_lookingRight)
+    {
         // this->sprite.scale(-1.0f, 1.0f);
         // this->sprite.move(- this->width,0);
 
@@ -73,118 +84,135 @@ void Body::setDirectionX(int direction) {
 
 int Body::getDirection() { return this->m_direction; }
 
-void Body::detectCollisions(SpriteObject *s_objects) {
+void Body::detectCollisions(SpriteObject *s_objects)
+{
     int i = 0;
     bool hit = false;
 
-    this->m_overlap = false;
-    while (true) {
-        if (s_objects->type == "NULL" || s_objects->type == "") break;
-        if (compare(this, s_objects->body)) {
+    while (true)
+    {
+        if (s_objects->type == "NULL" || s_objects->type == "")
+            break;
+        if (compare(this, s_objects->body))
+        {
+            // two of the same type of body cannot collide each other
             s_objects++;
             continue;
-        }  // two of the same type of body cannot collide each other
+        }
         sf::Vector2f objectPos = s_objects->body->getPosition();
 
         if (this->collides(
                 this->getPosition() +
                     sf::Vector2f(this->m_velocityX, -this->m_velocityY),
-                objectPos)) {
+                objectPos, this->m_width, this->m_height, s_objects->body->getWidth(), s_objects->body->getHeight()))
+        {
             hit = true;
-            this->m_overlap = true;
-            sf::Vector2f oppositeForce = this->getPosition() - objectPos;
-            float forceY = std::abs(oppositeForce.y);
-            float forceX = std::abs(oppositeForce.x);
 
-            if (forceY > forceX) {
-                if (oppositeForce.y >= 0) {  // force downward
-                    if (this->m_velocityY > 0)
-                        this->m_velocityY = -0.0f;
-                    else
-                        this->m_overlap = false;
-                } else {
-                    // force upward
-                    m_ground = objectPos.y - TILE_DIMENSION;
-                    this->m_velocityY = this->getY() - m_ground;
-                }
-            } else if (forceY < forceX) {
-                if (forceX <= TILE_DIMENSION) {
-                    this->m_direction = -this->m_direction;
-                    this->m_velocityX = 0;
-                }
-            } else {
+            if (this->getY() + this->getHeight() <= objectPos.y)
+            {
+
+                m_ground = objectPos.y;
+                this->m_velocityY = this->getY() - (objectPos.y - this->m_height);
+            }
+            else if (this->getY() >= objectPos.y + s_objects->body->getHeight())
+            {
+                if (this->m_velocityY > 0)
+                    this->m_velocityY = -0.0f;
+            }
+            else
+            {
+                this->m_direction = -this->m_direction;
+                this->m_velocityX = 0;
             }
         }
         s_objects++;
         i++;
     }
+    if (!hit)
+    {
+        m_overlap = false;
+        m_ground = WINDOW_HEIGHT + 16;
+    }
+    else
+    {
+        m_overlap = true;
+    }
 }
 
 bool Body::compare(Body *a, Body *b) { return a == b; }
 
-void Body::postCollisionsDetection() {
-    if (!this->m_isJumping) {
-        // std::cout << "not hit" << std::endl;
+void Body::postCollisionsDetection()
+{
+    if (!this->m_isJumping)
+    {
         this->m_velocityY = 0;
         this->m_isJumping = true;
     }
 
-    m_ground = WINDOW_HEIGHT + 16;
+    // m_ground = WINDOW_HEIGHT + 16;
 }
 
-bool Body::collides(sf::Vector2f a, sf::Vector2f b) {
-    return a.x >= b.x - TILE_DIMENSION + 2 && a.x <= b.x + TILE_DIMENSION - 2 &&
-           a.y >= b.y - TILE_DIMENSION && a.y <= b.y + TILE_DIMENSION;
+bool Body::collides(sf::Vector2f a, sf::Vector2f b, int aw, int ah, int bw, int bh)
+{
+
+    return a.x >= b.x - aw + 2 && a.x <= b.x + bw - 2 &&
+           a.y >= b.y - ah && a.y <= b.y + bh;
 }
-void Body::moveX()  // no collisions handling here. Only moving sprite
+void Body::moveX() // no collisions handling here. Only moving sprite
 {
     this->realCoordinates.x += this->m_velocityX;
 
     this->m_sprite.move(sf::Vector2f(this->m_velocityX, 0));
 }
 
-void Body::moveY() {
-    if (this->m_isJumping) {
+void Body::moveY()
+{
+    if (this->m_isJumping)
+    {
         this->m_sprite.move(sf::Vector2f(0, -this->m_velocityY));
     }
 }
-void Body::updateHorizontalVelocity() {
+void Body::updateHorizontalVelocity()
+{
     float goal = this->m_maxVelocityX * this->m_direction;
     float dt = this->m_accOffset;
     float current = this->m_velocityX;
     this->m_velocityX = lerp(current, goal, dt);
 
-    if (std::abs(this->m_velocityX) < std::abs(current)) {
+    if (std::abs(this->m_velocityX) < std::abs(current))
+    {
         this->m_decelerating = true;
-    } else {
+    }
+    else
+    {
         this->m_decelerating = false;
     }
 }
 
-void Body::updateVerticalVelocity() {
-    if (this->m_isJumping) {
-        if (this->getY() - (this->m_velocityY - this->m_gravity) >= m_ground) {
-            this->m_velocityY = this->getY() - m_ground;
-            this->m_overlap = true;
-        } else
-            this->m_velocityY -= this->m_gravity;
-    }
+void Body::updateVerticalVelocity()
+{
+    if (this->m_velocityY > -m_initialVelocityY)
+        this->m_velocityY -= this->m_gravity;
 }
 
 void Body::jump() { this->m_isJumping = true; }
 
-void Body::resetY() {
-    if (this->getY() == m_ground) {
+void Body::resetY()
+{
+    if (this->getY() + this->getHeight() == m_ground)
+    {
         this->m_isJumping = false;
         this->m_velocityY = m_initialVelocityY;
-        this->m_gravity = m_initialGravity;
     }
 }
 
-float Body::lerp(float current, float goal, float dt) {
-    if (current + dt < goal) return current + dt;
+float Body::lerp(float current, float goal, float dt)
+{
+    if (current + dt < goal)
+        return current + dt;
 
-    if (goal < current) return current - dt;
+    if (goal < current)
+        return current - dt;
 
     return goal;
 }

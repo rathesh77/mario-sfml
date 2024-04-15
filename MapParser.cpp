@@ -1,35 +1,43 @@
 #include "MapParser.hpp"
 
-MapParser *MapParser::create(std::string filename) {
+MapParser *MapParser::create(std::string filename)
+{
     std::ifstream file;
     file.open(filename);
 
-    if (file.is_open()) {
+    if (file.is_open())
+    {
         file.close();
         return new MapParser(filename);
     }
     return NULL;
 }
-MapParser::MapParser(std::string filename) {
+MapParser::MapParser(std::string filename)
+{
     this->map = new Map(20);
     this->filename = filename;
 }
 
-void MapParser::parse() {
+void MapParser::parse()
+{
     std::ifstream file(this->filename);
     std::string line;
     Grid *currentGrid;
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
+    {
         int start = 0;
         skipBlanks(line, start);
-        std::cout << line << '\n';
-        if (line.length() == 0 || line[start] == 0) {
+        if (line.length() == 0 || line[start] == 0)
+        {
             continue;
         }
-        if (line[start] == '#') {
+        if (line[start] == '#')
+        {
             int currentGridId = parseNthGrid(line, start);
             currentGrid = this->map->getNthGrid(currentGridId);
-        } else if (line[start] != '-') {
+        }
+        else if (line[start] != '-')
+        {
             Object *e = new Object;
             e = parseObject(line, start);
             this->map->addObjectToCurrentGrid(currentGrid, e);
@@ -38,15 +46,20 @@ void MapParser::parse() {
     file.close();
 }
 
-int MapParser::parseNthGrid(std::string line, int &start) {
+int MapParser::parseNthGrid(std::string line, int &start)
+{
     std::string str = "";
     int num = 0;
-    for (int i = start + 1; i < line.length(); i++) {
+    for (int i = start + 1; i < line.length(); i++)
+    {
         char current = line[i];
-        if (current >= 48 && current <= 57) {
+        if (current >= 48 && current <= 57)
+        {
             str += current;
             num = (num * 10) + ((int)current - 48);
-        } else {
+        }
+        else
+        {
             throw std::invalid_argument("Invalid file header");
         }
     }
@@ -54,7 +67,8 @@ int MapParser::parseNthGrid(std::string line, int &start) {
     return num;
 }
 
-Object *MapParser::parseObject(std::string line, int &start) {
+Object *MapParser::parseObject(std::string line, int &start)
+{
     Object *object = new Object;
 
     skipBlanks(line, start);
@@ -68,37 +82,49 @@ Object *MapParser::parseObject(std::string line, int &start) {
     return object;
 }
 
-std::string MapParser::parseObjectType(std::string line, int &start) {
+std::string MapParser::parseObjectType(std::string line, int &start)
+{
     skipBlanks(line, start);
 
     std::string type = "";
-    while (line[start] != ' ') {
+    while (line[start] != ' ')
+    {
         char current = line[start];
         start++;
-        if (current >= 97 && current <= 122) {
+        if (current >= 97 && current <= 122)
+        {
             type += current;
-        } else {
+        }
+        else
+        {
             throw std::invalid_argument("Invalid type header");
         }
     };
     return type;
 }
 
-float MapParser::parseObjectPosition(std::string line, int &start) {
+float MapParser::parseObjectPosition(std::string line, int &start)
+{
     skipBlanks(line, start);
 
     std::string str = "";
     float a = 0, b = 0;
 
-    while (line[start] != ' ' && line[start] != '\0') {
+    while (line[start] != ' ' && line[start] != '\0')
+    {
         char current = line[start];
         start++;
-        if (current >= 48 && current <= 57) {
+        if (current >= 48 && current <= 57)
+        {
             str += current;
-        } else if (current == '*') {
+        }
+        else if (current == '*')
+        {
             a = std::stof(str);
             str = "";
-        } else {
+        }
+        else
+        {
             throw std::invalid_argument("Invalid position header");
         }
     };
@@ -107,8 +133,10 @@ float MapParser::parseObjectPosition(std::string line, int &start) {
     return b * a;
 }
 
-void MapParser::skipBlanks(std::string line, int &start) {
-    while (line[start] == ' ') {
+void MapParser::skipBlanks(std::string line, int &start)
+{
+    while (line[start] == ' ')
+    {
         start++;
     };
 }

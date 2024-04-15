@@ -1,0 +1,20 @@
+begin
+    sideways:stone
+    MarioPosPrevious:65.600014/146.949997
+    MarioPosNext:67.600014/155.500000
+    obj:80.000000/160.000000
+end:325
+begin
+    sideways:ground
+    MarioPosPrevious:65.600014/164.050003
+    MarioPosNext:65.700012/173.199997
+    obj:64.000000/176.000000
+end:325
+begin
+    sideways:ground
+    MarioPosPrevious:65.600014/182.349991
+    MarioPosNext:65.600014/192.099991
+    obj:64.000000/192.000000
+end:325
+begin
+end:325

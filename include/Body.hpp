@@ -19,7 +19,7 @@ class Body {
     sf::Vector2f getPosition();
     sf::Sprite* getSprite();
 
-    Body(sf::Texture*, float, float, float, float, float, float, std::string);
+    Body(sf::Texture*, float, float, float, float, int, int, std::string);
     Body();
 
     void loop(SpriteObject *);
@@ -53,7 +53,7 @@ class Body {
     void detectCollisions(SpriteObject*);
     void postCollisionsDetection();
 
-    bool collides(sf::Vector2f, sf::Vector2f);
+    bool collides(sf::Vector2f, sf::Vector2f, int, int, int, int);
     bool compare(Body*, Body*);
 
 
