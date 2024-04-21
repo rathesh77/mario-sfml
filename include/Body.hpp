@@ -50,7 +50,12 @@ class Body {
 
     bool isOverlaping();
 
-    void detectCollisions(SpriteObject*);
+    std::map<std::string, std::vector<SpriteObject *>>  detectCollisions(SpriteObject*);
+    void handleCollision(SpriteObject *s_objects);
+    void upwardCollision(SpriteObject *,SpriteObject *);
+    void downwardCollision(SpriteObject *,SpriteObject *);
+    void sideCollision(SpriteObject *,SpriteObject * );
+
     void postCollisionsDetection();
 
     bool collides(sf::Vector2f, sf::Vector2f, int, int, int, int);
@@ -91,6 +96,8 @@ class Body {
     float m_ground;
     bool m_overlap = false;
     bool m_decelerating = false;
+    bool m_jumpEnabled = true;
+
 };
 
 

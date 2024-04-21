@@ -49,117 +49,63 @@ void Mario::loop(SpriteObject *s_objects)
         this->updateVerticalVelocity();
         this->postCollisionsDetection();
     }
-    this->detectCollisions(s_objects);
+    this->handleCollision(s_objects);
 
     this->moveX();
     this->moveY();
 }
 
-void Mario::detectCollisions(SpriteObject *s_objects)
+void Mario::handleCollision(SpriteObject *s_objects)
 {
-    int i = 0;
-    bool hit = false;
-    while (true)
+
+    std::map<std::string, std::vector<SpriteObject *>> collidedObjects = this->detectCollisions(s_objects);
+
+    for (SpriteObject *object : collidedObjects["up"])
     {
-        if (s_objects->type == "NULL" || s_objects->type == "")
-            break;
-        sf::Vector2f objectPos = s_objects->body->getPosition();
+        std::cout << "upward:" + object->type << std::endl;
 
-        if (this->collides(
-                this->getPosition() +
-                    sf::Vector2f(this->m_velocityX, -this->m_velocityY),
-                objectPos, this->m_width, this->m_height,
-                s_objects->body->getWidth(), s_objects->body->getHeight()))
+        sf::Vector2f objectPos = object->body->getPosition();
+
+        if (object->type == "goomba")
         {
+            delete object->body;
+            object->body = new Body();
+                        this->m_velocityY = -1;
 
-            hit = true;
-
-            float centerAX = (this->getX() + (this->m_width / 2));
-            float centerAY = (this->getY() + (this->m_height / 2));
-
-            float centerBX = (objectPos.x + (s_objects->body->getWidth() / 2));
-            float centerBY = (objectPos.y + (s_objects->body->getHeight() / 2));
-
-            sf::Vector2f centerA(centerAX, centerAY);
-            sf::Vector2f centerB(centerBX, centerBY);
-
-            sf::Vector2f sub = centerB - centerA;
-            sub = centerB - sub;
-
-            if (this->getY() + this->getHeight() <= objectPos.y)
-            {
-
-                std::cout << "upward:" + s_objects->type << std::endl;
-                /*
-                std::cout << "MarioPosPrevious:"+ std::to_string((this->getPosition()).x) + "/" + std::to_string((this->getPosition()).y) << std::endl;
-                std::cout << "MarioPosNext:"+ std::to_string((this->getPosition() +
-                    sf::Vector2f(this->m_velocityX, -this->m_velocityY)).x) + "/" + std::to_string((this->getPosition() +
-                    sf::Vector2f(this->m_velocityX, -this->m_velocityY)).y) << std::endl;
-                std::cout << "obj:"+ std::to_string(s_objects->body->getX()) + "/" + std::to_string(s_objects->body->getY())<< std::endl;
-*/
-                m_ground = objectPos.y;
-                this->m_velocityY = this->getY() - (objectPos.y - this->m_height);
-
-                if (s_objects->type == "goomba")
-                {
-                    delete s_objects->body;
-                    s_objects->body = new Body();
-                }
-            }
-            else if (this->getY() >= objectPos.y + s_objects->body->getHeight())
-            {
-                std::cout << "downward" << std::endl;
-
-                // if (this->m_velocityY > 0)
-                this->m_velocityY = 0.0f;
-
-                if (s_objects->type == "goomba")
-                {
-                    m_hitEnnemy = true;
-                }
-            }
-            else
-
-            {
-                std::cout << "sideways:" + s_objects->type << std::endl;
-                /*
-
-                                std::cout << "MarioPosPrevious:"+ std::to_string((this->getPosition()).x) + "/" + std::to_string((this->getPosition()).y) << std::endl;
-                                std::cout << "MarioPosNext:"+ std::to_string((this->getPosition() +
-                                    sf::Vector2f(this->m_velocityX, -this->m_velocityY)).x) + "/" + std::to_string((this->getPosition() +
-                                    sf::Vector2f(this->m_velocityX, -this->m_velocityY)).y) << std::endl;
-                                std::cout << "obj:"+ std::to_string(s_objects->body->getX()) + "/" + std::to_string(s_objects->body->getY())<< std::endl;
-                */
-                this->m_velocityX = 0;
-                this->m_sprite.move(1 * -this->m_direction, 0);
-                if (s_objects->type == "goomba")
-                {
-                    m_hitEnnemy = true;
-                }
-            }
-        }
-        else
-        {
-        }
-        s_objects++;
-        i++;
-    }
-
-    // std::cout<<"end:"+ std::to_string(i) <<std::endl;
-    if (!hit)
-    {
-        m_overlap = false;
-        m_ground = WINDOW_HEIGHT + 16;
-
-        if (this->getY() + -this->m_velocityY > 16 * 11)
-        {
-            std::cout << "out Y" << std::endl;
+        } else {
+            m_ground = objectPos.y;
+            this->m_velocityY = this->getY() - (objectPos.y - this->m_height);
         }
     }
-    else
+    for (SpriteObject *object : collidedObjects["down"])
     {
+        std::cout << "downward:" + object->type << std::endl;
 
-        m_overlap = true;
+        // if (this->m_velocityY > 0)
+        this->m_velocityY = 0.0f;
+
+        if (object->type == "goomba")
+        {
+            m_hitEnnemy = true;
+        }
+    }
+    for (SpriteObject *object : collidedObjects["side"])
+    {
+        std::cout << "sideways:" + object->type << std::endl;
+        /*
+
+                        std::cout << "MarioPosPrevious:"+ std::to_string((this->getPosition()).x) + "/" + std::to_string((this->getPosition()).y) << std::endl;
+                        std::cout << "MarioPosNext:"+ std::to_string((this->getPosition() +
+                            sf::Vector2f(this->m_velocityX, -this->m_velocityY)).x) + "/" + std::to_string((this->getPosition() +
+                            sf::Vector2f(this->m_velocityX, -this->m_velocityY)).y) << std::endl;
+                        std::cout << "obj:"+ std::to_string(s_objects->body->getX()) + "/" + std::to_string(s_objects->body->getY())<< std::endl;
+        */
+        this->m_velocityX = 0;
+        this->m_sprite.move(1 * -this->m_direction, 0);
+        if (object->type == "goomba")
+        {
+            m_hitEnnemy = true;
+        }
     }
 }
 

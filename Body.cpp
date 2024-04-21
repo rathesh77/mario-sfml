@@ -41,9 +41,9 @@ void Body::loop(SpriteObject *s_objects)
         this->updateHorizontalVelocity();
         this->updateVerticalVelocity();
         this->postCollisionsDetection();
-
-        this->detectCollisions(s_objects);
     }
+    this->handleCollision(s_objects);
+
     this->moveX();
     this->moveY();
 
@@ -84,10 +84,16 @@ void Body::setDirectionX(int direction)
 
 int Body::getDirection() { return this->m_direction; }
 
-void Body::detectCollisions(SpriteObject *s_objects)
+std::map<std::string, std::vector<SpriteObject *>> Body::detectCollisions(SpriteObject *s_objects)
 {
     int i = 0;
     bool hit = false;
+
+    std::map<std::string, std::vector<SpriteObject *>> collidedObjects = {
+        {"up", std::vector<SpriteObject *>{}},
+        {"down", std::vector<SpriteObject *>{}},
+        {"side", std::vector<SpriteObject *>{}}
+    };
 
     while (true)
     {
@@ -110,19 +116,15 @@ void Body::detectCollisions(SpriteObject *s_objects)
 
             if (this->getY() + this->getHeight() <= objectPos.y)
             {
-
-                m_ground = objectPos.y;
-                this->m_velocityY = this->getY() - (objectPos.y - this->m_height);
+                collidedObjects["up"].push_back(s_objects);
             }
             else if (this->getY() >= objectPos.y + s_objects->body->getHeight())
             {
-                if (this->m_velocityY > 0)
-                    this->m_velocityY = -0.0f;
+                collidedObjects["down"].push_back(s_objects);
             }
             else
             {
-                this->m_direction = -this->m_direction;
-                this->m_velocityX = 0;
+                collidedObjects["side"].push_back(s_objects);
             }
         }
         s_objects++;
@@ -137,6 +139,43 @@ void Body::detectCollisions(SpriteObject *s_objects)
     {
         m_overlap = true;
     }
+    return collidedObjects;
+}
+
+void Body::handleCollision(SpriteObject *s_objects)
+{
+
+    std::map<std::string, std::vector<SpriteObject *>> collidedObjects = this->detectCollisions(s_objects);
+
+    for (SpriteObject *object : collidedObjects["up"])
+    {
+        sf::Vector2f objectPos = object->body->getPosition();
+
+        m_ground = objectPos.y;
+        this->m_velocityY = this->getY() - (objectPos.y - this->m_height);
+    }
+    for (SpriteObject *object : collidedObjects["down"])
+    {
+        if (this->m_velocityY > 0)
+            this->m_velocityY = -0.0f;
+    }
+    for (SpriteObject *object : collidedObjects["side"])
+    {
+        this->m_direction = -this->m_direction;
+        this->m_velocityX = 0;
+    }
+}
+
+void Body::upwardCollision(SpriteObject *a, SpriteObject *b)
+{
+}
+
+void Body::downwardCollision(SpriteObject *a, SpriteObject *b)
+{
+}
+
+void Body::sideCollision(SpriteObject *a, SpriteObject *b)
+{
 }
 
 bool Body::compare(Body *a, Body *b) { return a == b; }
@@ -195,7 +234,14 @@ void Body::updateVerticalVelocity()
         this->m_velocityY -= this->m_gravity;
 }
 
-void Body::jump() { this->m_isJumping = true; }
+void Body::jump()
+{
+    if (m_jumpEnabled)
+    {
+        this->m_isJumping = true;
+        this->m_jumpEnabled = false;
+    }
+}
 
 void Body::resetY()
 {
@@ -203,6 +249,7 @@ void Body::resetY()
     {
         this->m_isJumping = false;
         this->m_velocityY = m_initialVelocityY;
+        m_jumpEnabled = true;
     }
 }
 

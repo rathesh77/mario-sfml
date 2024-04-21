@@ -40,7 +40,7 @@ void Game::loadMap(Map *map)
 
     for (int i = 0; i < m_nb_grids; i++)
     {
-        auto sprite = sf::Sprite();
+        sf::Sprite sprite = sf::Sprite();
         this->m_s_background[i] = sprite;
         this->m_s_background[i].setTexture(this->m_t_background);
         this->m_s_background[i].setTextureRect(
@@ -53,7 +53,7 @@ void Game::loadMap(Map *map)
         {
             for (int k = 0; k < TILE_DIMENSION; k++)
             {
-                auto skySprite = sf::Sprite();
+                sf::Sprite skySprite = sf::Sprite();
                 const int coord = (TILE_DIMENSION * TILE_DIMENSION * (i)) +
                                   ((j * TILE_DIMENSION) + k);
                 this->m_s_sky[coord] = skySprite;
@@ -83,10 +83,10 @@ void Game::generateSpritesInMemory()
     this->m_s_objects = new SpriteObject[nbObjects + 1];
     this->m_s_objects[nbObjects].type = "NULL";
 
-    auto *save_ptr = this->m_s_objects;
+    SpriteObject *save_ptr = this->m_s_objects;
     for (int i = 0; i < m_map->getNumberOfGrids(); i++)
     {
-        auto *ptr = m_map->getNthGrid(i)->object;
+        Object *ptr = m_map->getNthGrid(i)->object;
         while (ptr)
         {
             this->m_s_objects->type = ptr->type;
@@ -233,7 +233,7 @@ void Game::shiftSceneBackward()
 
 void Game::shiftObjectsBackward()
 {
-    auto *save_ptr = this->m_s_objects;
+    SpriteObject *save_ptr = this->m_s_objects;
 
     for (int i = 0; i < m_map->getNumberOfGrids(); i++)
     {
@@ -253,7 +253,7 @@ void Game::shiftObjectsBackward()
 
 void Game::drawObjects()
 {
-    auto *save_ptr = this->m_s_objects;
+    SpriteObject *save_ptr = this->m_s_objects;
 
     for (int i = 0; i < m_map->getNumberOfGrids(); i++)
     {

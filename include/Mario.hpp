@@ -15,7 +15,7 @@ class Mario: public Body {
 
     bool marioIsFreezed();
     bool hasHitEnnemy();
-    void detectCollisions(SpriteObject*);
+    void handleCollision(SpriteObject *s_objects);
 
    private:
     std::string m_spritePath = "sprites/sprites_sheet.png";
@@ -29,4 +29,5 @@ class Mario: public Body {
     bool m_freezeMario = false;
 
     bool m_hitEnnemy = false;
+
 };
