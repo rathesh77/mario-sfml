@@ -59,9 +59,9 @@ void Mario::handleCollision(SpriteObject *s_objects)
 {
 
     std::map<std::string, std::vector<SpriteObject *>> collidedObjects = this->detectCollisions(s_objects);
-    std::cout<<"begin"<<std::endl;
+    std::cout << "begin" << std::endl;
     for (SpriteObject *object : collidedObjects["up"])
-    {   
+    {
         std::cout << "upward:" + object->type << std::endl;
 
         sf::Vector2f objectPos = object->body->getPosition();
@@ -71,8 +71,9 @@ void Mario::handleCollision(SpriteObject *s_objects)
             delete object->body;
             object->body = new Body();
             this->m_velocityY = 1;
-
-        } else {
+        }
+        else
+        {
             m_ground = objectPos.y;
             this->m_velocityY = this->getY() - (objectPos.y - this->m_height);
         }
@@ -94,14 +95,22 @@ void Mario::handleCollision(SpriteObject *s_objects)
         std::cout << "sideways:" + object->type << std::endl;
         /*
 
-                        std::cout << "MarioPosPrevious:"+ std::to_string((this->getPosition()).x) + "/" + std::to_string((this->getPosition()).y) << std::endl;
-                        std::cout << "MarioPosNext:"+ std::to_string((this->getPosition() +
-                            sf::Vector2f(this->m_velocityX, -this->m_velocityY)).x) + "/" + std::to_string((this->getPosition() +
-                            sf::Vector2f(this->m_velocityX, -this->m_velocityY)).y) << std::endl;
-                        std::cout << "obj:"+ std::to_string(s_objects->body->getX()) + "/" + std::to_string(s_objects->body->getY())<< std::endl;
+            std::cout << "MarioPosPrevious:"+ std::to_string((this->getPosition()).x) + "/" + std::to_string((this->getPosition()).y) << std::endl;
+
+            std::cout << "MarioPosNext:"+ std::to_string((this->getPosition() +
+                sf::Vector2f(this->m_velocityX, -this->m_velocityY)).x) + "/" + std::to_string((this->getPosition() +
+                sf::Vector2f(this->m_velocityX, -this->m_velocityY)).y) << std::endl;
+
+            std::cout << "obj:"+ std::to_string(s_objects->body->getX()) + "/" + std::to_string(s_objects->body->getY())<< std::endl;
         */
-        this->m_velocityX = 0;
-        this->m_sprite.move(1 * -this->m_direction, 0);
+        if (this->getX() > object->body->getX())
+        {
+            this->m_velocityX = 0.2;
+        }
+        else
+        {
+            this->m_velocityX = -0.2;
+        }
         if (object->type == "goomba")
         {
             m_hitEnnemy = true;

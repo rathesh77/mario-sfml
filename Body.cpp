@@ -118,7 +118,8 @@ std::map<std::string, std::vector<SpriteObject *>> Body::detectCollisions(Sprite
 
             if (this->getY() + this->m_height <= objectPos.y)
             {
-                collidedObjects["up"].push_back(s_objects);
+                if (this->getX() + this->m_width >= objectPos.x + 2 && this->getX() <= objectPos.x + s_objects->body->m_width - 2)
+                    collidedObjects["up"].push_back(s_objects);
             }
             else if (this->getY() >= objectPos.y + s_objects->body->m_height)
             {
