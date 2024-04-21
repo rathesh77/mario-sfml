@@ -37,7 +37,7 @@ class Body {
     void setDirectionX(int);
 
     int getDirection();
-    float getVelocity();
+    float getVelocityX();
 
     float getX();
     float getY();
@@ -45,20 +45,14 @@ class Body {
     void loadSpriteForward(int);
     void jump();
 
-    int getWidth();
-    int getHeight();
-
     bool isOverlaping();
 
     std::map<std::string, std::vector<SpriteObject *>>  detectCollisions(SpriteObject*);
     void handleCollision(SpriteObject *s_objects);
-    void upwardCollision(SpriteObject *,SpriteObject *);
-    void downwardCollision(SpriteObject *,SpriteObject *);
-    void sideCollision(SpriteObject *,SpriteObject * );
 
     void postCollisionsDetection();
 
-    bool collides(sf::Vector2f, sf::Vector2f, int, int, int, int);
+    bool collides(Body *, Body *);
     bool compare(Body*, Body*);
 
 

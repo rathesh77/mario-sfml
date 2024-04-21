@@ -8,7 +8,8 @@ class Ground: public Body {
 
     Ground(sf::Texture*, float, float, float, float, int, int, std::string);
 
-    void detectCollisions(SpriteObject*);
+   std::map<std::string, std::vector<SpriteObject *>>  detectCollisions(SpriteObject*);
+   void handleCollision(SpriteObject *);
    void postCollisionsDetection();
 
    private:

@@ -59,9 +59,9 @@ void Mario::handleCollision(SpriteObject *s_objects)
 {
 
     std::map<std::string, std::vector<SpriteObject *>> collidedObjects = this->detectCollisions(s_objects);
-
+    std::cout<<"begin"<<std::endl;
     for (SpriteObject *object : collidedObjects["up"])
-    {
+    {   
         std::cout << "upward:" + object->type << std::endl;
 
         sf::Vector2f objectPos = object->body->getPosition();
@@ -70,7 +70,7 @@ void Mario::handleCollision(SpriteObject *s_objects)
         {
             delete object->body;
             object->body = new Body();
-                        this->m_velocityY = -1;
+            this->m_velocityY = 1;
 
         } else {
             m_ground = objectPos.y;
@@ -122,7 +122,7 @@ void Mario::moveX() // no collisions handling here. Only moving sprite
     {
         this->realCoordinates.x += this->m_velocityX;
 
-        if ((this->getX() + this->getVelocity() >= BOUNDING_X_MIDDLE))
+        if ((this->getX() + this->getVelocityX() >= BOUNDING_X_MIDDLE))
         {
             if (!this->m_decelerating && this->getDirection() < 1)
             {

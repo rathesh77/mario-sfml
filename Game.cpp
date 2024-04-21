@@ -226,7 +226,7 @@ void Game::shiftSceneBackward()
 {
     for (int i = 0; i < m_nb_grids; i++)
         this->m_s_background[i].move(
-            sf::Vector2f(-this->m_mario->getVelocity(), 0));
+            sf::Vector2f(-this->m_mario->getVelocityX(), 0));
 
     this->shiftObjectsBackward();
 }
@@ -242,7 +242,7 @@ void Game::shiftObjectsBackward()
         {
 
             this->m_s_objects->body->getSprite()->move(
-                sf::Vector2f(-this->m_mario->getVelocity(), 0));
+                sf::Vector2f(-this->m_mario->getVelocityX(), 0));
 
             this->m_s_objects++;
             nb++;

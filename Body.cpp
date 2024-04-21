@@ -95,6 +95,11 @@ std::map<std::string, std::vector<SpriteObject *>> Body::detectCollisions(Sprite
         {"side", std::vector<SpriteObject *>{}}
     };
 
+    Body nextPos = Body();
+    nextPos.m_sprite.setPosition(this->getPosition() + sf::Vector2f(this->m_velocityX, -this->m_velocityY));
+    nextPos.m_width = this->m_width;
+    nextPos.m_height = this->m_height;
+
     while (true)
     {
         if (s_objects->type == "NULL" || s_objects->type == "")
@@ -107,18 +112,15 @@ std::map<std::string, std::vector<SpriteObject *>> Body::detectCollisions(Sprite
         }
         sf::Vector2f objectPos = s_objects->body->getPosition();
 
-        if (this->collides(
-                this->getPosition() +
-                    sf::Vector2f(this->m_velocityX, -this->m_velocityY),
-                objectPos, this->m_width, this->m_height, s_objects->body->getWidth(), s_objects->body->getHeight()))
+        if (this->collides(&nextPos, s_objects->body))
         {
             hit = true;
 
-            if (this->getY() + this->getHeight() <= objectPos.y)
+            if (this->getY() + this->m_height <= objectPos.y)
             {
                 collidedObjects["up"].push_back(s_objects);
             }
-            else if (this->getY() >= objectPos.y + s_objects->body->getHeight())
+            else if (this->getY() >= objectPos.y + s_objects->body->m_height)
             {
                 collidedObjects["down"].push_back(s_objects);
             }
@@ -166,18 +168,6 @@ void Body::handleCollision(SpriteObject *s_objects)
     }
 }
 
-void Body::upwardCollision(SpriteObject *a, SpriteObject *b)
-{
-}
-
-void Body::downwardCollision(SpriteObject *a, SpriteObject *b)
-{
-}
-
-void Body::sideCollision(SpriteObject *a, SpriteObject *b)
-{
-}
-
 bool Body::compare(Body *a, Body *b) { return a == b; }
 
 void Body::postCollisionsDetection()
@@ -191,11 +181,11 @@ void Body::postCollisionsDetection()
     // m_ground = WINDOW_HEIGHT + 16;
 }
 
-bool Body::collides(sf::Vector2f a, sf::Vector2f b, int aw, int ah, int bw, int bh)
+bool Body::collides(Body *a, Body *b)
 {
 
-    return a.x >= b.x - aw + 2 && a.x <= b.x + bw - 2 &&
-           a.y >= b.y - ah && a.y <= b.y + bh;
+    return a->getX() >= b->getX() - a->m_width + 2 && a->getX() <= b->getX() + b->m_width - 2 &&
+           a->getY() >= b->getY() - a->m_height && a->getY() <= b->getY() + b->m_height;
 }
 void Body::moveX() // no collisions handling here. Only moving sprite
 {
@@ -245,7 +235,7 @@ void Body::jump()
 
 void Body::resetY()
 {
-    if (this->getY() + this->getHeight() == m_ground)
+    if (this->getY() + this->m_height == m_ground)
     {
         this->m_isJumping = false;
         this->m_velocityY = m_initialVelocityY;
@@ -264,15 +254,11 @@ float Body::lerp(float current, float goal, float dt)
     return goal;
 }
 
-float Body::getVelocity() { return this->m_velocityX; }
+float Body::getVelocityX() { return this->m_velocityX; }
 
 float Body::getX() { return this->getPosition().x; }
 
 float Body::getY() { return this->getPosition().y; }
-
-int Body::getWidth() { return this->m_width; }
-
-int Body::getHeight() { return this->m_height; }
 
 bool Body::isOverlaping() { return this->m_overlap; }
 

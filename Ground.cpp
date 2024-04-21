@@ -11,13 +11,9 @@ Ground::Ground(sf::Texture*texture, float x, float y, float rectX, float rectY, 
 
 }
 
-
-void Ground::detectCollisions(SpriteObject *s_objects) {
-
+std::map<std::string, std::vector<SpriteObject *>> Ground::detectCollisions(SpriteObject *) {
+    return std::map<std::string, std::vector<SpriteObject *>>{};
 }
 
-
-
-void Ground::postCollisionsDetection() {
-
-}
+void Ground::handleCollision(SpriteObject *) {}
+void Ground::postCollisionsDetection() {}
