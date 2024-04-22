@@ -6,8 +6,8 @@
 #define BOUNDING_X_MIDDLE WINDOW_WIDTH / 2.5
 
 #define TILE_DIMENSION 16
-#define WINDOW_WIDTH 500
-#define WINDOW_HEIGHT TILE_DIMENSION * 13
+#define WINDOW_WIDTH 16*16
+#define WINDOW_HEIGHT 16*15
 
 class Constants {
    public:

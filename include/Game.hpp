@@ -25,6 +25,7 @@ class Game {
     int m_nb_grids;
     int m_single_background_width = TILE_DIMENSION * TILE_DIMENSION;
 
+    std::string m_hudPath = "sprites/HUD.png";
     std::string m_backgroundPath = "sprites/background2_non_transparent.png";
     std::string m_skyPath = "sprites/background2_non_transparent.png";
     std::string m_brickPath = "sprites/bricks.png";
@@ -34,15 +35,15 @@ class Game {
 
     sf::Sprite *m_s_background;
     sf::Sprite *m_s_sky;
-
     SpriteObject *m_s_objects = new SpriteObject[1];
+    sf::Sprite *m_s_hud;
 
     sf::Texture m_t_sky;
     sf::Texture m_t_background;
     sf::Texture m_t_brick;
     sf::Texture m_t_ground;
-
     sf::Texture m_t_ennemies;
+    sf::Texture m_t_hud;
 
     sf::RenderWindow *m_window;
 
@@ -51,6 +52,7 @@ class Game {
     Map *m_map;
 
     void drawSprites();
+    void drawText();
 
     int m_nb_sprites = 0;
     int m_current_grid = 0;
@@ -59,5 +61,19 @@ class Game {
 
     //sf::SoundBuffer buffer;
     //sf::Sound sound;
+
+    sf::Text m_text_score;
+    sf::Text m_text_coins;
+    sf::Text m_text_world;
+    sf::Text m_text_time;
+    sf::Text m_text_lives;
+
+    int m_score = 0;
+    int m_coins = 0;
+    std::string m_world = "0";
+    int m_time = 0; // in seconds
+    int m_lives = 0;
+
+        sf::Font *font = new sf::Font;
 
 };

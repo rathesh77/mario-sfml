@@ -12,6 +12,32 @@ Game::Game(sf::RenderWindow *window)
 
     // sound.setBuffer(buffer);
     // sound.play();
+    if (!font->loadFromFile("./fonts/super-mario-bros-nes.otf"))
+    {
+    // error...
+        throw std::invalid_argument("Could not load super-mario-bros-nes.otf");
+
+    }
+
+    m_text_score.setFont(*font);
+    m_text_coins.setFont(*font);
+    m_text_world.setFont(*font);
+    m_text_time.setFont(*font);
+    m_text_lives.setFont(*font);
+
+    m_text_score.setString("SCORE" + m_score);
+    m_text_coins.setString("COINS" + m_coins);
+    m_text_world.setString("WORLD" + m_world);
+    m_text_time.setString("TIME" + m_time);
+    m_text_lives.setString("LIVES" + m_lives);
+
+    m_text_score.setCharacterSize(24); // in pixels, not points!
+    m_text_coins.setCharacterSize(24); // in pixels, not points!
+    m_text_world.setCharacterSize(24); // in pixels, not points!
+    m_text_time.setCharacterSize(24); // in pixels, not points!
+    m_text_lives.setCharacterSize(24); // in pixels, not points!
+
+    
 }
 
 void Game::loadMap(Map *map)
@@ -35,6 +61,14 @@ void Game::loadMap(Map *map)
     if (!this->m_t_ennemies.loadFromFile(this->m_ennemiesPath))
         throw std::invalid_argument("Could not load goomba texture");
 
+
+    if (!this->m_t_hud.loadFromFile(this->m_hudPath, sf::IntRect(0 , 8, 255, 39-7 )))
+        throw std::invalid_argument("Could not load goomba texture");
+
+    this->m_s_hud = new sf::Sprite;
+    this->m_s_hud->setTexture(this->m_t_hud);
+    this->m_s_hud->setPosition(0,0);
+    this->m_s_background = new sf::Sprite[m_nb_grids];
     this->m_s_background = new sf::Sprite[m_nb_grids];
     this->m_s_sky = new sf::Sprite[2 * TILE_DIMENSION * TILE_DIMENSION];
 
@@ -44,7 +78,7 @@ void Game::loadMap(Map *map)
         this->m_s_background[i] = sprite;
         this->m_s_background[i].setTexture(this->m_t_background);
         this->m_s_background[i].setTextureRect(
-            sf::IntRect(0, 40, m_single_background_width, WINDOW_HEIGHT));
+            sf::IntRect(0, 8, m_single_background_width, WINDOW_WIDTH));
         this->m_s_background[i].setPosition(i * m_single_background_width, 0);
     }
     for (int i = 0; i < 2; i++)
@@ -202,9 +236,22 @@ void Game::tick(sf::Clock *clock)
         }*/
     }
     this->drawSprites();
+    this->drawText();
 
     this->m_current_grid = (int)(this->m_mario->realCoordinates.x /
                                  (TILE_DIMENSION * TILE_DIMENSION));
+}
+
+void Game::drawText() 
+{
+  /*
+       this->m_window->draw(m_text_score);
+        this->m_window->draw(m_text_coins);
+        this->m_window->draw(m_text_world);
+        this->m_window->draw(m_text_time);
+        this->m_window->draw(m_text_lives);
+  */
+ this->m_window->draw(*this->m_s_hud);
 }
 
 void Game::drawSprites()

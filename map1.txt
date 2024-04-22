@@ -1,428 +1,428 @@
 #0
 
-    ground 16*0 16*12
-    ground 16*1 16*12
-    ground 16*2 16*12
-    ground 16*3 16*12
-    ground 16*4 16*12
-    ground 16*5 16*12
-    ground 16*6 16*12
-    ground 16*7 16*12
-    ground 16*8 16*12
-    ground 16*9 16*12
-    ground 16*10 16*12
-    ground 16*11 16*12
-    ground 16*12 16*12
-    ground 16*13 16*12
-    ground 16*14 16*12
-    ground 16*15 16*12
+    ground 16*0 16*14
+    ground 16*1 16*14
+    ground 16*2 16*14
+    ground 16*3 16*14
+    ground 16*4 16*14
+    ground 16*5 16*14
+    ground 16*6 16*14
+    ground 16*7 16*14
+    ground 16*8 16*14
+    ground 16*9 16*14
+    ground 16*10 16*14
+    ground 16*11 16*14
+    ground 16*12 16*14
+    ground 16*13 16*14
+    ground 16*14 16*14
+    ground 16*15 16*14
 
-    stone 16*5 16*10
+    stone 16*5 16*12
 
-   goomba 16*7 16*10
-   goomba 16*8 16*10
-   goomba 16*9 16*10
-   goomba 16*10 16*10
-   goomba 16*11 16*10
+   goomba 16*7 16*12
+   goomba 16*8 16*12
+   goomba 16*9 16*12
+   goomba 16*10 16*12
+   goomba 16*11 16*12
 
 
-    ground 16*0 16*11
-    ground 16*1 16*11
-    ground 16*2 16*11
-    ground 16*3 16*11
-    ground 16*4 16*11
+    ground 16*0 16*13
+    ground 16*1 16*13
+    ground 16*2 16*13
+    ground 16*3 16*13
+    ground 16*4 16*13
 
-    ground 16*5 16*11
-    ground 16*6 16*11
-    ground 16*7 16*11
-    ground 16*8 16*11
-    ground 16*9 16*11
-    ground 16*10 16*11
-    ground 16*11 16*11
-    ground 16*12 16*11
-    ground 16*13 16*11
-    ground 16*14 16*11
-    ground 16*15 16*11
+    ground 16*5 16*13
+    ground 16*6 16*13
+    ground 16*7 16*13
+    ground 16*8 16*13
+    ground 16*9 16*13
+    ground 16*10 16*13
+    ground 16*11 16*13
+    ground 16*12 16*13
+    ground 16*13 16*13
+    ground 16*14 16*13
+    ground 16*15 16*13
 
 #1
    
-    brick 16*0 16*7
-    brick 16*1 16*7
+    brick 16*0 16*9
+    brick 16*1 16*9
 
-    brick 16*3 16*7
-    brick 16*4 16*7
-    brick 16*5 16*7
-    brick 16*6 16*7
+    brick 16*3 16*9
+    brick 16*4 16*9
+    brick 16*5 16*9
+    brick 16*6 16*9
 
-    brick 16*5 16*3
+    brick 16*5 16*5
 
-   goomba 16*5 16*2
+   goomba 16*5 16*4
 
-   goomba 16*1 16*10
+   goomba 16*1 16*12
 
-   pipe 16*10 16*9
+   pipe 16*10 16*11
 
-    ground 16*0 16*12
-    ground 16*1 16*12
-    ground 16*2 16*12
-    ground 16*3 16*12
-    ground 16*4 16*12
-    ground 16*5 16*12
-    ground 16*6 16*12
-    ground 16*7 16*12
-    ground 16*8 16*12
-    ground 16*9 16*12
-    ground 16*10 16*12
-    ground 16*11 16*12
-    ground 16*12 16*12
-    ground 16*13 16*12
-    ground 16*14 16*12
-    ground 16*15 16*12
+    ground 16*0 16*14
+    ground 16*1 16*14
+    ground 16*2 16*14
+    ground 16*3 16*14
+    ground 16*4 16*14
+    ground 16*5 16*14
+    ground 16*6 16*14
+    ground 16*7 16*14
+    ground 16*8 16*14
+    ground 16*9 16*14
+    ground 16*10 16*14
+    ground 16*11 16*14
+    ground 16*12 16*14
+    ground 16*13 16*14
+    ground 16*14 16*14
+    ground 16*15 16*14
 
 
-    ground 16*0 16*11
-    ground 16*1 16*11
-    ground 16*2 16*11
-    ground 16*3 16*11
-    ground 16*4 16*11
-    ground 16*5 16*11
-    ground 16*6 16*11
-    ground 16*7 16*11
-    ground 16*8 16*11
-    ground 16*9 16*11
-    ground 16*10 16*11
-    ground 16*11 16*11
-    ground 16*12 16*11
-    ground 16*13 16*11
-    ground 16*14 16*11
-    ground 16*15 16*11
+    ground 16*0 16*13
+    ground 16*1 16*13
+    ground 16*2 16*13
+    ground 16*3 16*13
+    ground 16*4 16*13
+    ground 16*5 16*13
+    ground 16*6 16*13
+    ground 16*7 16*13
+    ground 16*8 16*13
+    ground 16*9 16*13
+    ground 16*10 16*13
+    ground 16*11 16*13
+    ground 16*12 16*13
+    ground 16*13 16*13
+    ground 16*14 16*13
+    ground 16*15 16*13
 
 #2
 
-   pipe 16*8 16*8
+   pipe 16*8 16*10
 
 
-        ground 16*0 16*12
-    ground 16*1 16*12
-    ground 16*2 16*12
-    ground 16*3 16*12
-    ground 16*4 16*12
-    ground 16*5 16*12
-    ground 16*6 16*12
-    ground 16*7 16*12
-    ground 16*8 16*12
-    ground 16*9 16*12
-    ground 16*10 16*12
-    ground 16*11 16*12
-    ground 16*12 16*12
-    ground 16*13 16*12
-    ground 16*14 16*12
-    ground 16*15 16*12
+        ground 16*0 16*14
+    ground 16*1 16*14
+    ground 16*2 16*14
+    ground 16*3 16*14
+    ground 16*4 16*14
+    ground 16*5 16*14
+    ground 16*6 16*14
+    ground 16*7 16*14
+    ground 16*8 16*14
+    ground 16*9 16*14
+    ground 16*10 16*14
+    ground 16*11 16*14
+    ground 16*12 16*14
+    ground 16*13 16*14
+    ground 16*14 16*14
+    ground 16*15 16*14
 
 
-    ground 16*0 16*11
-    ground 16*1 16*11
-    ground 16*2 16*11
-    ground 16*3 16*11
-    ground 16*4 16*11
-    ground 16*5 16*11
-    ground 16*6 16*11
-    ground 16*7 16*11
-    ground 16*8 16*11
-    ground 16*9 16*11
-    ground 16*10 16*11
-    ground 16*11 16*11
-    ground 16*12 16*11
-    ground 16*13 16*11
-    ground 16*14 16*11
-    ground 16*15 16*11
+    ground 16*0 16*13
+    ground 16*1 16*13
+    ground 16*2 16*13
+    ground 16*3 16*13
+    ground 16*4 16*13
+    ground 16*5 16*13
+    ground 16*6 16*13
+    ground 16*7 16*13
+    ground 16*8 16*13
+    ground 16*9 16*13
+    ground 16*10 16*13
+    ground 16*11 16*13
+    ground 16*12 16*13
+    ground 16*13 16*13
+    ground 16*14 16*13
+    ground 16*15 16*13
 
 #3
 
 
-   pipe 16*8 16*7
+   pipe 16*8 16*9
 
 
-    ground 16*0 16*12
-    ground 16*1 16*12
-    ground 16*2 16*12
-    ground 16*3 16*12
-    ground 16*4 16*12
-    ground 16*5 16*12
-    ground 16*6 16*12
-    ground 16*7 16*12
-    ground 16*8 16*12
-    ground 16*9 16*12
-    ground 16*10 16*12
-    ground 16*11 16*12
-    ground 16*12 16*12
-    ground 16*13 16*12
-    ground 16*14 16*12
-    ground 16*15 16*12
+    ground 16*0 16*14
+    ground 16*1 16*14
+    ground 16*2 16*14
+    ground 16*3 16*14
+    ground 16*4 16*14
+    ground 16*5 16*14
+    ground 16*6 16*14
+    ground 16*7 16*14
+    ground 16*8 16*14
+    ground 16*9 16*14
+    ground 16*10 16*14
+    ground 16*11 16*14
+    ground 16*12 16*14
+    ground 16*13 16*14
+    ground 16*14 16*14
+    ground 16*15 16*14
 
 
-    ground 16*0 16*11
-    ground 16*1 16*11
-    ground 16*2 16*11
-    ground 16*3 16*11
-    ground 16*4 16*11
-    ground 16*5 16*11
-    ground 16*6 16*11
-    ground 16*7 16*11
-    ground 16*8 16*11
-    ground 16*9 16*11
-    ground 16*10 16*11
-    ground 16*11 16*11
-    ground 16*12 16*11
-    ground 16*13 16*11
-    ground 16*14 16*11
-    ground 16*15 16*11
+    ground 16*0 16*13
+    ground 16*1 16*13
+    ground 16*2 16*13
+    ground 16*3 16*13
+    ground 16*4 16*13
+    ground 16*5 16*13
+    ground 16*6 16*13
+    ground 16*7 16*13
+    ground 16*8 16*13
+    ground 16*9 16*13
+    ground 16*10 16*13
+    ground 16*11 16*13
+    ground 16*12 16*13
+    ground 16*13 16*13
+    ground 16*14 16*13
+    ground 16*15 16*13
 
 #4
 
-    brick 16*6 16*7
-    brick 16*7 16*7
-    brick 16*8 16*7
+    brick 16*6 16*9
+    brick 16*7 16*9
+    brick 16*8 16*9
 
 
-    brick 16*9 16*3
-    brick 16*10 16*3
-    brick 16*11 16*3
-    brick 16*12 16*3
-    brick 16*13 16*3
-    brick 16*14 16*3
-    brick 16*15 16*3
-    brick 16*16 16*3
+    brick 16*9 16*5
+    brick 16*10 16*5
+    brick 16*11 16*5
+    brick 16*12 16*5
+    brick 16*13 16*5
+    brick 16*14 16*5
+    brick 16*15 16*5
+    brick 16*16 16*5
 
 
 
 
 
-    ground 16*0 16*12
-    ground 16*1 16*12
-    ground 16*2 16*12
-    ground 16*3 16*12
-    ground 16*4 16*12
-    ground 16*5 16*12
-    ground 16*6 16*12
-    ground 16*7 16*12
-    ground 16*8 16*12
-    ground 16*9 16*12
-    ground 16*10 16*12
-    ground 16*11 16*12
-    ground 16*12 16*12
-    ground 16*13 16*12
-    ground 16*14 16*12
-    - ground 16*15 16*12
+    ground 16*0 16*14
+    ground 16*1 16*14
+    ground 16*2 16*14
+    ground 16*3 16*14
+    ground 16*4 16*14
+    ground 16*5 16*14
+    ground 16*6 16*14
+    ground 16*7 16*14
+    ground 16*8 16*14
+    ground 16*9 16*14
+    ground 16*10 16*14
+    ground 16*11 16*14
+    ground 16*12 16*14
+    ground 16*13 16*14
+    ground 16*14 16*14
+    - ground 16*15 16*14
 
 
-    ground 16*0 16*11
-    ground 16*1 16*11
-    ground 16*2 16*11
-    ground 16*3 16*11
-    ground 16*4 16*11
-    ground 16*5 16*11
-    ground 16*6 16*11
-    ground 16*7 16*11
-    ground 16*8 16*11
-    ground 16*9 16*11
-    ground 16*10 16*11
-    ground 16*11 16*11
-    ground 16*12 16*11
-    ground 16*13 16*11
-    ground 16*14 16*11
-    - ground 16*15 16*11
+    ground 16*0 16*13
+    ground 16*1 16*13
+    ground 16*2 16*13
+    ground 16*3 16*13
+    ground 16*4 16*13
+    ground 16*5 16*13
+    ground 16*6 16*13
+    ground 16*7 16*13
+    ground 16*8 16*13
+    ground 16*9 16*13
+    ground 16*10 16*13
+    ground 16*11 16*13
+    ground 16*12 16*13
+    ground 16*13 16*13
+    ground 16*14 16*13
+    - ground 16*15 16*13
 
 
 #5
 
-    brick 16*4 16*3
-    brick 16*5 16*3
-    brick 16*6 16*3
-    brick 16*7 16*3
+    brick 16*4 16*5
+    brick 16*5 16*5
+    brick 16*6 16*5
+    brick 16*7 16*5
 
-    brick 16*7 16*7
+    brick 16*7 16*9
     
 
-    brick 16*7 16*7
+    brick 16*7 16*9
 
-    brick 16*13 16*7
+    brick 16*13 16*9
 
-    brick 16*14 16*7
-
-
-
-    -ground 16*0 16*12
-    - ground 16*1 16*12
-    ground 16*2 16*12
-    ground 16*3 16*12
-    ground 16*4 16*12
-    ground 16*5 16*12
-    ground 16*6 16*12
-    ground 16*7 16*12
-    ground 16*8 16*12
-    ground 16*9 16*12
-    ground 16*10 16*12
-    ground 16*11 16*12
-    ground 16*12 16*12
-    ground 16*13 16*12
-    ground 16*14 16*12
-    ground 16*15 16*12
+    brick 16*14 16*9
 
 
-    -ground 16*0 16*11
-    - ground 16*1 16*11
-    ground 16*2 16*11
-    ground 16*3 16*11
-    ground 16*4 16*11
-    ground 16*5 16*11
-    ground 16*6 16*11
-    ground 16*7 16*11
-    ground 16*8 16*11
-    ground 16*9 16*11
-    ground 16*10 16*11
-    ground 16*11 16*11
-    ground 16*12 16*11
-    ground 16*13 16*11
-    ground 16*14 16*11
-    ground 16*15 16*11
+
+    -ground 16*0 16*14
+    - ground 16*1 16*14
+    ground 16*2 16*14
+    ground 16*3 16*14
+    ground 16*4 16*14
+    ground 16*5 16*14
+    ground 16*6 16*14
+    ground 16*7 16*14
+    ground 16*8 16*14
+    ground 16*9 16*14
+    ground 16*10 16*14
+    ground 16*11 16*14
+    ground 16*12 16*14
+    ground 16*13 16*14
+    ground 16*14 16*14
+    ground 16*15 16*14
+
+
+    -ground 16*0 16*13
+    - ground 16*1 16*13
+    ground 16*2 16*13
+    ground 16*3 16*13
+    ground 16*4 16*13
+    ground 16*5 16*13
+    ground 16*6 16*13
+    ground 16*7 16*13
+    ground 16*8 16*13
+    ground 16*9 16*13
+    ground 16*10 16*13
+    ground 16*11 16*13
+    ground 16*12 16*13
+    ground 16*13 16*13
+    ground 16*14 16*13
+    ground 16*15 16*13
 
 #6
-    stone 16*0 16*10
-    stone 16*1 16*10
+    stone 16*0 16*12
+    stone 16*1 16*12
+    stone 16*2 16*12
+    stone 16*3 16*12
+
+    stone 16*1 16*11
+    stone 16*2 16*11
+    stone 16*3 16*11
+
     stone 16*2 16*10
     stone 16*3 16*10
-
-    stone 16*1 16*9
-    stone 16*2 16*9
+        
     stone 16*3 16*9
 
-    stone 16*2 16*8
-    stone 16*3 16*8
-        
-    stone 16*3 16*7
 
+    stone 16*6 16*12
+    stone 16*7 16*12
+    stone 16*8 16*12
+    stone 16*9 16*12
+
+    stone 16*6 16*11
+    stone 16*7 16*11
+    stone 16*8 16*11
 
     stone 16*6 16*10
     stone 16*7 16*10
-    stone 16*8 16*10
-    stone 16*9 16*10
-
-    stone 16*6 16*9
-    stone 16*7 16*9
-    stone 16*8 16*9
-
-    stone 16*6 16*8
-    stone 16*7 16*8
     
-    stone 16*6 16*7
+    stone 16*6 16*9
     
 
     ---
 
-    stone 16*11 16*10
-    stone 16*12 16*10
-    stone 16*13 16*10
+    stone 16*11 16*12
+    stone 16*12 16*12
+    stone 16*13 16*12
+    stone 16*14 16*12
+
+    stone 16*12 16*11
+    stone 16*13 16*11
+    stone 16*14 16*11
+
     stone 16*14 16*10
-
-    stone 16*12 16*9
-    stone 16*13 16*9
-    stone 16*14 16*9
-
-    stone 16*14 16*8
-    stone 16*15 16*8
-        
-    stone 16*15 16*9
     stone 16*15 16*10
+        
+    stone 16*15 16*11
+    stone 16*15 16*12
     
-    stone 16*15 16*7
+    stone 16*15 16*9
 
-    ground 16*0 16*12
-    ground 16*1 16*12
-    ground 16*2 16*12
-    ground 16*3 16*12
-    ground 16*4 16*12
-    ground 16*5 16*12
-    ground 16*6 16*12
-    ground 16*7 16*12
-    ground 16*8 16*12
-    ground 16*9 16*12
-    ground 16*10 16*12
-    ground 16*11 16*12
-    ground 16*12 16*12
-    ground 16*13 16*12
-    ground 16*14 16*12
-    ground 16*15 16*12
+    ground 16*0 16*14
+    ground 16*1 16*14
+    ground 16*2 16*14
+    ground 16*3 16*14
+    ground 16*4 16*14
+    ground 16*5 16*14
+    ground 16*6 16*14
+    ground 16*7 16*14
+    ground 16*8 16*14
+    ground 16*9 16*14
+    ground 16*10 16*14
+    ground 16*11 16*14
+    ground 16*12 16*14
+    ground 16*13 16*14
+    ground 16*14 16*14
+    ground 16*15 16*14
 
 
-    ground 16*0 16*11
-    ground 16*1 16*11
-    ground 16*2 16*11
-    ground 16*3 16*11
-    ground 16*4 16*11
-    ground 16*5 16*11
-    ground 16*6 16*11
-    ground 16*7 16*11
-    ground 16*8 16*11
-    ground 16*9 16*11
-    ground 16*10 16*11
-    ground 16*11 16*11
-    ground 16*12 16*11
-    ground 16*13 16*11
-    ground 16*14 16*11
-    ground 16*15 16*11
+    ground 16*0 16*13
+    ground 16*1 16*13
+    ground 16*2 16*13
+    ground 16*3 16*13
+    ground 16*4 16*13
+    ground 16*5 16*13
+    ground 16*6 16*13
+    ground 16*7 16*13
+    ground 16*8 16*13
+    ground 16*9 16*13
+    ground 16*10 16*13
+    ground 16*11 16*13
+    ground 16*12 16*13
+    ground 16*13 16*13
+    ground 16*14 16*13
+    ground 16*15 16*13
 
 #7
 
 
+    stone 16*2 16*12
+    stone 16*3 16*12
+    stone 16*4 16*12
+    stone 16*5 16*12
+
+    stone 16*2 16*11
+    stone 16*3 16*11
+    stone 16*4 16*11
+
     stone 16*2 16*10
     stone 16*3 16*10
-    stone 16*4 16*10
-    stone 16*5 16*10
-
+    
     stone 16*2 16*9
-    stone 16*3 16*9
-    stone 16*4 16*9
-
-    stone 16*2 16*8
-    stone 16*3 16*8
-    
-    stone 16*2 16*7
 
     
-    -ground 16*0 16*12
-    - ground 16*1 16*12
-    ground 16*2 16*12
-    ground 16*3 16*12
-    ground 16*4 16*12
-    ground 16*5 16*12
-    ground 16*6 16*12
-    ground 16*7 16*12
-    ground 16*8 16*12
-    ground 16*9 16*12
-    ground 16*10 16*12
-    ground 16*11 16*12
-    ground 16*12 16*12
-    ground 16*13 16*12
-    ground 16*14 16*12
-    ground 16*15 16*12
+    -ground 16*0 16*14
+    - ground 16*1 16*14
+    ground 16*2 16*14
+    ground 16*3 16*14
+    ground 16*4 16*14
+    ground 16*5 16*14
+    ground 16*6 16*14
+    ground 16*7 16*14
+    ground 16*8 16*14
+    ground 16*9 16*14
+    ground 16*10 16*14
+    ground 16*11 16*14
+    ground 16*12 16*14
+    ground 16*13 16*14
+    ground 16*14 16*14
+    ground 16*15 16*14
 
 
-    -ground 16*0 16*11
-    - ground 16*1 16*11
-    ground 16*2 16*11
-    ground 16*3 16*11
-    ground 16*4 16*11
-    ground 16*5 16*11
-    ground 16*6 16*11
-    ground 16*7 16*11
-    ground 16*8 16*11
-    ground 16*9 16*11
-    ground 16*10 16*11
-    ground 16*11 16*11
-    ground 16*12 16*11
-    ground 16*13 16*11
-    ground 16*14 16*11
-    ground 16*15 16*11
+    -ground 16*0 16*13
+    - ground 16*1 16*13
+    ground 16*2 16*13
+    ground 16*3 16*13
+    ground 16*4 16*13
+    ground 16*5 16*13
+    ground 16*6 16*13
+    ground 16*7 16*13
+    ground 16*8 16*13
+    ground 16*9 16*13
+    ground 16*10 16*13
+    ground 16*11 16*13
+    ground 16*12 16*13
+    ground 16*13 16*13
+    ground 16*14 16*13
+    ground 16*15 16*13
 
 - bricks.y >= 16px * 7

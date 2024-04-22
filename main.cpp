@@ -17,7 +17,7 @@ int main() {
                             "Super Mario Bros");
     window.setFramerateLimit(40);
     window.setKeyRepeatEnabled(true);
-    window.setSize(sf::Vector2u(1200, 400));
+    window.setSize(sf::Vector2u(800, 600));
     Game game = Game(&window);
     Map *m = mp->map;
     game.loadMap(m);

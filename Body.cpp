@@ -178,8 +178,6 @@ void Body::postCollisionsDetection()
         this->m_velocityY = 0;
         this->m_isJumping = true;
     }
-
-    // m_ground = WINDOW_HEIGHT + 16;
 }
 
 bool Body::collides(Body *a, Body *b)
