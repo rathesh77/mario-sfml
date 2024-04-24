@@ -38,6 +38,23 @@ Game::Game(sf::RenderWindow *window)
     m_text_lives.setCharacterSize(24); // in pixels, not points!
 
     
+    this->m_s_score_digit_1 = new sf::Sprite;
+    this->m_s_score_digit_2 = new sf::Sprite;
+    this->m_s_score_digit_3 = new sf::Sprite;
+    this->m_s_score_digit_4 = new sf::Sprite;
+    this->m_s_score_digit_5 = new sf::Sprite;
+    this->m_s_score_digit_6 = new sf::Sprite;
+
+
+    this->m_s_score_digit_1->setTexture(this->m_t_hud);
+    this->m_s_score_digit_2->setTexture(this->m_t_hud);
+    this->m_s_score_digit_3->setTexture(this->m_t_hud);
+    this->m_s_score_digit_4->setTexture(this->m_t_hud);
+    this->m_s_score_digit_5->setTexture(this->m_t_hud);
+    this->m_s_score_digit_6->setTexture(this->m_t_hud);
+
+    this->printInfos();
+
 }
 
 void Game::loadMap(Map *map)
@@ -242,6 +259,30 @@ void Game::tick(sf::Clock *clock)
                                  (TILE_DIMENSION * TILE_DIMENSION));
 }
 
+void Game::printInfos() {
+
+    std::string currentScore = std::to_string(this->m_score);
+    int size = currentScore.length();
+    for (int i = 0; i < 6 - size; i++) {
+        currentScore = '0' +  currentScore;
+    }
+
+    this->m_s_score_digit_1->setTextureRect(sf::IntRect(charactersSet[currentScore[0]][0],charactersSet[currentScore[0]][1],8,8));
+    this->m_s_score_digit_2->setTextureRect(sf::IntRect(charactersSet[currentScore[1]][0],charactersSet[currentScore[1]][1],8,8));
+    this->m_s_score_digit_3->setTextureRect(sf::IntRect(charactersSet[currentScore[2]][0],charactersSet[currentScore[2]][1],8,8));
+    this->m_s_score_digit_4->setTextureRect(sf::IntRect(charactersSet[currentScore[3]][0],charactersSet[currentScore[3]][1],8,8));
+    this->m_s_score_digit_5->setTextureRect(sf::IntRect(charactersSet[currentScore[4]][0],charactersSet[currentScore[4]][1],8,8));
+    this->m_s_score_digit_6->setTextureRect(sf::IntRect(charactersSet[currentScore[5]][0],charactersSet[currentScore[5]][1],8,8));
+
+    this->m_s_score_digit_1->setPosition(0,16);
+    this->m_s_score_digit_2->setPosition(16,16);
+    this->m_s_score_digit_3->setPosition(24,16);
+    this->m_s_score_digit_4->setPosition(32,16);
+    this->m_s_score_digit_4->setPosition(40,16);
+    this->m_s_score_digit_5->setPosition(48,16);
+    this->m_s_score_digit_6->setPosition(56,16);
+}
+
 void Game::drawText() 
 {
   /*
@@ -251,7 +292,15 @@ void Game::drawText()
         this->m_window->draw(m_text_time);
         this->m_window->draw(m_text_lives);
   */
- this->m_window->draw(*this->m_s_hud);
+    this->m_window->draw(*this->m_s_hud);
+
+    this->m_window->draw(*this->m_s_score_digit_1);
+    this->m_window->draw(*this->m_s_score_digit_2);
+    this->m_window->draw(*this->m_s_score_digit_3);
+    this->m_window->draw(*this->m_s_score_digit_4);
+    this->m_window->draw(*this->m_s_score_digit_5);
+    this->m_window->draw(*this->m_s_score_digit_6);
+
 }
 
 void Game::drawSprites()
