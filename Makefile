@@ -3,7 +3,7 @@ LIB = SFML/build/lib/
 INCLUDE = SFML/include/
 MODULES = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-main
 EXECUTABLE = main
-SOURCES = Ground.cpp Body.cpp mario.cpp MapParser.cpp Map.cpp game.cpp main.cpp
+SOURCES = Event.cpp Ground.cpp Body.cpp mario.cpp MapParser.cpp Map.cpp game.cpp main.cpp
 
 clean: main.exe
 	./clean.sh ${EXECUTABLE}.exe

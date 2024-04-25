@@ -36,7 +36,7 @@ Mario::Mario()
     m_ground = WINDOW_HEIGHT + 16;
 }
 
-void Mario::loop(SpriteObject *s_objects)
+std::vector<Event> Mario::loop(SpriteObject *s_objects)
 {
     if (this->isOverlaping())
     {
@@ -49,15 +49,17 @@ void Mario::loop(SpriteObject *s_objects)
         this->updateVerticalVelocity();
         this->postCollisionsDetection();
     }
-    this->handleCollision(s_objects);
+    std::vector<Event> events = this->handleCollision(s_objects);
 
     this->moveX();
     this->moveY();
+    return events;
 }
 
-void Mario::handleCollision(SpriteObject *s_objects)
+std::vector<Event> Mario::handleCollision(SpriteObject *s_objects)
 {
 
+    std::vector<Event> events = {};
     std::map<std::string, std::vector<SpriteObject *>> collidedObjects = this->detectCollisions(s_objects);
     std::cout << "begin" << std::endl;
     for (SpriteObject *object : collidedObjects["up"])
@@ -71,6 +73,7 @@ void Mario::handleCollision(SpriteObject *s_objects)
             delete object->body;
             object->body = new Body();
             this->m_velocityY = 1;
+            events.push_back(Event(GOOMBA_KILLED));
         }
         else
         {
@@ -116,6 +119,7 @@ void Mario::handleCollision(SpriteObject *s_objects)
             m_hitEnnemy = true;
         }
     }
+    return events;
 }
 
 void Mario::moveX() // no collisions handling here. Only moving sprite

@@ -2,12 +2,14 @@
 
 #include "Constants.hpp"
 #include "Body.hpp"
+#include "Event.hpp"
 
 class Mario: public Body {
    public:
 
     Mario();
-    void loop(SpriteObject *);
+    std::vector<Event> loop(SpriteObject *);
+    std::vector<Event> handleCollision(SpriteObject *s_objects);
 
     void moveX();
 
@@ -15,7 +17,6 @@ class Mario: public Body {
 
     bool marioIsFreezed();
     bool hasHitEnnemy();
-    void handleCollision(SpriteObject *s_objects);
 
    private:
     std::string m_spritePath = "sprites/sprites_sheet.png";

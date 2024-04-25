@@ -12,49 +12,6 @@ Game::Game(sf::RenderWindow *window)
 
     // sound.setBuffer(buffer);
     // sound.play();
-    if (!font->loadFromFile("./fonts/super-mario-bros-nes.otf"))
-    {
-    // error...
-        throw std::invalid_argument("Could not load super-mario-bros-nes.otf");
-
-    }
-
-    m_text_score.setFont(*font);
-    m_text_coins.setFont(*font);
-    m_text_world.setFont(*font);
-    m_text_time.setFont(*font);
-    m_text_lives.setFont(*font);
-
-    m_text_score.setString("SCORE" + m_score);
-    m_text_coins.setString("COINS" + m_coins);
-    m_text_world.setString("WORLD" + m_world);
-    m_text_time.setString("TIME" + m_time);
-    m_text_lives.setString("LIVES" + m_lives);
-
-    m_text_score.setCharacterSize(24); // in pixels, not points!
-    m_text_coins.setCharacterSize(24); // in pixels, not points!
-    m_text_world.setCharacterSize(24); // in pixels, not points!
-    m_text_time.setCharacterSize(24); // in pixels, not points!
-    m_text_lives.setCharacterSize(24); // in pixels, not points!
-
-    
-    this->m_s_score_digit_1 = new sf::Sprite;
-    this->m_s_score_digit_2 = new sf::Sprite;
-    this->m_s_score_digit_3 = new sf::Sprite;
-    this->m_s_score_digit_4 = new sf::Sprite;
-    this->m_s_score_digit_5 = new sf::Sprite;
-    this->m_s_score_digit_6 = new sf::Sprite;
-
-
-    this->m_s_score_digit_1->setTexture(this->m_t_hud);
-    this->m_s_score_digit_2->setTexture(this->m_t_hud);
-    this->m_s_score_digit_3->setTexture(this->m_t_hud);
-    this->m_s_score_digit_4->setTexture(this->m_t_hud);
-    this->m_s_score_digit_5->setTexture(this->m_t_hud);
-    this->m_s_score_digit_6->setTexture(this->m_t_hud);
-
-    this->printInfos();
-
 }
 
 void Game::loadMap(Map *map)
@@ -79,12 +36,13 @@ void Game::loadMap(Map *map)
         throw std::invalid_argument("Could not load goomba texture");
 
 
-    if (!this->m_t_hud.loadFromFile(this->m_hudPath, sf::IntRect(0 , 8, 255, 39-7 )))
+    if (!this->m_t_hud.loadFromFile(this->m_hudPath))
         throw std::invalid_argument("Could not load goomba texture");
 
     this->m_s_hud = new sf::Sprite;
     this->m_s_hud->setTexture(this->m_t_hud);
     this->m_s_hud->setPosition(0,0);
+    this->m_s_hud->setTextureRect(sf::IntRect(0 , 8, 255, 39-7 ));
     this->m_s_background = new sf::Sprite[m_nb_grids];
     this->m_s_background = new sf::Sprite[m_nb_grids];
     this->m_s_sky = new sf::Sprite[2 * TILE_DIMENSION * TILE_DIMENSION];
@@ -120,6 +78,22 @@ void Game::loadMap(Map *map)
         }
     }
 
+    this->m_s_score_digit_1 = new sf::Sprite;
+    this->m_s_score_digit_2 = new sf::Sprite;
+    this->m_s_score_digit_3 = new sf::Sprite;
+    this->m_s_score_digit_4 = new sf::Sprite;
+    this->m_s_score_digit_5 = new sf::Sprite;
+    this->m_s_score_digit_6 = new sf::Sprite;
+
+
+    this->m_s_score_digit_1->setTexture(this->m_t_hud);
+    this->m_s_score_digit_2->setTexture(this->m_t_hud);
+    this->m_s_score_digit_3->setTexture(this->m_t_hud);
+    this->m_s_score_digit_4->setTexture(this->m_t_hud);
+    this->m_s_score_digit_5->setTexture(this->m_t_hud);
+    this->m_s_score_digit_6->setTexture(this->m_t_hud);
+
+    this->updateInfos();
     generateSpritesInMemory();
 }
 
@@ -242,7 +216,16 @@ void Game::tick(sf::Clock *clock)
             this->m_lost = true;
             // sound.stop();
         }
-        this->m_mario->loop(this->m_s_objects);
+        std::vector<Event> marioEvents = this->m_mario->loop(this->m_s_objects);
+        bool hasKilledGoomba = false;
+        for (Event e : marioEvents) {
+            if (e.getType() == GOOMBA_KILLED) {
+                this->m_score += 100;
+                hasKilledGoomba = true;
+            }
+        }
+        if (hasKilledGoomba)
+            this->updateInfos();
     }
     else
     {
@@ -259,7 +242,7 @@ void Game::tick(sf::Clock *clock)
                                  (TILE_DIMENSION * TILE_DIMENSION));
 }
 
-void Game::printInfos() {
+void Game::updateInfos() {
 
     std::string currentScore = std::to_string(this->m_score);
     int size = currentScore.length();
@@ -274,24 +257,16 @@ void Game::printInfos() {
     this->m_s_score_digit_5->setTextureRect(sf::IntRect(charactersSet[currentScore[4]][0],charactersSet[currentScore[4]][1],8,8));
     this->m_s_score_digit_6->setTextureRect(sf::IntRect(charactersSet[currentScore[5]][0],charactersSet[currentScore[5]][1],8,8));
 
-    this->m_s_score_digit_1->setPosition(0,16);
-    this->m_s_score_digit_2->setPosition(16,16);
-    this->m_s_score_digit_3->setPosition(24,16);
-    this->m_s_score_digit_4->setPosition(32,16);
-    this->m_s_score_digit_4->setPosition(40,16);
-    this->m_s_score_digit_5->setPosition(48,16);
-    this->m_s_score_digit_6->setPosition(56,16);
+    this->m_s_score_digit_1->setPosition(24,24);
+    this->m_s_score_digit_2->setPosition(32,24);
+    this->m_s_score_digit_3->setPosition(40,24);
+    this->m_s_score_digit_4->setPosition(48,24);
+    this->m_s_score_digit_5->setPosition(56,24);
+    this->m_s_score_digit_6->setPosition(64,24);
 }
 
 void Game::drawText() 
 {
-  /*
-       this->m_window->draw(m_text_score);
-        this->m_window->draw(m_text_coins);
-        this->m_window->draw(m_text_world);
-        this->m_window->draw(m_text_time);
-        this->m_window->draw(m_text_lives);
-  */
     this->m_window->draw(*this->m_s_hud);
 
     this->m_window->draw(*this->m_s_score_digit_1);

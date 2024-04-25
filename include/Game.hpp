@@ -61,7 +61,7 @@ class Game {
 
     void drawSprites();
     void drawText();
-    void printInfos();
+    void updateInfos();
 
     int m_nb_sprites = 0;
     int m_current_grid = 0;
@@ -70,12 +70,6 @@ class Game {
 
     //sf::SoundBuffer buffer;
     //sf::Sound sound;
-
-    sf::Text m_text_score;
-    sf::Text m_text_coins;
-    sf::Text m_text_world;
-    sf::Text m_text_time;
-    sf::Text m_text_lives;
 
     int m_score = 0;
     int m_coins = 0;
@@ -86,48 +80,48 @@ class Game {
     sf::Font *font = new sf::Font;
 
     std::map<char, std::vector<int> > charactersSet = {
-        {'0', std::vector<int>(265+ (16 * 0), 7)},
-        {'1', std::vector<int>(265+ (16 * 1), 7)},
-        {'2', std::vector<int>(265+ (16 * 2), 7)},
-        {'3', std::vector<int>(265+ (16 * 3), 7)},
-        {'4', std::vector<int>(265+ (16 * 4), 7)},
-        {'5', std::vector<int>(265+ (16 * 5), 7)},
-        {'6', std::vector<int>(265+ (16 * 6), 7)},
-        {'7', std::vector<int>(265+ (16 * 7), 7)},
-        {'8', std::vector<int>(265+ (16 * 8), 7)},
-        {'9', std::vector<int>(265+ (16 * 9), 7)},
-        {'A', std::vector<int>(265+ (16 * 10), 7)},
-        {'B', std::vector<int>(265+ (16 * 11), 7)},
-        {'C', std::vector<int>(265+ (16 * 12), 7)},
-        {'D', std::vector<int>(265+ (16 * 13), 7)},
-        {'E', std::vector<int>(265+ (16 * 14), 7)},
-        {'F', std::vector<int>(265+ (16 * 15), 7)},
+        {'0', std::vector<int>{264+ (9 * 0), 8}},
+        {'1', std::vector<int>{264+ (9 * 1), 8}},
+        {'2', std::vector<int>{264+ (9 * 2), 8}},
+        {'3', std::vector<int>{264+ (9 * 3), 8}},
+        {'4', std::vector<int>{264+ (9 * 4), 8}},
+        {'5', std::vector<int>{264+ (9 * 5), 8}},
+        {'6', std::vector<int>{264+ (9 * 6), 8}},
+        {'7', std::vector<int>{264+ (9 * 7), 8}},
+        {'8', std::vector<int>{264+ (9 * 8), 8}},
+        {'9', std::vector<int>{264+ (9 * 9), 8}},
+        {'A', std::vector<int>{264+ (9 * 10), 8}},
+        {'B', std::vector<int>{264+ (9 * 11), 8}},
+        {'C', std::vector<int>{264+ (9 * 12), 8}},
+        {'D', std::vector<int>{264+ (9 * 13), 8}},
+        {'E', std::vector<int>{264+ (9 * 14), 8}},
+        {'F', std::vector<int>{264+ (9 * 15), 8}},
 
-        {'G', std::vector<int>(265+ (16 * 0), 14)},
-        {'H', std::vector<int>(265+ (16 * 1), 14)},
-        {'I', std::vector<int>(265+ (16 * 2), 14)},
-        {'J', std::vector<int>(265+ (16 * 3), 14)},
-        {'K', std::vector<int>(265+ (16 * 4), 14)},
-        {'L', std::vector<int>(265+ (16 * 5), 14)},
-        {'M', std::vector<int>(265+ (16 * 6), 14)},
-        {'N', std::vector<int>(265+ (16 * 7), 14)},
-        {'O', std::vector<int>(265+ (16 * 8), 14)},
-        {'P', std::vector<int>(265+ (16 * 9), 14)},
-        {'Q', std::vector<int>(265+ (16 * 10), 14)},
-        {'R', std::vector<int>(265+ (16 * 11), 14)},
-        {'S', std::vector<int>(265+ (16 * 12), 14)},
-        {'T', std::vector<int>(265+ (16 * 13), 14)},
-        {'U', std::vector<int>(265+ (16 * 14), 14)},
-        {'V', std::vector<int>(265+ (16 * 15), 14)},
+        {'G', std::vector<int>{264+ (9 * 0), 17}},
+        {'H', std::vector<int>{264+ (9 * 1), 17}},
+        {'I', std::vector<int>{264+ (9 * 2), 17}},
+        {'J', std::vector<int>{264+ (9 * 3), 17}},
+        {'K', std::vector<int>{264+ (9 * 4), 17}},
+        {'L', std::vector<int>{264+ (9 * 5), 17}},
+        {'M', std::vector<int>{264+ (9 * 6), 17}},
+        {'N', std::vector<int>{264+ (9 * 7), 17}},
+        {'O', std::vector<int>{264+ (9 * 8), 17}},
+        {'P', std::vector<int>{264+ (9 * 9), 17}},
+        {'Q', std::vector<int>{264+ (9 * 10), 17}},
+        {'R', std::vector<int>{264+ (9 * 11), 17}},
+        {'S', std::vector<int>{264+ (9 * 12), 17}},
+        {'T', std::vector<int>{264+ (9 * 13), 17}},
+        {'U', std::vector<int>{264+ (9 * 14), 17}},
+        {'V', std::vector<int>{264+ (9 * 15), 17}},
 
-        {'W', std::vector<int>(265+ (16 * 0), 21)},
-        {'X', std::vector<int>(265+ (16 * 1), 21)},
-        {'Y', std::vector<int>(265+ (16 * 2), 21)},
-        {'Z', std::vector<int>(265+ (16 * 3), 21)},
-        {'-', std::vector<int>(265+ (16 * 4), 21)},
-        {'x', std::vector<int>(265+ (16 * 5), 21)},
-        {'!', std::vector<int>(265+ (16 * 6), 21)},
-        {'.', std::vector<int>(265+ (16 * 7), 21)},
-        {'_', std::vector<int>(265+ (16 * 8), 21)},
+        {'W', std::vector<int>{264+ (9 * 0), 26}},
+        {'X', std::vector<int>{264+ (9 * 1), 26}},
+        {'Y', std::vector<int>{264+ (9 * 2), 26}},
+        {'Z', std::vector<int>{264+ (9 * 3), 26}},
+        {'-', std::vector<int>{264+ (9 * 4), 26}},
+        {'x', std::vector<int>{264+ (9 * 5), 26}},
+        {'!', std::vector<int>{264+ (9 * 6), 26}},
+        {'.', std::vector<int>{264+ (9 * 7), 26}},
+        {'_', std::vector<int>{264+ (9 * 8), 26}},
     };
 };
