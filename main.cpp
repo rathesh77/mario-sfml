@@ -6,29 +6,29 @@
 #include "MapParser.hpp"
 
 int main() {
-    MapParser *mp = MapParser::create("map1.txt");
-    if (mp) {
-        mp->parse();
-    } else {
-        return EXIT_FAILURE;
-    }
+  MapParser *mp = MapParser::create("map1.txt");
+  if (mp) {
+    mp->parse();
+  } else {
+    return EXIT_FAILURE;
+  }
 
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
-                            "Super Mario Bros");
-    window.setFramerateLimit(40);
-    window.setKeyRepeatEnabled(true);
-    window.setSize(sf::Vector2u(800, 600));
-    Game game = Game(&window);
-    Map *m = mp->map;
-    game.loadMap(m);
+  sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
+                          "Super Mario Bros");
+  window.setFramerateLimit(40);
+  window.setKeyRepeatEnabled(true);
+  window.setSize(sf::Vector2u(800, 600));
+  Game game = Game(&window);
+  Map *m = mp->map;
+  game.loadMap(m);
 
-    sf::Clock clock;
-    while (window.isOpen()) {
-        window.clear();
-        game.tick(&clock);
+  sf::Clock clock;
+  while (window.isOpen()) {
+    window.clear();
+    game.tick(&clock);
 
-        window.display();
-    }
+    window.display();
+  }
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
