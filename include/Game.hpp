@@ -26,9 +26,8 @@ class Game {
 
   std::string m_hudPath = "sprites/HUD.png";
   std::string m_backgroundPath = "sprites/background2_non_transparent.png";
-  std::string m_skyPath = "sprites/background2_non_transparent.png";
   std::string m_brickPath = "sprites/bricks.png";
-  std::string m_groundPath = "sprites/tileset.png";
+  std::string m_tilesetPath = "sprites/tileset.png";
 
   std::string m_ennemiesPath = "sprites/ennemies_transparent.png";
 
@@ -36,6 +35,8 @@ class Game {
   sf::Sprite *m_s_sky;
   SpriteObject *m_s_objects = new SpriteObject[1];
   sf::Sprite *m_s_hud;
+  sf::Sprite *m_s_unknownBox;
+
 
   sf::Sprite *m_s_score_digit_1;
   sf::Sprite *m_s_score_digit_2;
@@ -44,10 +45,13 @@ class Game {
   sf::Sprite *m_s_score_digit_5;
   sf::Sprite *m_s_score_digit_6;
 
+  sf::Sprite *m_s_coins_digit_1;
+  sf::Sprite *m_s_coins_digit_2;
+
   sf::Texture m_t_sky;
   sf::Texture m_t_background;
   sf::Texture m_t_brick;
-  sf::Texture m_t_ground;
+  sf::Texture m_t_tileset;
   sf::Texture m_t_ennemies;
   sf::Texture m_t_hud;
 

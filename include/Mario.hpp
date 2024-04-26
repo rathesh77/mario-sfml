@@ -20,11 +20,6 @@ class Mario : public Body {
  private:
   std::string m_spritePath = "sprites/sprites_sheet.png";
 
-  sf::Texture m_texture;
-  sf::Texture m_marioFrameOne;
-  sf::Texture m_marioFrameTwo;
-  sf::Texture m_marioFrameThree;
-  sf::Texture m_marioFrameFour;
-
+  sf::Texture m_t_texture;
   bool m_freezeMario = false;
 };

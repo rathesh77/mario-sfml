@@ -5,27 +5,15 @@
 Mario::Mario() {
   this->m_width = TILE_DIMENSION;
   this->m_height = TILE_DIMENSION;
-  if (!this->m_marioFrameOne.loadFromFile(
-          this->m_spritePath, sf::IntRect(0, 8, this->m_width, this->m_height)))
-    throw std::invalid_argument("Could not load mario texture");
 
-  if (!this->m_marioFrameTwo.loadFromFile(
-          this->m_spritePath,
-          sf::IntRect(20, 8, 20 + this->m_width, this->m_height)))
+  if (!this->m_t_texture.loadFromFile(
+          this->m_spritePath))
     throw std::invalid_argument("Could not load mario frame one texture");
 
-  if (!this->m_marioFrameThree.loadFromFile(
-          this->m_spritePath,
-          sf::IntRect(38, 8, 38 + this->m_width, this->m_height)))
-    throw std::invalid_argument("Could not load mario frame one texture");
-
-  if (!this->m_marioFrameFour.loadFromFile(
-          this->m_spritePath,
-          sf::IntRect(56, 8, 56 + this->m_width, this->m_height)))
-    throw std::invalid_argument("Could not load mario frame one texture");
-
-  this->m_sprite = sf::Sprite(this->m_marioFrameOne);
+  this->m_sprite = sf::Sprite(this->m_t_texture);
   this->m_sprite.setPosition(10, BOUNDING_Y_BOTTOM);
+  this->m_sprite.setTextureRect(sf::IntRect(0, 8,  this->m_width, this->m_height));
+
   this->realCoordinates.x += this->getX();
   this->m_direction = 0;
   this->m_velocityX = 0.0f;
@@ -58,7 +46,6 @@ std::vector<Event> Mario::handleCollision(SpriteObject *s_objects) {
   std::vector<Event> events = {};
   std::map<std::string, std::vector<SpriteObject *>> collidedObjects =
       this->detectCollisions(s_objects);
-  std::cout << "begin" << std::endl;
   for (SpriteObject *object : collidedObjects["up"]) {
     std::cout << "upward:" + object->type << std::endl;
 
@@ -82,6 +69,9 @@ std::vector<Event> Mario::handleCollision(SpriteObject *s_objects) {
 
     if (object->type == "goomba") {
       events.push_back(Event(MARIO_DIED));
+    } else if (object->type == "unknownbrick") {
+      events.push_back(Event(UNKNOWN_BRICK_HIT, object));
+
     }
   }
   for (SpriteObject *object : collidedObjects["side"]) {
@@ -112,7 +102,7 @@ std::vector<Event> Mario::handleCollision(SpriteObject *s_objects) {
   return events;
 }
 
-void Mario::moveX()  // no collisions handling here. Only moving sprite
+void Mario::moveX() // no collisions handling here. Only moving sprite
 {
   if (this->getX() + this->m_velocityX <= BOUNDING_X_LEFT &&
       (this->m_direction < 1 || this->m_decelerating)) {
@@ -136,17 +126,18 @@ void Mario::moveX()  // no collisions handling here. Only moving sprite
   }
 }
 void Mario::loadSpriteForward(int frameCount) {
-  if (this->m_velocityX != 0) {
-    if (frameCount < 2) {
-      this->m_sprite.setTexture(m_marioFrameOne);
+    if (this->m_velocityX != 0) {
+      if (frameCount < 2) {
+        this->m_sprite.setTextureRect(sf::IntRect(0, 8, this->m_width, this->m_height));
+      }
+      if (frameCount % 2 == 0) {
+        this->m_sprite.setTextureRect(sf::IntRect(20, 8, this->m_width, this->m_height));
+      }
+      if (frameCount % 3 == 0) {
+        this->m_sprite.setTextureRect(sf::IntRect(38, 8, this->m_width, this->m_height));
+        
+      }
     }
-    if (frameCount % 2 == 0) {
-      this->m_sprite.setTexture(m_marioFrameTwo);
-    }
-    if (frameCount % 3 == 0) {
-      this->m_sprite.setTexture(m_marioFrameThree);
-    }
-  }
 }
 
 bool Mario::marioIsFreezed() { return this->m_freezeMario; }

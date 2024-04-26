@@ -1,8 +1,8 @@
 #include "Game.hpp"
 
-#include <iostream>
-
 #include "Ground.hpp"
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <iostream>
 
 Game::Game(sf::RenderWindow *window) {
   this->m_currentMap = 0;
@@ -11,6 +11,7 @@ Game::Game(sf::RenderWindow *window) {
   this->m_mario = new Mario();
   buffer.loadFromFile("audio/overworld.mp3");
 
+  sound.setVolume(0);
   sound.setBuffer(buffer);
   sound.play();
 }
@@ -19,7 +20,7 @@ void Game::loadMap(Map *map) {
   this->m_map = map;
   this->m_nb_grids = map->getNumberOfGrids();
 
-  if (!this->m_t_sky.loadFromFile(this->m_skyPath))
+  if (!this->m_t_sky.loadFromFile(this->m_backgroundPath))
     throw std::invalid_argument("Could not load goomba texture");
 
   if (!this->m_t_background.loadFromFile(this->m_backgroundPath))
@@ -28,7 +29,7 @@ void Game::loadMap(Map *map) {
   if (!this->m_t_brick.loadFromFile(this->m_brickPath))
     throw std::invalid_argument("Could not load brick texture");
 
-  if (!this->m_t_ground.loadFromFile(this->m_groundPath))
+  if (!this->m_t_tileset.loadFromFile(this->m_tilesetPath))
     throw std::invalid_argument("Could not load ground texture");
 
   if (!this->m_t_ennemies.loadFromFile(this->m_ennemiesPath))
@@ -89,6 +90,12 @@ void Game::generateSpritesInMemory() {
   this->m_s_score_digit_5->setTexture(this->m_t_hud);
   this->m_s_score_digit_6->setTexture(this->m_t_hud);
 
+  this->m_s_coins_digit_1 = new sf::Sprite;
+  this->m_s_coins_digit_2 = new sf::Sprite;
+
+  this->m_s_coins_digit_1->setTexture(this->m_t_hud);
+  this->m_s_coins_digit_2->setTexture(this->m_t_hud);
+
   this->updateInfos();
 
   int nbObjects = m_map->getNumberOfGrids() * 40;
@@ -119,13 +126,16 @@ void Game::generateSpritesInMemory() {
             new Body(&this->m_t_ennemies, x, y, 0, 16, 16, 16, ptr->type);
       } else if (ptr->type == "ground") {
         this->m_s_objects->body =
-            new Ground(&this->m_t_ground, x, y, 32, 460, 16, 16, ptr->type);
+            new Ground(&this->m_t_tileset, x, y, 32, 460, 16, 16, ptr->type);
       } else if (ptr->type == "stone") {
         this->m_s_objects->body =
-            new Ground(&this->m_t_ground, x, y, 0, 33, 16, 16, ptr->type);
+            new Ground(&this->m_t_tileset, x, y, 0, 33, 16, 16, ptr->type);
       } else if (ptr->type == "pipe") {
         this->m_s_objects->body =
-            new Ground(&this->m_t_ground, x, y, 112, 612, 32, 63, ptr->type);
+            new Ground(&this->m_t_tileset, x, y, 112, 612, 32, 63, ptr->type);
+      } else if (ptr->type == "unknownbrick") {
+        this->m_s_objects->body =
+            new Ground(&this->m_t_tileset, x, y, 96, 476, 16, 16, ptr->type);
       }
       ptr = ptr->next;
       this->m_s_objects++;
@@ -184,18 +194,26 @@ void Game::tick(sf::Clock *clock) {
     }
 
     std::vector<Event> marioEvents = this->m_mario->loop(this->m_s_objects);
-    bool hasKilledGoomba = false;
+    bool refreshStats = false;
+
     for (Event e : marioEvents) {
       if (e.getType() == GOOMBA_KILLED) {
         this->m_score += 100;
-        hasKilledGoomba = true;
+        refreshStats = true;
       } else if (e.getType() == MARIO_DIED) {
         this->m_lost = true;
         sound.stop();
         break;
+      } else if (e.getType() == UNKNOWN_BRICK_HIT) {
+        this->m_coins += 1;
+        refreshStats = true;
+        e.getTarget()->body =
+            new Ground(&this->m_t_brick, e.getTarget()->body->getX(),
+                       e.getTarget()->body->getY(), 272, 112, 16, 16, "brick");
+        e.getTarget()->type = "brick";
       }
     }
-    if (hasKilledGoomba)
+    if (refreshStats)
       this->updateInfos();
   } else {
     if (sound.getStatus() == sf::Sound::Stopped) {
@@ -243,6 +261,24 @@ void Game::updateInfos() {
   this->m_s_score_digit_4->setPosition(48, 24);
   this->m_s_score_digit_5->setPosition(56, 24);
   this->m_s_score_digit_6->setPosition(64, 24);
+
+  std::string currentCoins = std::to_string(this->m_coins);
+
+  size = currentCoins.length();
+  for (int i = 0; i < 2 - size; i++) {
+    currentCoins = '0' + currentCoins;
+  }
+
+  this->m_s_coins_digit_1->setTextureRect(
+      sf::IntRect(charactersSet[currentCoins[0]][0],
+                  charactersSet[currentCoins[0]][1], 8, 8));
+
+  this->m_s_coins_digit_2->setTextureRect(
+      sf::IntRect(charactersSet[currentCoins[1]][0],
+                  charactersSet[currentCoins[1]][1], 8, 8));
+
+  this->m_s_coins_digit_1->setPosition(104, 24);
+  this->m_s_coins_digit_2->setPosition(112, 24);
 }
 
 void Game::drawText() {
@@ -254,6 +290,9 @@ void Game::drawText() {
   this->m_window->draw(*this->m_s_score_digit_4);
   this->m_window->draw(*this->m_s_score_digit_5);
   this->m_window->draw(*this->m_s_score_digit_6);
+
+  this->m_window->draw(*this->m_s_coins_digit_1);
+  this->m_window->draw(*this->m_s_coins_digit_2);
 }
 
 void Game::drawSprites() {
@@ -266,6 +305,12 @@ void Game::drawSprites() {
 
   this->drawObjects();
   this->m_window->draw(*this->m_mario->getSprite());
+  sf::RectangleShape rectShape = sf::RectangleShape(sf::Vector2f(16, 16));
+  rectShape.setPosition(m_mario->getPosition());
+  rectShape.setFillColor(sf::Color(0, 0, 0, 0));
+  rectShape.setOutlineThickness(1);
+  rectShape.setOutlineColor(sf::Color(255, 0, 0));
+  this->m_window->draw(rectShape);
 }
 
 void Game::shiftSceneBackward() {
