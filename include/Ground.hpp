@@ -10,7 +10,5 @@ class Ground : public Body {
   std::map<std::string, std::vector<SpriteObject *>> detectCollisions(
       SpriteObject *);
   void handleCollision(SpriteObject *);
-  void postCollisionsDetection();
-
  private:
 };

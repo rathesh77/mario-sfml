@@ -23,18 +23,17 @@ Mario::Mario() {
 }
 
 std::vector<Event> Mario::loop(SpriteObject *s_objects) {
-  //std::cout<<this->m_velocityY<<std::endl;
+    //std::cout<<this->m_velocityY<<std::endl;
   if (this->isOverlaping()) {
     this->m_overlap = false;
-    this->resetY();
   }
   this->updateHorizontalVelocity();
   this->updateVerticalVelocity();
-  this->postCollisionsDetection();
   std::vector<Event> events = this->handleCollision(s_objects);
 
   this->moveX();
   this->moveY();
+  this->resetY();
 
   if (this->getY() >= WINDOW_HEIGHT) {
     events.push_back(Event(MARIO_DIED));
@@ -126,7 +125,7 @@ void Mario::moveX() // no collisions handling here. Only moving sprite
   }
 }
 void Mario::loadSpriteForward(int frameCount) {
-  if (this->m_velocityY != 0 ) {
+  if (this->m_isJumping) {
     this->m_sprite.setTextureRect(sf::IntRect(96, 8, this->m_width, this->m_height));
 
   } else 

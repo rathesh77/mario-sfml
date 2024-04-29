@@ -50,8 +50,6 @@ class Body {
       SpriteObject *);
   void handleCollision(SpriteObject *s_objects);
 
-  void postCollisionsDetection();
-
   bool collides(Body *, Body *);
   bool compare(Body *, Body *);
 
@@ -77,7 +75,7 @@ class Body {
   float m_accOffset = 0.25f;
 
   float m_initialVelocityY = 9.45f;
-  float m_velocityY = m_initialVelocityY;
+  float m_velocityY = 0;
 
   float m_initialGravity = 0.6f;
   float m_gravity = m_initialGravity;

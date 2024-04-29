@@ -34,7 +34,6 @@ void Body::loop(SpriteObject *s_objects) {
   }
   this->updateHorizontalVelocity();
   this->updateVerticalVelocity();
-  this->postCollisionsDetection();
   this->handleCollision(s_objects);
 
   this->moveX();
@@ -111,6 +110,7 @@ std::map<std::string, std::vector<SpriteObject *>> Body::detectCollisions(
   if (!hit) {
     m_overlap = false;
     m_ground = WINDOW_HEIGHT + 16;
+    this->m_isJumping = true;
   } else {
     m_overlap = true;
   }
@@ -137,13 +137,6 @@ void Body::handleCollision(SpriteObject *s_objects) {
 }
 
 bool Body::compare(Body *a, Body *b) { return a == b; }
-
-void Body::postCollisionsDetection() {
-  if (!this->m_isJumping) {
-    this->m_velocityY = 0;
-    this->m_isJumping = true;
-  }
-}
 
 bool Body::collides(Body *a, Body *b) {
   return a->getX() >= b->getX() - a->m_width + 2 &&

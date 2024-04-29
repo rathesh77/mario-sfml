@@ -17,4 +17,3 @@ std::map<std::string, std::vector<SpriteObject *>> Ground::detectCollisions(
 }
 
 void Ground::handleCollision(SpriteObject *) {}
-void Ground::postCollisionsDetection() {}
