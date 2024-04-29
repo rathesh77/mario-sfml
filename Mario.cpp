@@ -23,14 +23,14 @@ Mario::Mario() {
 }
 
 std::vector<Event> Mario::loop(SpriteObject *s_objects) {
+  //std::cout<<this->m_velocityY<<std::endl;
   if (this->isOverlaping()) {
     this->m_overlap = false;
     this->resetY();
-  } else {
-    this->updateHorizontalVelocity();
-    this->updateVerticalVelocity();
-    this->postCollisionsDetection();
   }
+  this->updateHorizontalVelocity();
+  this->updateVerticalVelocity();
+  this->postCollisionsDetection();
   std::vector<Event> events = this->handleCollision(s_objects);
 
   this->moveX();
@@ -126,6 +126,10 @@ void Mario::moveX() // no collisions handling here. Only moving sprite
   }
 }
 void Mario::loadSpriteForward(int frameCount) {
+  if (this->m_velocityY != 0 ) {
+    this->m_sprite.setTextureRect(sf::IntRect(96, 8, this->m_width, this->m_height));
+
+  } else 
     if (this->m_velocityX != 0) {
       if (frameCount < 2) {
         this->m_sprite.setTextureRect(sf::IntRect(0, 8, this->m_width, this->m_height));
@@ -137,6 +141,8 @@ void Mario::loadSpriteForward(int frameCount) {
         this->m_sprite.setTextureRect(sf::IntRect(38, 8, this->m_width, this->m_height));
         
       }
+    } else {
+      this->m_sprite.setTextureRect(sf::IntRect(0, 8, this->m_width, this->m_height));
     }
 }
 

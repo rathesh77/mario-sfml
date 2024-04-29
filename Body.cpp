@@ -30,22 +30,16 @@ Body::Body(sf::Texture *texture, float posX, float posY, float rectX,
 
 void Body::loop(SpriteObject *s_objects) {
   if (this->isOverlaping()) {
-    // this->overlap = false;
-  } else {
-    this->updateHorizontalVelocity();
-    this->updateVerticalVelocity();
-    this->postCollisionsDetection();
+    this->m_overlap = false;
   }
+  this->updateHorizontalVelocity();
+  this->updateVerticalVelocity();
+  this->postCollisionsDetection();
   this->handleCollision(s_objects);
 
   this->moveX();
   this->moveY();
-
   this->resetY();
-  if (this->isOverlaping()) {
-    // this->m_velocityX = -1.0;
-    this->m_overlap = false;
-  }
 }
 
 sf::Vector2f Body::getPosition() { return this->m_sprite.getPosition(); }
@@ -183,21 +177,22 @@ void Body::updateHorizontalVelocity() {
 }
 
 void Body::updateVerticalVelocity() {
-  if (this->m_velocityY > -m_initialVelocityY)
+  if (this->m_isJumping)
     this->m_velocityY -= this->m_gravity;
 }
 
 void Body::jump() {
   if (m_jumpEnabled) {
     this->m_isJumping = true;
+    this->m_velocityY = this->m_initialVelocityY;
     this->m_jumpEnabled = false;
   }
 }
 
 void Body::resetY() {
-  if (this->getY() + this->m_height == m_ground) {
+  if (this->getY() + this->m_height == m_ground && this->m_velocityY != this->m_initialVelocityY) {
     this->m_isJumping = false;
-    this->m_velocityY = m_initialVelocityY;
+    this->m_velocityY = 0;
     m_jumpEnabled = true;
   }
 }
