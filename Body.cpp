@@ -44,19 +44,16 @@ void Body::loop(SpriteObject *s_objects) {
 sf::Vector2f Body::getPosition() { return this->m_sprite.getPosition(); }
 
 void Body::setDirectionX(int direction) {
-  if (direction != 0) {
+  if (direction != 0)
     this->m_lookingRight = direction == 1 ? true : false;
-  }
-
+  
   if (!this->m_lookingRight && !this->m_flipped) {
-    // this->sprite.scale(-1.0f, 1.0f);
-    // this->sprite.move(this->width, 0);
-
+    this->m_sprite.scale(-1.0f, 1.0f);
+    this->m_sprite.setOrigin(this->m_width, 0);
     this->m_flipped = true;
   } else if (this->m_flipped && this->m_lookingRight) {
-    // this->sprite.scale(-1.0f, 1.0f);
-    // this->sprite.move(- this->width,0);
-
+    this->m_sprite.scale(-1.0f, 1.0f);
+    this->m_sprite.setOrigin(0, 0);
     this->m_flipped = false;
   }
 
