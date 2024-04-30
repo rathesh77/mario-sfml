@@ -6,13 +6,13 @@ Mario::Mario() {
   this->m_width = TILE_DIMENSION;
   this->m_height = TILE_DIMENSION;
 
-  if (!this->m_t_texture.loadFromFile(
-          this->m_spritePath))
+  if (!this->m_t_texture.loadFromFile(this->m_spritePath))
     throw std::invalid_argument("Could not load mario frame one texture");
 
   this->m_sprite = sf::Sprite(this->m_t_texture);
   this->m_sprite.setPosition(10, BOUNDING_Y_BOTTOM);
-  this->m_sprite.setTextureRect(sf::IntRect(0, 8,  this->m_width, this->m_height));
+  this->m_sprite.setTextureRect(
+      sf::IntRect(0, 8, this->m_width, this->m_height));
 
   this->realCoordinates.x += this->getX();
   this->m_direction = 0;
@@ -23,7 +23,7 @@ Mario::Mario() {
 }
 
 std::vector<Event> Mario::loop(SpriteObject *s_objects) {
-    //std::cout<<this->m_velocityY<<std::endl;
+  // std::cout<<this->m_velocityY<<std::endl;
   if (this->isOverlaping()) {
     this->m_overlap = false;
   }
@@ -70,7 +70,6 @@ std::vector<Event> Mario::handleCollision(SpriteObject *s_objects) {
       events.push_back(Event(MARIO_DIED));
     } else if (object->type == "unknownbrick") {
       events.push_back(Event(UNKNOWN_BRICK_HIT, object));
-
     }
   }
   for (SpriteObject *object : collidedObjects["side"]) {
@@ -126,23 +125,26 @@ void Mario::moveX() // no collisions handling here. Only moving sprite
 }
 void Mario::loadSpriteForward(int frameCount) {
   if (this->m_isJumping) {
-    this->m_sprite.setTextureRect(sf::IntRect(96, 8, this->m_width, this->m_height));
+    this->m_sprite.setTextureRect(
+        sf::IntRect(96, 8, this->m_width, this->m_height));
 
-  } else 
-    if (this->m_velocityX != 0) {
-      if (frameCount < 2) {
-        this->m_sprite.setTextureRect(sf::IntRect(0, 8, this->m_width, this->m_height));
-      }
-      if (frameCount % 2 == 0) {
-        this->m_sprite.setTextureRect(sf::IntRect(20, 8, this->m_width, this->m_height));
-      }
-      if (frameCount % 3 == 0) {
-        this->m_sprite.setTextureRect(sf::IntRect(38, 8, this->m_width, this->m_height));
-        
-      }
-    } else {
-      this->m_sprite.setTextureRect(sf::IntRect(0, 8, this->m_width, this->m_height));
+  } else if (this->m_velocityX != 0) {
+    if (frameCount < 2) {
+      this->m_sprite.setTextureRect(
+          sf::IntRect(0, 8, this->m_width, this->m_height));
     }
+    if (frameCount % 2 == 0) {
+      this->m_sprite.setTextureRect(
+          sf::IntRect(20, 8, this->m_width, this->m_height));
+    }
+    if (frameCount % 3 == 0) {
+      this->m_sprite.setTextureRect(
+          sf::IntRect(38, 8, this->m_width, this->m_height));
+    }
+  } else {
+    this->m_sprite.setTextureRect(
+        sf::IntRect(0, 8, this->m_width, this->m_height));
+  }
 }
 
 bool Mario::marioIsFreezed() { return this->m_freezeMario; }

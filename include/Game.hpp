@@ -5,7 +5,7 @@
 #include "Mario.hpp"
 
 class Game {
- public:
+public:
   int frameCount = 0;
 
   Game(sf::RenderWindow *);
@@ -19,7 +19,7 @@ class Game {
   void loadMap(Map *);
   void generateSpritesInMemory();
 
- private:
+private:
   int m_currentMap;
   int m_nb_grids;
   int m_single_background_width = TILE_DIMENSION * TILE_DIMENSION;
@@ -36,7 +36,6 @@ class Game {
   SpriteObject *m_s_objects = new SpriteObject[1];
   sf::Sprite *m_s_hud;
   sf::Sprite *m_s_unknownBox;
-
 
   sf::Sprite *m_s_score_digit_1;
   sf::Sprite *m_s_score_digit_2;
@@ -76,12 +75,12 @@ class Game {
   int m_score = 0;
   int m_coins = 0;
   std::string m_world = "0";
-  int m_time = 0;  // in seconds
+  int m_time = 0; // in seconds
   int m_lives = 0;
 
   sf::Font *font = new sf::Font;
 
-  std::map<char, std::vector<int> > charactersSet = {
+  std::map<char, std::vector<int>> charactersSet = {
       {'0', std::vector<int>{264 + (9 * 0), 8}},
       {'1', std::vector<int>{264 + (9 * 1), 8}},
       {'2', std::vector<int>{264 + (9 * 2), 8}},

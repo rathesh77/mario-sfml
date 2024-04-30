@@ -8,4 +8,4 @@ Event::Event(EVENT_TYPES type, SpriteObject *target) {
 
 EVENT_TYPES Event::getType() { return this->m_type; }
 
-SpriteObject* Event::getTarget() { return this->m_target; }
+SpriteObject *Event::getTarget() { return this->m_target; }

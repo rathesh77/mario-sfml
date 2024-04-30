@@ -46,7 +46,7 @@ sf::Vector2f Body::getPosition() { return this->m_sprite.getPosition(); }
 void Body::setDirectionX(int direction) {
   if (direction != 0)
     this->m_lookingRight = direction == 1 ? true : false;
-  
+
   if (!this->m_lookingRight && !this->m_flipped) {
     this->m_sprite.scale(-1.0f, 1.0f);
     this->m_sprite.setOrigin(this->m_width, 0);
@@ -62,8 +62,8 @@ void Body::setDirectionX(int direction) {
 
 int Body::getDirection() { return this->m_direction; }
 
-std::map<std::string, std::vector<SpriteObject *>> Body::detectCollisions(
-    SpriteObject *s_objects) {
+std::map<std::string, std::vector<SpriteObject *>>
+Body::detectCollisions(SpriteObject *s_objects) {
   int i = 0;
   bool hit = false;
 
@@ -80,7 +80,8 @@ std::map<std::string, std::vector<SpriteObject *>> Body::detectCollisions(
   nextPos.m_height = this->m_height;
 
   while (true) {
-    if (s_objects->type == "NULL" || s_objects->type == "") break;
+    if (s_objects->type == "NULL" || s_objects->type == "")
+      break;
     if (compare(this, s_objects->body)) {
       // two of the same type of body cannot collide each other
       s_objects++;
@@ -126,7 +127,8 @@ void Body::handleCollision(SpriteObject *s_objects) {
     this->m_velocityY = this->getY() - (objectPos.y - this->m_height);
   }
   for (SpriteObject *object : collidedObjects["down"]) {
-    if (this->m_velocityY > 0) this->m_velocityY = -0.0f;
+    if (this->m_velocityY > 0)
+      this->m_velocityY = -0.0f;
   }
   for (SpriteObject *object : collidedObjects["side"]) {
     this->m_direction = -this->m_direction;
@@ -142,7 +144,7 @@ bool Body::collides(Body *a, Body *b) {
          a->getY() >= b->getY() - a->m_height &&
          a->getY() <= b->getY() + b->m_height;
 }
-void Body::moveX()  // no collisions handling here. Only moving sprite
+void Body::moveX() // no collisions handling here. Only moving sprite
 {
   this->realCoordinates.x += this->m_velocityX;
 
@@ -181,7 +183,8 @@ void Body::jump() {
 }
 
 void Body::resetY() {
-  if (this->getY() + this->m_height == this->m_ground && this->m_velocityY != this->m_initialVelocityY) {
+  if (this->getY() + this->m_height == this->m_ground &&
+      this->m_velocityY != this->m_initialVelocityY) {
     this->m_isJumping = false;
     this->m_velocityY = 0;
     this->m_jumpEnabled = true;
@@ -189,9 +192,11 @@ void Body::resetY() {
 }
 
 float Body::lerp(float current, float goal, float dt) {
-  if (current + dt < goal) return current + dt;
+  if (current + dt < goal)
+    return current + dt;
 
-  if (goal < current) return current - dt;
+  if (goal < current)
+    return current - dt;
 
   return goal;
 }

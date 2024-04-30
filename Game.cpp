@@ -113,9 +113,10 @@ void Game::generateSpritesInMemory() {
     while (ptr) {
       this->m_s_objects->type = ptr->type;
       this->m_nb_sprites++;
-      const float x = ptr->position.x +
-                      this->m_s_background[this->m_current_grid].getPosition().x +
-                      (TILE_DIMENSION * TILE_DIMENSION * (i - this->m_current_grid));
+      const float x =
+          ptr->position.x +
+          this->m_s_background[this->m_current_grid].getPosition().x +
+          (TILE_DIMENSION * TILE_DIMENSION * (i - this->m_current_grid));
 
       const float y = ptr->position.y;
       if (ptr->type == "brick") {
@@ -143,8 +144,7 @@ void Game::generateSpritesInMemory() {
   }
   this->m_s_objects[this->m_nb_sprites].type = "NULL";
   SpriteObject *_s_objects = new SpriteObject[this->m_nb_sprites + 1];
-  memcpy(_s_objects, save_ptr,
-         sizeof(SpriteObject) * (this->m_nb_sprites + 1));
+  memcpy(_s_objects, save_ptr, sizeof(SpriteObject) * (this->m_nb_sprites + 1));
   this->m_s_objects = NULL;
   save_ptr = NULL;
   this->m_s_objects = _s_objects;

@@ -10,7 +10,7 @@
 #define WINDOW_HEIGHT 16 * 15
 
 class Constants {
- public:
+public:
   Constants();
   virtual ~Constants();
 };

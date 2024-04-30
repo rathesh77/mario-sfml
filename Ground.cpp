@@ -11,8 +11,8 @@ Ground::Ground(sf::Texture *texture, float x, float y, float rectX, float rectY,
   this->m_maxVelocityX = 0.0f;
 }
 
-std::map<std::string, std::vector<SpriteObject *>> Ground::detectCollisions(
-    SpriteObject *) {
+std::map<std::string, std::vector<SpriteObject *>>
+Ground::detectCollisions(SpriteObject *) {
   return std::map<std::string, std::vector<SpriteObject *>>{};
 }
 

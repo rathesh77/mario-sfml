@@ -14,7 +14,7 @@ struct SpriteObject {
 };
 
 class Body {
- public:
+public:
   sf::Vector2f getPosition();
   sf::Sprite *getSprite();
 
@@ -46,8 +46,8 @@ class Body {
 
   bool isOverlaping();
 
-  std::map<std::string, std::vector<SpriteObject *>> detectCollisions(
-      SpriteObject *);
+  std::map<std::string, std::vector<SpriteObject *>>
+  detectCollisions(SpriteObject *);
   void handleCollision(SpriteObject *s_objects);
 
   bool collides(Body *, Body *);
@@ -58,7 +58,7 @@ class Body {
 
   sf::Sprite m_sprite;
 
- protected:
+protected:
   std::string m_type;
 
   sf::Texture *m_texture;

@@ -5,7 +5,7 @@
 #include "Event.hpp"
 
 class Mario : public Body {
- public:
+public:
   Mario();
   std::vector<Event> loop(SpriteObject *);
   std::vector<Event> handleCollision(SpriteObject *s_objects);
@@ -17,7 +17,7 @@ class Mario : public Body {
   bool marioIsFreezed();
   bool hasHitEnnemy();
 
- private:
+private:
   std::string m_spritePath = "sprites/sprites_sheet.png";
 
   sf::Texture m_t_texture;
