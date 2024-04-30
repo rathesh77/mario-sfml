@@ -202,7 +202,7 @@ void Game::tick(sf::Clock *clock) {
         refreshStats = true;
       } else if (e.getType() == MARIO_DIED) {
         this->m_lost = true;
-        m_sound.stop();
+        this->m_sound.stop();
         break;
       } else if (e.getType() == UNKNOWN_BRICK_HIT) {
         this->m_coins += 1;
