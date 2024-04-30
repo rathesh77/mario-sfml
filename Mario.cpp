@@ -19,7 +19,7 @@ Mario::Mario() {
   this->m_velocityX = 0.0f;
   this->m_accOffset = 0.1f;
   this->m_maxVelocityX = 2.0f;
-  m_ground = WINDOW_HEIGHT + 16;
+  this->m_ground = WINDOW_HEIGHT + 16;
 }
 
 std::vector<Event> Mario::loop(SpriteObject *s_objects) {
@@ -56,7 +56,7 @@ std::vector<Event> Mario::handleCollision(SpriteObject *s_objects) {
       this->m_velocityY = 1;
       events.push_back(Event(GOOMBA_KILLED));
     } else {
-      m_ground = objectPos.y;
+      this->m_ground = objectPos.y;
       this->m_velocityY = this->getY() - (objectPos.y - this->m_height);
     }
   }

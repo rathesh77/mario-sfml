@@ -25,7 +25,7 @@ Body::Body(sf::Texture *texture, float posX, float posY, float rectX,
   this->m_sprite.setTextureRect(sf::IntRect(rectX, rectY, width, height));
   this->m_sprite.setPosition(posX, posY);
   this->realCoordinates.x += this->getX();
-  m_ground = WINDOW_HEIGHT + 16;
+  this->m_ground = WINDOW_HEIGHT + 16;
 }
 
 void Body::loop(SpriteObject *s_objects) {
@@ -105,11 +105,12 @@ std::map<std::string, std::vector<SpriteObject *>> Body::detectCollisions(
     i++;
   }
   if (!hit) {
-    m_overlap = false;
-    m_ground = WINDOW_HEIGHT + 16;
+    this->m_overlap = false;
+    this->m_ground = WINDOW_HEIGHT + 16;
     this->m_isJumping = true;
+    this->m_jumpEnabled = false;
   } else {
-    m_overlap = true;
+    this->m_overlap = true;
   }
   return collidedObjects;
 }
@@ -121,7 +122,7 @@ void Body::handleCollision(SpriteObject *s_objects) {
   for (SpriteObject *object : collidedObjects["up"]) {
     sf::Vector2f objectPos = object->body->getPosition();
 
-    m_ground = objectPos.y;
+    this->m_ground = objectPos.y;
     this->m_velocityY = this->getY() - (objectPos.y - this->m_height);
   }
   for (SpriteObject *object : collidedObjects["down"]) {
@@ -172,7 +173,7 @@ void Body::updateVerticalVelocity() {
 }
 
 void Body::jump() {
-  if (m_jumpEnabled) {
+  if (this->m_jumpEnabled) {
     this->m_isJumping = true;
     this->m_velocityY = this->m_initialVelocityY;
     this->m_jumpEnabled = false;
@@ -180,10 +181,10 @@ void Body::jump() {
 }
 
 void Body::resetY() {
-  if (this->getY() + this->m_height == m_ground && this->m_velocityY != this->m_initialVelocityY) {
+  if (this->getY() + this->m_height == this->m_ground && this->m_velocityY != this->m_initialVelocityY) {
     this->m_isJumping = false;
     this->m_velocityY = 0;
-    m_jumpEnabled = true;
+    this->m_jumpEnabled = true;
   }
 }
 

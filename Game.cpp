@@ -9,11 +9,11 @@ Game::Game(sf::RenderWindow *window) {
   this->m_window = window;
 
   this->m_mario = new Mario();
-  buffer.loadFromFile("audio/overworld.mp3");
+  this->m_buffer.loadFromFile("audio/overworld.mp3");
 
-  sound.setVolume(0);
-  sound.setBuffer(buffer);
-  sound.play();
+  this->m_sound.setVolume(0);
+  this->m_sound.setBuffer(this->m_buffer);
+  this->m_sound.play();
 }
 
 void Game::loadMap(Map *map) {
@@ -46,17 +46,17 @@ void Game::generateSpritesInMemory() {
   this->m_s_hud->setTexture(this->m_t_hud);
   this->m_s_hud->setPosition(0, 0);
   this->m_s_hud->setTextureRect(sf::IntRect(0, 8, 255, 39 - 7));
-  this->m_s_background = new sf::Sprite[m_nb_grids];
-  this->m_s_background = new sf::Sprite[m_nb_grids];
+  this->m_s_background = new sf::Sprite[this->m_nb_grids];
+  this->m_s_background = new sf::Sprite[this->m_nb_grids];
   this->m_s_sky = new sf::Sprite[2 * TILE_DIMENSION * TILE_DIMENSION];
 
-  for (int i = 0; i < m_nb_grids; i++) {
+  for (int i = 0; i < this->m_nb_grids; i++) {
     sf::Sprite sprite = sf::Sprite();
     this->m_s_background[i] = sprite;
     this->m_s_background[i].setTexture(this->m_t_background);
     this->m_s_background[i].setTextureRect(
-        sf::IntRect(0, 8, m_single_background_width, WINDOW_WIDTH));
-    this->m_s_background[i].setPosition(i * m_single_background_width, 0);
+        sf::IntRect(0, 8, this->m_single_background_width, WINDOW_WIDTH));
+    this->m_s_background[i].setPosition(i * this->m_single_background_width, 0);
   }
   for (int i = 0; i < 2; i++) {
     for (int j = 0; j < TILE_DIMENSION; j++) {
@@ -98,8 +98,8 @@ void Game::generateSpritesInMemory() {
 
   this->updateInfos();
 
-  int nbObjects = m_map->getNumberOfGrids() * 40;
-  int first = m_current_grid;
+  int nbObjects = this->m_map->getNumberOfGrids() * 40;
+  int first = this->m_current_grid;
 
   delete[] this->m_s_objects; // memory freed
   // this->s_objects = NULL; not necessary since we reallocate some space
@@ -108,14 +108,14 @@ void Game::generateSpritesInMemory() {
   this->m_s_objects[nbObjects].type = "NULL";
 
   SpriteObject *save_ptr = this->m_s_objects;
-  for (int i = 0; i < m_map->getNumberOfGrids(); i++) {
-    Object *ptr = m_map->getNthGrid(i)->object;
+  for (int i = 0; i < this->m_map->getNumberOfGrids(); i++) {
+    Object *ptr = this->m_map->getNthGrid(i)->object;
     while (ptr) {
       this->m_s_objects->type = ptr->type;
       this->m_nb_sprites++;
       const float x = ptr->position.x +
-                      this->m_s_background[m_current_grid].getPosition().x +
-                      (TILE_DIMENSION * TILE_DIMENSION * (i - m_current_grid));
+                      this->m_s_background[this->m_current_grid].getPosition().x +
+                      (TILE_DIMENSION * TILE_DIMENSION * (i - this->m_current_grid));
 
       const float y = ptr->position.y;
       if (ptr->type == "brick") {
@@ -142,13 +142,13 @@ void Game::generateSpritesInMemory() {
     }
   }
   this->m_s_objects[this->m_nb_sprites].type = "NULL";
-  SpriteObject *_m_s_objects = new SpriteObject[this->m_nb_sprites + 1];
-  memcpy(_m_s_objects, save_ptr,
+  SpriteObject *_s_objects = new SpriteObject[this->m_nb_sprites + 1];
+  memcpy(_s_objects, save_ptr,
          sizeof(SpriteObject) * (this->m_nb_sprites + 1));
   this->m_s_objects = NULL;
   save_ptr = NULL;
-  this->m_s_objects = _m_s_objects;
-  _m_s_objects = NULL;
+  this->m_s_objects = _s_objects;
+  _s_objects = NULL;
 }
 
 int Game::getCurrentMap() { return this->m_currentMap; }
@@ -202,7 +202,7 @@ void Game::tick(sf::Clock *clock) {
         refreshStats = true;
       } else if (e.getType() == MARIO_DIED) {
         this->m_lost = true;
-        sound.stop();
+        m_sound.stop();
         break;
       } else if (e.getType() == UNKNOWN_BRICK_HIT) {
         this->m_coins += 1;
@@ -216,10 +216,10 @@ void Game::tick(sf::Clock *clock) {
     if (refreshStats)
       this->updateInfos();
   } else {
-    if (sound.getStatus() == sf::Sound::Stopped) {
-      buffer.loadFromFile("audio/mario_dies.mp3");
-      sound.setBuffer(buffer);
-      sound.play();
+    if (this->m_sound.getStatus() == sf::Sound::Stopped) {
+      this->m_buffer.loadFromFile("audio/mario_dies.mp3");
+      this->m_sound.setBuffer(this->m_buffer);
+      this->m_sound.play();
     }
   }
   this->drawSprites();
@@ -299,14 +299,14 @@ void Game::drawSprites() {
   for (int i = 0; i < 2 * TILE_DIMENSION * TILE_DIMENSION; i++) {
     this->m_window->draw(this->m_s_sky[i]);
   }
-  for (int i = 0; i < m_nb_grids; i++) {
+  for (int i = 0; i < this->m_nb_grids; i++) {
     this->m_window->draw(this->m_s_background[i]);
   }
 
   this->drawObjects();
   this->m_window->draw(*this->m_mario->getSprite());
   sf::RectangleShape rectShape = sf::RectangleShape(sf::Vector2f(16, 16));
-  rectShape.setPosition(m_mario->getPosition());
+  rectShape.setPosition(this->m_mario->getPosition());
   rectShape.setFillColor(sf::Color(0, 0, 0, 0));
   rectShape.setOutlineThickness(1);
   rectShape.setOutlineColor(sf::Color(255, 0, 0));
@@ -314,7 +314,7 @@ void Game::drawSprites() {
 }
 
 void Game::shiftSceneBackward() {
-  for (int i = 0; i < m_nb_grids; i++)
+  for (int i = 0; i < this->m_nb_grids; i++)
     this->m_s_background[i].move(
         sf::Vector2f(-this->m_mario->getVelocityX(), 0));
 
@@ -324,9 +324,9 @@ void Game::shiftSceneBackward() {
 void Game::shiftObjectsBackward() {
   SpriteObject *save_ptr = this->m_s_objects;
 
-  for (int i = 0; i < m_map->getNumberOfGrids(); i++) {
+  for (int i = 0; i < this->m_map->getNumberOfGrids(); i++) {
     int nb = 0;
-    while (nb < m_map->getNthGrid(i)->NB_SPRITES) {
+    while (nb < this->m_map->getNthGrid(i)->NB_SPRITES) {
       this->m_s_objects->body->getSprite()->move(
           sf::Vector2f(-this->m_mario->getVelocityX(), 0));
 
@@ -340,10 +340,10 @@ void Game::shiftObjectsBackward() {
 void Game::drawObjects() {
   SpriteObject *save_ptr = this->m_s_objects;
 
-  for (int i = 0; i < m_map->getNumberOfGrids(); i++) {
+  for (int i = 0; i < this->m_map->getNumberOfGrids(); i++) {
     int nb = 0;
 
-    while (nb < m_map->getNthGrid(i)->NB_SPRITES) {
+    while (nb < this->m_map->getNthGrid(i)->NB_SPRITES) {
       // the commented code belows clear sprites that are offscreen. Might need
       // to use it later
       /*if (this->m_s_objects->body->getPosition().x < -TILE_DIMENSION) {

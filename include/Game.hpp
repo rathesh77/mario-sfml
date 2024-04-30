@@ -70,8 +70,8 @@ class Game {
 
   bool m_lost = false;
 
-  sf::SoundBuffer buffer;
-  sf::Sound sound;
+  sf::SoundBuffer m_buffer;
+  sf::Sound m_sound;
 
   int m_score = 0;
   int m_coins = 0;
